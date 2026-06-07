@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sketches & Drawings — Atelier Coloré Canada</title>
+  <meta name="description" content="Browse our curated collection of sketches and drawings." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #FAFAFA; --surface: #FFFFFF; --text: #111111;
+      --text-muted: rgba(17, 17, 17, 0.6); --gold: #b28a2f; 
+      --border: #E5E5E5; --nav-h: 70px;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); font-family: 'Inter', sans-serif; color: var(--text); overflow-x: hidden; padding-top: var(--nav-h); }
+    
+    /* NAV */
+    .nav-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: var(--nav-h); background: rgba(250, 250, 250, 0.98); backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: space-between; padding: 0 40px; border-bottom: 1px solid var(--border); }
+    .nav-brand { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 800; color: var(--text); text-decoration: none; letter-spacing: 2px; text-transform: uppercase; }
+    .nav-links { display: flex; gap: 32px; list-style: none; align-items: center; }
+    .nav-links a { color: rgba(17, 17, 17, 0.85); text-decoration: none; font-size: 13px; text-transform: uppercase; letter-spacing: 1.5px; transition: color 0.3s; display: flex; align-items: center; gap: 6px; }
+    .nav-links a:hover, .nav-links a.active { color: var(--gold); }
+    .search-icon svg { width: 16px; height: 16px; }
+    .dropdown { position: relative; }
+    .dropdown-menu { position: absolute; top: 100%; left: 0; background: var(--surface); border: 1px solid var(--border); list-style: none; padding: 12px 0; min-width: 240px; opacity: 0; visibility: hidden; transform: translateY(10px); transition: all 0.3s ease; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+    .dropdown:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+    .dropdown-menu a { padding: 10px 20px; display: block; color: var(--text-muted); font-size: 12px; letter-spacing: 1px; }
+    .dropdown-menu a:hover { background: var(--bg); color: var(--gold); }
+
+    /* HERO */
+    .catalog-hero { width: 100%; min-height: 320px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding: 60px 80px 56px; background: var(--bg); border-bottom: 1px solid var(--border); text-align: center; }
+    .catalog-hero-line { width: 1px; height: 48px; background: linear-gradient(to bottom, transparent, var(--gold)); margin: 0 auto 28px; }
+    .catalog-eyebrow { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); margin-bottom: 18px; }
+    .catalog-heading { font-family: 'Playfair Display', serif; font-size: clamp(36px, 6vw, 80px); font-weight: 900; letter-spacing: -1px; line-height: 1.0; color: var(--text); margin-bottom: 20px; }
+    .catalog-subtitle { font-size: 15px; color: var(--text-muted); max-width: 480px; margin: 0 auto 40px; line-height: 1.7; font-weight: 400; }
+
+    /* TOOLBAR & GRID */
+    .catalog-toolbar { position: sticky; top: var(--nav-h); z-index: 50; background: rgba(250, 250, 250, 0.97); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); padding: 0 80px; display: flex; align-items: center; justify-content: flex-end; gap: 24px; height: 60px; }
+    .toolbar-sort { display: flex; align-items: center; gap: 12px; }
+    .sort-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); }
+    .sort-select { background: transparent; border: 1px solid var(--border); color: var(--text); font-family: 'Inter', sans-serif; font-size: 12px; padding: 6px 12px; cursor: pointer; outline: none; }
+    .catalog-body { max-width: 1600px; margin: 0 auto; padding: 56px 80px 120px; }
+    .artwork-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; }
+    .artwork-grid-card { text-decoration: none; color: inherit; cursor: pointer; display: block; transition: all 0.35s; }
+    .artwork-grid-card:hover { transform: translateY(-10px); }
+    .card-frame { width: 100%; aspect-ratio: 3/4; background: var(--surface); border: 1px solid var(--border); overflow: hidden; margin-bottom: 18px; position: relative; }
+    .card-frame::after { content: ''; position: absolute; inset: 8px; border: 1px solid rgba(0,0,0,0.05); z-index: 2; transition: border-color 0.3s; }
+    .artwork-grid-card:hover .card-frame { border-color: var(--gold); box-shadow: 0 16px 40px rgba(0,0,0,0.06); }
+    .artwork-grid-card:hover .card-frame::after { border-color: rgba(178,138,47,0.4); }
+    .card-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s; }
+    .artwork-grid-card:hover .card-img { transform: scale(1.06); }
+    .card-meta { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+    .card-title { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; margin-bottom: 5px; }
+    .card-medium { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); }
+    .card-price { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; color: var(--gold); }
+
+    .empty-state { grid-column: 1 / -1; text-align: center; padding: 100px 40px; }
+    .empty-glyph { font-family: 'Playfair Display', serif; font-size: 64px; color: var(--text-muted); margin-bottom: 20px; }
+    .empty-title { font-family: 'Playfair Display', serif; font-size: 22px; margin-bottom: 10px; }
+    .empty-text { color: var(--text-muted); font-size: 14px; margin-bottom: 28px; }
+    .empty-link { display: inline-block; padding: 12px 32px; border: 1px solid var(--gold); color: var(--text); background: var(--surface); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; }
+    
+    .breadcrumb { padding: 0 80px; display: flex; align-items: center; gap: 10px; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); margin-bottom: -12px; margin-top: 28px; }
+    .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--gold); }
+    .breadcrumb span { color: var(--gold); }
+    .breadcrumb-sep { opacity: 0.4; }
+
+    @media (max-width: 1200px) { .artwork-grid { grid-template-columns: repeat(3, 1fr); gap: 24px; } }
+    @media (max-width: 900px) { .artwork-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; } .catalog-hero { padding: 48px 40px 40px; } .catalog-toolbar, .catalog-body, .breadcrumb { padding-left: 40px; padding-right: 40px; } }
+    @media (max-width: 600px) { .artwork-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; } .nav-links { display: none; } .catalog-toolbar, .catalog-body, .breadcrumb { padding-left: 20px; padding-right: 20px; } }
+  </style>
+</head>
+<body>
+
+  <nav class="nav-bar">
+    <a href="index.html" class="nav-brand">Atelier Coloré</a>
+    <ul class="nav-links">
+      <li><a href="search.html">Search</a></li>
+      <li><a href="index.html">Home</a></li>
+      <li class="dropdown"><a href="#">Artists <span>▼</span></a>
+        <ul class="dropdown-menu" id="nav-artists-dropdown"></ul>
+      </li>
+      <li class="dropdown"><a href="#" class="active">Artwork Type <span>▼</span></a>
+        <ul class="dropdown-menu">
+          <li><a href="all-artworks.html">All Artwork</a></li>
+          <li><a href="sculptures.html">Sculpture and Objects</a></li>
+          <li><a href="oil-paintings.html">Oil Painting</a></li>
+          <li><a href="sketches.html">Sketches</a></li>
+        </ul>
+      </li>
+      <li><a href="#">Sell</a></li>
+      <li class="dropdown"><a href="#">Service <span>▼</span></a>
+        <ul class="dropdown-menu"><li><a href="#">Buy</a></li><li><a href="#">Bid</a></li></ul>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="breadcrumb">
+    <a href="index.html">Home</a><span class="breadcrumb-sep">—</span><span>Sketches & Drawings</span>
+  </div>
+
+  <header class="catalog-hero">
+    <div class="catalog-hero-line"></div>
+    <p class="catalog-eyebrow">Original Works · Atelier Coloré</p>
+    <h1 class="catalog-heading">Sketches</h1>
+    <p class="catalog-subtitle">Intimate preparatory drawings and master sketches that reveal the artist's raw thought process.</p>
+  </header>
+
+  <div class="catalog-toolbar">
+    <div class="toolbar-sort">
+      <span class="sort-label">Sort by</span>
+      <select class="sort-select" id="sort-select" onchange="applySort()">
+        <option value="default">Featured</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+      </select>
+    </div>
+  </div>
+
+  <main class="catalog-body"><div id="artwork-grid" class="artwork-grid"></div></main>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+    const supabase = createClient('https://hcnciegpfsmladslpkxx.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhjbmNpZWdwZnNtbGFkc2xwa3h4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk5NjMzMTcsImV4cCI6MjA5NTUzOTMxN30.XndWiaPVh8qzaHOA_5OQkaHx3y4N5UA0DHaFcWpOmXg');
+
+    let allItems = [];
+
+    async function init() {
+      const { data, error } = await supabase.from('Artworks').select('*').eq('Type', 'Sketch').order('created_at', { ascending: false });
+      if (error || !data) { renderEmpty('Unable to load collection.'); return; }
+      allItems = data.filter(a => a.Image_url);
+      renderGrid();
+    }
+
+    function renderGrid() {
+      const sortVal = document.getElementById('sort-select')?.value || 'default';
+      const sorted = [...allItems].sort((a,b) => sortVal==='price-asc' ? Number(a.Price)-Number(b.Price) : sortVal==='price-desc' ? Number(b.Price)-Number(a.Price) : 0);
+      const grid = document.getElementById('artwork-grid');
+      
+      if (sorted.length === 0) { renderEmpty('No sketches available currently.'); return; }
+      
+      grid.innerHTML = sorted.map(art => `
+        <a href="artwork?id=${art.id}" class="artwork-grid-card">
+          <div class="card-frame"><img src="${art.Image_url}" class="card-img" /></div>
+          <div class="card-meta">
+            <div><div class="card-title">${art.Title||'Untitled'}</div><div class="card-medium">${art.Type||''}</div></div>
+            <div class="card-price">$${Number(art.Price).toLocaleString()}</div>
+          </div>
+        </a>`).join('');
+    }
+
+    window.applySort = renderGrid;
+    function renderEmpty(msg) {
+      document.getElementById('artwork-grid').innerHTML = `<div class="empty-state"><div class="empty-glyph">✦</div><h2 class="empty-title">Not available</h2><p class="empty-text">${msg}</p><a href="index.html" class="empty-link">Back to Home</a></div>`;
+    }
+    init();
+  
+    async function populateArtistsNav() {
+      const dropdown = document.getElementById('nav-artists-dropdown');
+      if (!dropdown) return;
+      const { data } = await supabase.from('Artist').select('id, artist_name').order('artist_name');
+      if (data) {
+        dropdown.innerHTML = data.map(a => `<li><a href="artist?id=${a.id}">${a.artist_name}</a></li>`).join('');
+      }
+    }
+    populateArtistsNav();
+  </script>
+</body>
+</html>

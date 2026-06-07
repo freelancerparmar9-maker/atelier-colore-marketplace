@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Atelier Coloré Canada | Contemporary Oil Paintings</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="preload" as="image" href="https://hcnciegpfsmladslpkxx.supabase.co/storage/v1/object/public/gallery-assets/Background/background.png" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    :root {
+      /* Gallery White Theme */
+      --bg: #FAFAFA;
+      --surface: #FFFFFF;
+      --text: #111111;
+      --text-muted: rgba(17, 17, 17, 0.6);
+      --gold: #b28a2f; /* slightly darker gold for readability on light */
+      --border: #E5E5E5;
+      --border-dark: #D0D0D0;
+      
+      --nav-h: 70px;
+    }
+
+    body {
+      background: var(--bg);
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* NAV BAR (Transparent to Solid Black on scroll) */
+    .nav-bar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      height: var(--nav-h);
+      background: transparent;
+      border-bottom: 1px solid transparent;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      transition: all 0.4s ease;
+    }
+
+    .nav-bar.scrolled {
+      background: rgba(17, 17, 17, 0.98);
+      border-bottom: 1px solid #333;
+    }
+
+    .nav-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      font-weight: 800;
+      color: #ffffff; /* Always white due to painting/black background */
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+    
+    .nav-links {
+      display: flex; gap: 32px; list-style: none;
+      align-items: center;
+    }
+    .nav-links a {
+      color: rgba(255, 255, 255, 0.9);
+      text-decoration: none;
+      font-size: 13px; text-transform: uppercase; letter-spacing: 1.5px;
+      transition: color 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--gold); }
+    .search-icon svg { width: 16px; height: 16px; }
+
+    /* DROPDOWNS */
+    .dropdown {
+      position: relative;
+    }
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: rgba(17, 17, 17, 0.98);
+      border: 1px solid #333;
+      list-style: none;
+      padding: 12px 0;
+      min-width: 240px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px);
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .dropdown:hover .dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    .dropdown-menu li {
+      padding: 0;
+    }
+    .dropdown-menu a {
+      padding: 10px 20px;
+      display: block;
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 12px;
+      letter-spacing: 1px;
+    }
+    .dropdown-menu a:hover {
+      background: #222;
+      color: var(--gold);
+    }
+
+    /* BIG PAINTING CONTAINER */
+    .big-painting-container {
+      position: relative;
+      width: 100%;
+      height: 90vh;
+      background: #000;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .painting-layer {
+      position: absolute;
+      inset: 0;
+      background-size: cover; 
+      background-position: center;
+      background-repeat: no-repeat;
+      transition: opacity 0.5s ease-in-out;
+      will-change: opacity;
+    }
+    
+    #heroBgA { z-index: 1; opacity: 1; }
+    #heroBgB { z-index: 2; opacity: 0; }
+
+    .hero-wrapper {
+      background: #111111; /* Dark premium background */
+      width: 100%;
+      position: relative;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 30%);
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    /* TEXT BLOCK BELOW PAINTING */
+    .text-block {
+      text-align: center;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 12px 20px 20px;
+    }
+
+    .brand-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(20px, 3vw, 36px);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 8px;
+      color: #FFFFFF;
+      margin-bottom: 16px;
+    }
+
+    .brand-narrative {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(12px, 1.1vw, 14px);
+      font-weight: 400;
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.65);
+      letter-spacing: 0.5px;
+    }
+
+    /* BOTTOM CAROUSEL (SMALL THUMBNAILS) */
+    .carousel-section {
+      width: 100%;
+      padding: 10px 40px 60px;
+    }
+
+    .carousel-track-container {
+      overflow: hidden;
+      width: 100%;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 10px 0;
+    }
+
+    .carousel-track {
+      display: flex;
+      gap: 16px;
+      transition: transform 1s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .thumb-card {
+      flex: 0 0 calc(16.666% - 13.33px);
+      aspect-ratio: 4 / 3;
+      position: relative;
+      border: 2px solid transparent;
+      transition: all 0.4s ease;
+      cursor: pointer;
+      overflow: hidden;
+      background: #1A1A1A;
+      border-radius: 2px;
+    }
+
+    .thumb-card.active {
+      border-color: var(--gold);
+      transform: scale(1.08);
+      z-index: 2;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+    }
+
+    .thumb-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.5;
+      transition: opacity 0.4s;
+    }
+
+    .thumb-card.active .thumb-img, .thumb-card:hover .thumb-img {
+      opacity: 1;
+    }
+
+    @media (max-width: 900px) {
+      .thumb-card { flex: 0 0 calc(25% - 12px); }
+      .brand-title { letter-spacing: 8px; }
+      .big-painting-container { height: 50vh; }
+    }
+    @media (max-width: 600px) {
+      .thumb-card { flex: 0 0 calc(33.333% - 10.66px); }
+      .brand-title { letter-spacing: 4px; }
+      .carousel-section { padding: 20px 20px 40px; }
+    }
+
+    /* HANDICRAFTS SECTION */
+    .handicrafts-section {
+      width: 100%;
+      padding: 100px 60px;
+      background: url('https://hcnciegpfsmladslpkxx.supabase.co/storage/v1/object/public/gallery-assets/Background/background.png') center/cover no-repeat;
+      display: flex;
+      gap: 60px;
+      align-items: center;
+      border-top: 1px solid #222;
+    }
+
+    .handicrafts-text {
+      flex: 1;
+      padding-right: 40px;
+    }
+    
+    .hc-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      color: #ffffff;
+      margin-bottom: 24px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+    }
+
+    .hc-desc {
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.9;
+      color: rgba(255, 255, 255, 0.7);
+      letter-spacing: 0.5px;
+    }
+
+    .handicrafts-grid {
+      flex: 1.2;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .region-item {
+      background: rgba(17, 17, 17, 0.7);
+      border: 1px solid rgba(255,255,255,0.15);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      overflow: hidden;
+      transition: all 0.4s ease;
+      cursor: pointer;
+    }
+
+    .region-item:hover {
+      border-color: var(--gold);
+      background: rgba(0, 0, 0, 0.9);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    .region-header {
+      padding: 24px 32px;
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #ffffff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .region-header::after {
+      content: '+';
+      color: var(--gold);
+      font-size: 28px;
+      font-weight: 300;
+      transition: transform 0.4s ease;
+    }
+
+    .region-item:hover .region-header::after {
+      transform: rotate(45deg);
+    }
+
+    .region-content {
+      max-height: 0;
+      opacity: 0;
+      padding: 0 32px;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .region-item:hover .region-content {
+      max-height: 300px;
+      opacity: 1;
+      padding: 0 32px 24px;
+    }
+
+    .sub-cat-list {
+      list-style: none;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .sub-cat-item {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.65);
+      padding: 8px 12px;
+      background: rgba(0, 0, 0, 0.4);
+      border-left: 2px solid rgba(255,255,255,0.1);
+      transition: all 0.3s;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .sub-cat-item:hover {
+      color: #ffffff;
+      border-color: var(--gold);
+      background: rgba(255,255,255,0.05);
+      transform: translateX(4px);
+    }
+
+    @media (max-width: 900px) {
+      .handicrafts-section { flex-direction: column; padding: 60px 30px; }
+      .handicrafts-text { padding-right: 0; margin-bottom: 40px; }
+      .sub-cat-list { grid-template-columns: 1fr; }
+    }
+
+    /* SHOWCASE SECTION */
+    .showcase-section {
+      width: 100%;
+      padding: 80px 60px;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      gap: 60px;
+      border-top: 1px solid var(--border);
+    }
+
+    .showcase-row {
+      position: relative;
+      width: 100%;
+    }
+
+    .row-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+    }
+
+    .row-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+
+    .row-see-more {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--gold);
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .row-see-more:hover {
+      color: var(--text);
+      transform: translateX(4px);
+    }
+
+    /* SCROLL CONTAINER WITH NAVIGATION OVERLAYS */
+    .scroll-container-wrapper {
+      position: relative;
+      width: 100%;
+    }
+
+    .scroll-container {
+      display: flex;
+      gap: 24px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      padding: 10px 0;
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    .scroll-container::-webkit-scrollbar {
+      display: none;
+    }
+    
+    .scroll-container {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* CARD DESIGN */
+    .art-card {
+      flex: 0 0 calc(20% - 19.2px); /* 5 cards in viewport */
+      min-width: 220px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+      border-radius: 2px;
+    }
+
+    .art-card:hover {
+      transform: translateY(-8px) scale(1.03);
+      border-color: var(--gold);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.06), 0 4px 10px rgba(0,0,0,0.03);
+    }
+
+    .art-frame {
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      overflow: hidden;
+      background: #FAFAFA;
+      border: 1px solid var(--border);
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    .art-frame::after {
+      content: '';
+      position: absolute;
+      inset: 8px;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      pointer-events: none;
+      transition: border-color 0.3s ease;
+    }
+
+    .art-card:hover .art-frame::after {
+      border-color: rgba(178, 138, 47, 0.3);
+    }
+
+    .art-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    .art-card:hover .art-image {
+      transform: scale(1.08);
+    }
+
+    .art-info {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .art-card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .art-card-price {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      color: var(--gold);
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+
+    /* SCROLL BUTTONS */
+    .nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid var(--border);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 10;
+      opacity: 0;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(4px);
+    }
+
+    .nav-btn:hover {
+      background: var(--gold);
+      color: #fff;
+      border-color: var(--gold);
+      box-shadow: 0 4px 15px rgba(178, 138, 47, 0.2);
+    }
+
+    .scroll-container-wrapper:hover .nav-btn {
+      opacity: 1;
+    }
+
+    .nav-btn.left {
+      left: -22px;
+    }
+
+    .nav-btn.right {
+      right: -22px;
+    }
+
+    /* EMPTY STATE PLACEHOLDER */
+    .empty-state {
+      width: 100%;
+      padding: 40px;
+      text-align: center;
+      border: 1px dashed var(--border-dark);
+      background: var(--surface);
+      color: var(--text-muted);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 1024px) {
+      .art-card { flex: 0 0 calc(33.333% - 16px); }
+      .showcase-section { padding: 60px 30px; }
+      .nav-btn { display: none; }
+    }
+
+    @media (max-width: 600px) {
+      .art-card { flex: 0 0 calc(50% - 12px); min-width: 160px; padding: 10px; }
+      .art-card-title { font-size: 13px; }
+      .art-card-price { font-size: 12px; }
+      .nav-bar { padding: 0 20px; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav-bar" id="main-nav">
+    <a href="index.html" class="nav-brand">Atelier Coloré</a>
+    <ul class="nav-links">
+      <li><a href="search.html">Search</a></li>
+      <li><a href="index.html" class="active">Home</a></li>
+      <li class="dropdown">
+        <a href="#">Artists <span style="font-size:8px; margin-left:4px;">▼</span></a>
+        <ul class="dropdown-menu" id="nav-artists-dropdown"></ul>
+      </li>
+      <li class="dropdown">
+        <a href="#">Artwork Type <span style="font-size:8px; margin-left:4px;">▼</span></a>
+        <ul class="dropdown-menu">
+          <li><a href="all-artworks.html">All Artwork</a></li>
+          <li><a href="sculptures.html">Sculpture and Objects</a></li>
+          <li><a href="oil-paintings.html">Oil Painting</a></li>
+          <li><a href="sketches.html">Sketches</a></li>
+        </ul>
+      </li>
+      <li><a href="#">Sell</a></li>
+      <li class="dropdown">
+        <a href="#">Service <span style="font-size:8px; margin-left:4px;">▼</span></a>
+        <ul class="dropdown-menu">
+          <li><a href="#">Buy</a></li>
+          <li><a href="#">Bid</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- HERO WRAPPER -->
+  <div class="hero-wrapper">
+    <!-- Big Painting Container -->
+    <div class="big-painting-container" id="hero-layer-container">
+      <div class="hero-overlay"></div>
+    </div>
+
+    <!-- Text Block (Below Painting) -->
+    <div class="text-block">
+      <h1 class="brand-title">Atelier Coloré Canada</h1>
+      <p class="brand-narrative">
+        Atelier Coloré brings to life contemporary oil paintings exploring Buddhist, Himalayan, and Modern themes. Crafted by a collective of visionary artists who paint with their souls upon the palette, we invite you to explore our curated range of original works—defining your taste and bringing profound charm to your environs.
+      </p>
+    </div>
+
+    <!-- Small Thumbnails Carousel -->
+    <div class="carousel-section">
+      <div class="carousel-track-container">
+        <div class="carousel-track" id="carouselTrack">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Himalayan Handicrafts Section -->
+  <section class="handicrafts-section">
+    <div class="handicrafts-text">
+      <h2 class="hc-title">Regional Treasures</h2>
+      <p class="hc-desc">
+        Beyond the canvas, we curate authentic Himalayan handicrafts, connecting you directly to the region's rich cultural heritage through masterfully woven textiles, intricately carved wood, artisanal jewelry, and timeless traditional crafts.
+      </p>
+    </div>
+    <div class="handicrafts-grid">
+      
+      <!-- Kashmir -->
+      <div class="region-item">
+        <div class="region-header">Kashmir</div>
+        <div class="region-content">
+          <ul class="sub-cat-list">
+            <li class="sub-cat-item" onclick="routeToCatalog('Kashmir', 'Silver Jewelry')">Silver Jewelry</li>
+            <li class="sub-cat-item" onclick="routeToCatalog('Kashmir', 'Walnut Wood Carving')">Walnut Wood Carving</li>
+            <li class="sub-cat-item" onclick="routeToCatalog('Kashmir', 'Kashmir Carpets')">Kashmir Carpets</li>
+            <li class="sub-cat-item" onclick="routeToCatalog('Kashmir', 'Felt Wool Rugs')">Felt Wool Rugs</li>
+            <li class="sub-cat-item" onclick="routeToCatalog('Kashmir', 'Chain Stitch Traditional Items')">Chain Stitch Items</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Himachal Pradesh -->
+      <div class="region-item">
+        <div class="region-header">Himachal Pradesh</div>
+        <div class="region-content">
+          <ul class="sub-cat-list">
+            <li class="sub-cat-item" onclick="routeToCatalog('Himachal Pradesh', 'Kangra Painting')">Kangra Painting</li>
+            <li class="sub-cat-item" onclick="routeToCatalog('Himachal Pradesh', 'Basholi Painting')">Basholi Painting</li>
+            <li class="sub-cat-item" onclick="routeToCatalog('Himachal Pradesh', 'Chamba Rumal')">Chamba Rumal</li>
+            <li class="sub-cat-item" onclick="routeToCatalog('Himachal Pradesh', 'Himachali Cap')">Himachali Cap</li>
+            <li class="sub-cat-item" onclick="routeToCatalog('Himachal Pradesh', 'Kullu Muffler and Stole')">Kullu Muffler & Stole</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Punjab -->
+      <div class="region-item">
+        <div class="region-header">Punjab</div>
+        <div class="region-content">
+          <ul class="sub-cat-list">
+            <li class="sub-cat-item" onclick="routeToCatalog('Punjab', 'Phulkari Embroidery')">Phulkari Embroidery</li>
+            <li class="sub-cat-item" onclick="routeToCatalog('Punjab', 'Jutti Footwear')">Jutti Footwear</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Rajasthan -->
+      <div class="region-item">
+        <div class="region-header">Rajasthan</div>
+        <div class="region-content">
+          <ul class="sub-cat-list">
+            <li class="sub-cat-item" onclick="routeToCatalog('Rajasthan', 'Blue Pottery')">Blue Pottery</li>
+            <li class="sub-cat-item" onclick="routeToCatalog('Rajasthan', 'Meenakari Jewelry')">Meenakari Jewelry</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Artwork Showcase Section -->
+  <section class="showcase-section">
+    
+    <!-- Row 1: All Artworks -->
+    <div class="showcase-row">
+      <div class="row-header">
+        <h3 class="row-title">All Artworks</h3>
+        <a href="all-artworks.html" class="row-see-more">See More &rarr;</a>
+      </div>
+      <div class="scroll-container-wrapper">
+        <button class="nav-btn left" onclick="scrollRow('all-artworks-track', 'left')">&lt;</button>
+        <div class="scroll-container" id="all-artworks-track">
+          <!-- Populated by JS -->
+        </div>
+        <button class="nav-btn right" onclick="scrollRow('all-artworks-track', 'right')">&gt;</button>
+      </div>
+    </div>
+
+    <!-- Row 2: Oil Paintings -->
+    <div class="showcase-row">
+      <div class="row-header">
+        <h3 class="row-title">Oil Paintings</h3>
+        <a href="oil-paintings.html" class="row-see-more">See More &rarr;</a>
+      </div>
+      <div class="scroll-container-wrapper">
+        <button class="nav-btn left" onclick="scrollRow('oil-paintings-track', 'left')">&lt;</button>
+        <div class="scroll-container" id="oil-paintings-track">
+          <!-- Populated by JS -->
+        </div>
+        <button class="nav-btn right" onclick="scrollRow('oil-paintings-track', 'right')">&gt;</button>
+      </div>
+    </div>
+
+    <!-- Row 3: Sketches & Drawings -->
+    <div class="showcase-row">
+      <div class="row-header">
+        <h3 class="row-title">Sketches & Drawings</h3>
+        <a href="sketches.html" class="row-see-more">See More &rarr;</a>
+      </div>
+      <div class="scroll-container-wrapper">
+        <button class="nav-btn left" onclick="scrollRow('sketches-track', 'left')">&lt;</button>
+        <div class="scroll-container" id="sketches-track">
+          <!-- Populated by JS -->
+        </div>
+        <button class="nav-btn right" onclick="scrollRow('sketches-track', 'right')">&gt;</button>
+      </div>
+    </div>
+
+  </section>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+    const supabase = createClient(
+      'https://hcnciegpfsmladslpkxx.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhjbmNpZWdwZnNtbGFkc2xwa3h4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk5NjMzMTcsImV4cCI6MjA5NTUzOTMxN30.XndWiaPVh8qzaHOA_5OQkaHx3y4N5UA0DHaFcWpOmXg'
+    );
+
+    let oilPaintings = [];
+    let currentIndex = 0;
+    let carouselInterval;
+    
+    const track = document.getElementById('carouselTrack');
+    const mainNav = document.getElementById('main-nav');
+
+    // NAV SCROLL EFFECT
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 100) {
+        mainNav.classList.add('scrolled');
+      } else {
+        mainNav.classList.remove('scrolled');
+      }
+    });
+
+    async function init() {
+      const { data, error } = await supabase
+        .from('Artworks')
+        .select('*')
+        .eq('Type', 'Oil Painting')
+        .order('created_at', { ascending: false });
+
+      if (error || !data.length) {
+        console.error('Error fetching oil paintings', error);
+        return;
+      }
+
+      oilPaintings = data.filter(d => d.Image_url);
+
+      if (oilPaintings.length === 0) return;
+
+      // Inject layers
+      const heroContainer = document.getElementById('hero-layer-container');
+      const overlay = heroContainer.querySelector('.hero-overlay');
+      heroContainer.innerHTML = '';
+      oilPaintings.forEach((art, idx) => {
+        const layer = document.createElement('div');
+        layer.className = 'painting-layer';
+        layer.id = `hero-layer-${idx}`;
+        layer.style.backgroundImage = `url('${art.Image_url}')`;
+        layer.style.opacity = idx === 0 ? 1 : 0;
+        layer.style.zIndex = idx === 0 ? 2 : 1;
+        heroContainer.appendChild(layer);
+      });
+      heroContainer.appendChild(overlay);
+
+      renderThumbnails();
+      updateHero(0);
+      startAutoplay();
+    }
+
+    function renderThumbnails() {
+      track.innerHTML = oilPaintings.map((art, idx) => `
+        <div class="thumb-card" data-index="${idx}">
+          <img src="${art.Image_url}" class="thumb-img" alt="${art.Title}" />
+        </div>
+      `).join('');
+
+      document.querySelectorAll('.thumb-card').forEach(card => {
+        card.addEventListener('click', () => {
+          const idx = parseInt(card.dataset.index);
+          goToSlide(idx);
+          resetAutoplay();
+        });
+      });
+    }
+
+    function updateHero(index) {
+      if (oilPaintings.length === 0) return;
+      const art = oilPaintings[index];
+      
+      oilPaintings.forEach((_, idx) => {
+        const layer = document.getElementById(`hero-layer-${idx}`);
+        if (!layer) return;
+        if (idx === index) {
+          layer.style.opacity = 1;
+          layer.style.zIndex = 2;
+        } else {
+          layer.style.opacity = 0;
+          layer.style.zIndex = 1;
+        }
+      });
+      
+      // Make the big painting container clickable to view the artwork details
+      document.querySelector('.big-painting-container').onclick = () => {
+        window.location.href = `artwork?id=${art.id}`;
+      };
+
+      document.querySelectorAll('.thumb-card').forEach((card, idx) => {
+        if (idx === index) {
+          card.classList.add('active');
+        } else {
+          card.classList.remove('active');
+        }
+      });
+
+      slideTrack(index);
+    }
+
+    function slideTrack(index) {
+      if(oilPaintings.length === 0) return;
+      const cards = document.querySelectorAll('.thumb-card');
+      if(cards.length === 0) return;
+      
+      const cardWidth = cards[0].offsetWidth;
+      const gap = 16; 
+      const moveAmount = (cardWidth + gap) * index;
+      
+      const containerWidth = document.querySelector('.carousel-track-container').offsetWidth;
+      const totalWidth = (cardWidth + gap) * oilPaintings.length - gap;
+      
+      const maxMove = Math.max(0, totalWidth - containerWidth);
+      const translate = Math.min(moveAmount, maxMove);
+      
+      track.style.transform = `translateX(-${translate}px)`;
+    }
+
+    function goToSlide(index) {
+      currentIndex = index;
+      updateHero(currentIndex);
+    }
+
+    function startAutoplay() {
+      carouselInterval = setInterval(() => {
+        currentIndex = (currentIndex + 1) % oilPaintings.length;
+        updateHero(currentIndex);
+      }, 5000); 
+    }
+
+    function resetAutoplay() {
+      clearInterval(carouselInterval);
+      startAutoplay();
+    }
+
+    window.addEventListener('resize', () => {
+      slideTrack(currentIndex);
+    });
+
+    window.routeToCatalog = function(region, category) {
+      // NOTE: For handicrafts, we can still route to a dynamic query page or build distinct ones later.
+      window.location.href = `/catalog.html?type=Handicraft&region=${encodeURIComponent(region)}&category=${encodeURIComponent(category)}`;
+    };
+
+    window.scrollRow = function(rowId, direction) {
+      const container = document.getElementById(rowId);
+      if (!container) return;
+      const scrollAmount = container.clientWidth * 0.8;
+      container.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth'
+      });
+    };
+
+    async function loadShowcase() {
+      // Row 1: All Artworks
+      try {
+        const { data: allArt, error: err1 } = await supabase
+          .from('Artworks')
+          .select('*')
+          .limit(6);
+        
+        renderShowcaseRow('all-artworks-track', allArt, err1, 5);
+      } catch (e) {
+        console.error('Error fetching all artworks:', e);
+        renderShowcaseError('all-artworks-track');
+      }
+
+      // Row 2: Oil Paintings
+      try {
+        const { data: oilPaintings, error: err2 } = await supabase
+          .from('Artworks')
+          .select('*')
+          .eq('Type', 'Oil Painting')
+          .limit(6);
+        
+        renderShowcaseRow('oil-paintings-track', oilPaintings, err2, 5);
+      } catch (e) {
+        console.error('Error fetching oil paintings:', e);
+        renderShowcaseError('oil-paintings-track');
+      }
+
+      // Row 3: Sketches & Drawings
+      try {
+        const { data: sketches, error: err3 } = await supabase
+          .from('Artworks')
+          .select('*')
+          .eq('Type', 'Sketch')
+          .limit(6);
+        
+        renderShowcaseRow('sketches-track', sketches, err3, 6);
+      } catch (e) {
+        console.error('Error fetching sketches:', e);
+        renderShowcaseError('sketches-track');
+      }
+    }
+
+    function renderShowcaseRow(trackId, data, error, maxItems) {
+      const trackEl = document.getElementById(trackId);
+      if (!trackEl) return;
+
+      if (error || !data || data.length === 0) {
+        trackEl.parentElement.innerHTML = `<div class="empty-state">New curated works arriving soon.</div>`;
+        return;
+      }
+
+      const validData = data.filter(item => item.Image_url).slice(0, maxItems);
+
+      if (validData.length === 0) {
+        trackEl.parentElement.innerHTML = `<div class="empty-state">New curated works arriving soon.</div>`;
+        return;
+      }
+
+      trackEl.innerHTML = validData.map(art => `
+        <a href="artwork.html?id=${art.id}" onclick="localStorage.setItem('selectedArtworkId', '${art.id}'); window.location.href='artwork.html?id=${art.id}'; return false;" class="art-card">
+          <div class="art-frame">
+            <img src="${art.Image_url}" class="art-image" alt="${art.Title || 'Artwork'}" loading="lazy" />
+          </div>
+          <div class="art-info">
+            <h4 class="art-card-title">${art.Title || 'Untitled'}</h4>
+            <span class="art-card-price">$${Number(art.Price).toLocaleString()}</span>
+          </div>
+        </a>
+      `).join('');
+    }
+
+    function renderShowcaseError(trackId) {
+      const trackEl = document.getElementById(trackId);
+      if (trackEl) {
+        trackEl.parentElement.innerHTML = `<div class="empty-state">New curated works arriving soon.</div>`;
+      }
+    }
+
+    init();
+    loadShowcase();
+  
+    async function populateArtistsNav() {
+      const dropdown = document.getElementById('nav-artists-dropdown');
+      if (!dropdown) return;
+      const { data } = await supabase.from('Artist').select('id, artist_name').order('artist_name');
+      if (data) {
+        dropdown.innerHTML = data.map(a => `<li><a href="artist?id=${a.id}" onclick="localStorage.setItem('selectedArtistId', '${a.id}'); window.location.href='artist?id=${a.id}'; return false;">${a.artist_name}</a></li>`).join('');
+      }
+    }
+    populateArtistsNav();
+  </script>
+</body>
+</html>

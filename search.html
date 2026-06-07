@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Search — Atelier Coloré Canada</title>
+  <meta name="description" content="Search the Atelier Coloré Canada collection." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,800;0,900;1,400;1,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #FAFAFA;
+      --surface: #FFFFFF;
+      --text: #111111;
+      --text-muted: rgba(17, 17, 17, 0.6);
+      --gold: #b28a2f; 
+      --border: #E5E5E5;
+      --nav-h: 70px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      overflow-x: hidden;
+      padding-top: var(--nav-h);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* NAV BAR */
+    .nav-bar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: var(--nav-h);
+      background: rgba(250, 250, 250, 0.98);
+      backdrop-filter: blur(12px);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px;
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px; font-weight: 800;
+      color: var(--text); text-decoration: none;
+      letter-spacing: 2px; text-transform: uppercase;
+    }
+    .nav-links { display: flex; gap: 32px; list-style: none; align-items: center; }
+    .nav-links a {
+      color: rgba(17, 17, 17, 0.85); text-decoration: none;
+      font-size: 13px; text-transform: uppercase; letter-spacing: 1.5px;
+      transition: color 0.3s;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--gold); }
+    .search-icon svg { width: 16px; height: 16px; }
+
+    /* DROPDOWNS */
+    .dropdown { position: relative; }
+    .dropdown-menu {
+      position: absolute; top: 100%; left: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      list-style: none; padding: 12px 0;
+      min-width: 240px;
+      opacity: 0; visibility: hidden;
+      transform: translateY(10px);
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    }
+    .dropdown:hover .dropdown-menu {
+      opacity: 1; visibility: visible; transform: translateY(0);
+    }
+    .dropdown-menu a {
+      padding: 10px 20px; display: block;
+      color: var(--text-muted); font-size: 12px; letter-spacing: 1px;
+    }
+    .dropdown-menu a:hover {
+      background: var(--bg); color: var(--gold);
+    }
+
+    /* SEARCH HERO */
+    .search-hero {
+      width: 100%;
+      padding: 80px 80px 60px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .search-eyebrow {
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 24px;
+    }
+
+    .search-input-wrapper {
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid var(--border);
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(32px, 5vw, 64px);
+      color: var(--text);
+      padding: 10px 0;
+      outline: none;
+      text-align: center;
+      transition: border-color 0.3s;
+    }
+
+    .search-input:focus {
+      border-color: var(--gold);
+    }
+
+    .search-input::placeholder {
+      color: rgba(17, 17, 17, 0.2);
+    }
+
+    .search-meta {
+      margin-top: 24px;
+      font-size: 14px;
+      color: var(--text-muted);
+      min-height: 20px;
+    }
+
+    /* GRID */
+    .search-results {
+      flex: 1;
+      max-width: 1600px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 60px 80px 120px;
+    }
+
+    .artwork-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+    }
+
+    .artwork-grid-card {
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+      display: block;
+      transition: all 0.35s;
+    }
+    .artwork-grid-card:hover { transform: translateY(-10px); }
+    
+    .card-frame {
+      width: 100%;
+      aspect-ratio: 4/5;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      margin-bottom: 18px;
+      position: relative;
+    }
+    .artwork-grid-card:nth-child(even) .card-frame { aspect-ratio: 1/1; }
+    
+    .card-frame::after {
+      content: '';
+      position: absolute;
+      inset: 8px;
+      border: 1px solid rgba(0,0,0,0.05);
+      z-index: 2;
+      transition: border-color 0.3s;
+    }
+    .artwork-grid-card:hover .card-frame {
+      border-color: var(--gold);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.06);
+    }
+    .artwork-grid-card:hover .card-frame::after { border-color: rgba(178,138,47,0.4); }
+    
+    .card-img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.7s;
+    }
+    .artwork-grid-card:hover .card-img { transform: scale(1.06); }
+    
+    .card-meta { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+    .card-title { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; margin-bottom: 5px; color: var(--text); }
+    .card-medium { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); }
+    .card-price { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; color: var(--gold); }
+
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 60px 40px;
+    }
+    .empty-glyph { font-family: 'Playfair Display', serif; font-size: 48px; color: var(--border); margin-bottom: 20px; }
+    .empty-text { color: var(--text-muted); font-size: 15px; }
+
+    @media (max-width: 1200px) { .artwork-grid { grid-template-columns: repeat(3, 1fr); gap: 24px; } }
+    @media (max-width: 900px) { 
+      .artwork-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; } 
+      .search-hero { padding: 60px 40px 40px; } 
+      .search-results { padding-left: 40px; padding-right: 40px; } 
+    }
+    @media (max-width: 600px) { 
+      .artwork-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; } 
+      .nav-links { display: none; } 
+      .search-hero { padding: 40px 20px 30px; } 
+      .search-results { padding-left: 20px; padding-right: 20px; } 
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV BAR -->
+  <nav class="nav-bar" id="main-nav">
+    <a href="index.html" class="nav-brand">Atelier Coloré</a>
+    <ul class="nav-links">
+      <li>
+        <a href="search.html" class="active">Search</a>
+      </li>
+      <li><a href="index.html">Home</a></li>
+      <li class="dropdown">
+        <a href="#">Artists <span style="font-size:8px; margin-left:4px;">▼</span></a>
+        <ul class="dropdown-menu" id="nav-artists-dropdown"></ul>
+      </li>
+      <li class="dropdown">
+        <a href="#">Artwork Type <span style="font-size:8px; margin-left:4px;">▼</span></a>
+        <ul class="dropdown-menu">
+          <li><a href="all-artworks.html">All Artwork</a></li>
+          <li><a href="sculptures.html">Sculpture and Objects</a></li>
+          <li><a href="oil-paintings.html">Oil Painting</a></li>
+          <li><a href="sketches.html">Sketches</a></li>
+        </ul>
+      </li>
+      <li><a href="#">Sell</a></li>
+      <li class="dropdown">
+        <a href="#">Service <span style="font-size:8px; margin-left:4px;">▼</span></a>
+        <ul class="dropdown-menu">
+          <li><a href="#">Buy</a></li>
+          <li><a href="#">Bid</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+
+  <header class="search-hero">
+    <div class="search-eyebrow">Discover</div>
+    <div class="search-input-wrapper">
+      <input type="text" id="searchInput" class="search-input" placeholder="Search by title, medium, or style..." autocomplete="off" autofocus />
+    </div>
+    <div class="search-meta" id="searchMeta">Type to start searching the collection.</div>
+  </header>
+
+  <main class="search-results">
+    <div id="artwork-grid" class="artwork-grid">
+      <!-- Populated by JS -->
+    </div>
+  </main>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+    const supabase = createClient('https://hcnciegpfsmladslpkxx.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhjbmNpZWdwZnNtbGFkc2xwa3h4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk5NjMzMTcsImV4cCI6MjA5NTUzOTMxN30.XndWiaPVh8qzaHOA_5OQkaHx3y4N5UA0DHaFcWpOmXg');
+
+    let allItems = [];
+    const searchInput = document.getElementById('searchInput');
+    const searchMeta = document.getElementById('searchMeta');
+    const grid = document.getElementById('artwork-grid');
+
+    async function init() {
+      // Fetch all items once, then filter locally for speed.
+      const { data, error } = await supabase.from('Artworks').select('*').order('created_at', { ascending: false });
+      if (!error && data) {
+        allItems = data.filter(a => a.Image_url);
+      }
+      
+      const params = new URLSearchParams(window.location.search);
+      const query = params.get('q');
+      if (query) {
+        searchInput.value = query;
+        performSearch(query);
+      } else {
+        // Show a few random items to start
+        renderGrid(allItems.slice(0, 8));
+      }
+    }
+
+    function performSearch(query) {
+      if (!query.trim()) {
+        searchMeta.textContent = "Type to start searching the collection.";
+        renderGrid(allItems.slice(0, 8));
+        return;
+      }
+      
+      const q = query.toLowerCase();
+      const results = allItems.filter(item => {
+        return (item.Title && item.Title.toLowerCase().includes(q)) || 
+               (item.Type && item.Type.toLowerCase().includes(q)) ||
+               (item.Description && item.Description.toLowerCase().includes(q));
+      });
+      
+      searchMeta.textContent = \`\${results.length} result\${results.length !== 1 ? 's' : ''} found for "\${query}"\`;
+      renderGrid(results);
+      
+      // Update URL without reloading
+      const url = new URL(window.location);
+      url.searchParams.set('q', query);
+      window.history.replaceState({}, '', url);
+    }
+
+    function renderGrid(items) {
+      if (items.length === 0) {
+        grid.innerHTML = \`<div class="empty-state"><div class="empty-glyph">✦</div><div class="empty-text">No artworks matched your search.</div></div>\`;
+        return;
+      }
+      
+      grid.innerHTML = items.map(art => \`
+        <a href="artwork?id=\${art.id}" class="artwork-grid-card">
+          <div class="card-frame"><img src="\${art.Image_url}" class="card-img" /></div>
+          <div class="card-meta">
+            <div><div class="card-title">\${art.Title||'Untitled'}</div><div class="card-medium">\${art.Type||''}</div></div>
+            <div class="card-price">\$\${Number(art.Price).toLocaleString()}</div>
+          </div>
+        </a>\`).join('');
+    }
+
+    let debounceTimer;
+    searchInput.addEventListener('input', (e) => {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        performSearch(e.target.value);
+      }, 300);
+    });
+
+    init();
+  
+    async function populateArtistsNav() {
+      const dropdown = document.getElementById('nav-artists-dropdown');
+      if (!dropdown) return;
+      const { data } = await supabase.from('Artist').select('id, artist_name').order('artist_name');
+      if (data) {
+        dropdown.innerHTML = data.map(a => `<li><a href="artist?id=${a.id}">${a.artist_name}</a></li>`).join('');
+      }
+    }
+    populateArtistsNav();
+  </script>
+</body>
+</html>

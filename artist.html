@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Artist — Atelier Coloré Canada</title>
+  <meta name="description" content="Explore the full portfolio of our featured artist at Atelier Coloré Canada." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,800;0,900;1,400;1,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --dark-bg: #111;
+      --nav-bg: #151515;
+      --white: #ffffff;
+      --gold: #c9a84c;
+      --muted: rgba(255,255,255,0.55);
+      --border: #222;
+      --nav-h: 70px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--dark-bg);
+      font-family: 'Inter', sans-serif;
+      color: var(--white);
+      overflow-x: hidden;
+      padding-top: var(--nav-h);
+    }
+
+    /* NAV */
+    .nav-bar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: var(--nav-h);
+      background: rgba(21,21,21,0.96);
+      backdrop-filter: blur(12px);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px;
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px; font-weight: 800;
+      color: var(--white); text-decoration: none;
+      letter-spacing: 2px; text-transform: uppercase;
+    }
+    .nav-links { display: flex; gap: 36px; list-style: none; }
+    .nav-links a {
+      color: rgba(255,255,255,0.85); text-decoration: none;
+      font-size: 13px; text-transform: uppercase; letter-spacing: 1.5px;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--gold); }
+
+    /* DROPDOWNS */
+    .dropdown {
+      position: relative;
+    }
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: rgba(17, 17, 17, 0.98);
+      border: 1px solid #333;
+      list-style: none;
+      padding: 12px 0;
+      min-width: 240px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px);
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .dropdown:hover .dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    .dropdown-menu li {
+      padding: 0;
+    }
+    .dropdown-menu a {
+      padding: 10px 20px;
+      display: block;
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 12px;
+      letter-spacing: 1px;
+    }
+    .dropdown-menu a:hover {
+      background: #222;
+      color: var(--gold);
+    }
+
+    /* HERO BANNER */
+    .artist-hero {
+      width: 100%;
+      background: linear-gradient(to bottom, #0a0a0a, var(--dark-bg));
+      border-bottom: 1px solid var(--border);
+      padding: 80px 80px 0;
+      display: flex;
+      align-items: flex-end;
+      gap: 60px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .artist-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 20% 50%, rgba(201,168,76,0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .artist-hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 140px 5% 60px;
+      position: relative;
+    }
+
+    .artist-portrait-wrap {
+      width: 100%;
+      max-width: 800px;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 40px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+      position: relative;
+    }
+    
+    .artist-portrait-wrap::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
+      pointer-events: none;
+    }
+
+    .artist-portrait {
+      display: block;
+      width: 100%;
+      height: auto; /* natural height, no cropping */
+      filter: grayscale(10%) contrast(1.1);
+    }
+
+    .artist-portrait-placeholder {
+      width: 100%; height: 100%;
+      background: #1a1a1a;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .artist-portrait-placeholder svg {
+      width: 60px; height: 60px; opacity: 0.15;
+    }
+
+    .artist-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 56px;
+      font-weight: 400;
+      letter-spacing: 2px;
+      color: #fff;
+      margin-bottom: 24px;
+      line-height: 1.1;
+    }
+
+    .artist-tagline {
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.8;
+      max-width: 720px;
+      margin: 0 auto 48px;
+      font-style: italic;
+    }
+
+    .artist-stats {
+      display: flex;
+      gap: 80px;
+      justify-content: center;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding: 32px 0;
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .stat-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      font-weight: 400;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+    .stat-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+    }
+
+    /* DIVIDER STRIP */
+    .artist-strip {
+      border-top: 1px solid var(--border);
+      padding: 28px 80px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+    .strip-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .strip-tag {
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border: 1px solid #333;
+      color: rgba(255,255,255,0.7);
+    }
+
+    /* PORTFOLIO SECTION */
+    .portfolio-section {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 64px 80px 120px;
+    }
+
+    .portfolio-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 48px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 20px;
+    }
+
+    .portfolio-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .filter-tabs {
+      display: flex;
+      gap: 4px;
+    }
+    .filter-tab {
+      padding: 8px 20px;
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: transparent;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+    .filter-tab.active, .filter-tab:hover {
+      color: var(--white);
+      border-color: #333;
+    }
+    .filter-tab.active {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    /* MASONRY GRID */
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 28px;
+    }
+
+    .portfolio-card {
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+      display: block;
+      transition: all 0.35s ease;
+    }
+    .portfolio-card:hover { transform: translateY(-8px); }
+
+    .portfolio-card-frame {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      background: #151515;
+      border: 1px solid #222;
+      overflow: hidden;
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .portfolio-card-frame::after {
+      content: '';
+      position: absolute;
+      inset: 10px;
+      border: 1px solid rgba(201,168,76,0.1);
+      pointer-events: none;
+      transition: border-color 0.3s ease;
+    }
+    .portfolio-card:hover .portfolio-card-frame {
+      border-color: var(--gold);
+      box-shadow: 0 10px 28px rgba(201,168,76,0.12), 0 4px 12px rgba(0,0,0,0.5);
+    }
+    .portfolio-card:hover .portfolio-card-frame::after {
+      border-color: rgba(201,168,76,0.4);
+    }
+
+    .portfolio-card-img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.7s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    .portfolio-card:hover .portfolio-card-img { transform: scale(1.07); }
+
+    .portfolio-card-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .portfolio-card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.3;
+      flex: 1;
+    }
+    .portfolio-card-price {
+      font-size: 13px;
+      color: var(--gold);
+      font-weight: 500;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .portfolio-card-type {
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 5px;
+    }
+
+    /* LOADING / ERROR */
+    .page-loader {
+      min-height: calc(100vh - var(--nav-h));
+      display: flex; align-items: center;
+      justify-content: center;
+      flex-direction: column; gap: 20px;
+    }
+    .loader-ring {
+      width: 44px; height: 44px;
+      border: 2px solid #222;
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loader-text { font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); }
+
+    .empty-grid {
+      grid-column: 1 / -1;
+      padding: 80px 0;
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 1200px) {
+      .portfolio-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 900px) {
+      .artist-hero { flex-direction: column; padding: 48px 40px 0; gap: 36px; }
+      .artist-portrait-wrap { width: 180px; height: 220px; }
+      .artist-hero-info { padding-bottom: 32px; }
+      .artist-strip { padding: 20px 40px; flex-wrap: wrap; }
+      .portfolio-section { padding: 48px 40px 80px; }
+      .portfolio-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+      .filter-tabs { display: none; }
+    }
+    @media (max-width: 600px) {
+      .artist-hero { padding: 32px 20px 0; }
+      .artist-stats { gap: 28px; }
+      .portfolio-section { padding: 32px 20px 60px; }
+      .portfolio-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+      .nav-bar { padding: 0 20px; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav-bar">
+    <a href="index.html" class="nav-brand">Atelier Coloré</a>
+    <ul class="nav-links">
+      <li><a href="search.html">Search</a></li>
+      <li><a href="index.html">Home</a></li>
+      <li class="dropdown">
+        <a href="#" class="active">Artists <span style="font-size:8px; margin-left:4px;">▼</span></a>
+        <ul class="dropdown-menu" id="nav-artists-dropdown"></ul>
+      </li>
+      <li class="dropdown">
+        <a href="#">Artwork Type <span style="font-size:8px; margin-left:4px;">▼</span></a>
+        <ul class="dropdown-menu">
+          <li><a href="all-artworks.html">All Artwork</a></li>
+          <li><a href="sculptures.html">Sculpture and Objects</a></li>
+          <li><a href="oil-paintings.html">Oil Painting</a></li>
+          <li><a href="sketches.html">Sketches</a></li>
+        </ul>
+      </li>
+      <li class="dropdown">
+        <a href="#">Service <span style="font-size:8px; margin-left:4px;">▼</span></a>
+        <ul class="dropdown-menu">
+          <li><a href="#">Buy</a></li>
+          <li><a href="#">Bid</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+
+  <div id="page-content">
+    <div class="page-loader">
+      <div class="loader-ring"></div>
+      <p class="loader-text">Loading artist portfolio</p>
+    </div>
+  </div>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+    const SUPABASE_URL = 'https://hcnciegpfsmladslpkxx.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhjbmNpZWdwZnNtbGFkc2xwa3h4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk5NjMzMTcsImV4cCI6MjA5NTUzOTMxN30.XndWiaPVh8qzaHOA_5OQkaHx3y4N5UA0DHaFcWpOmXg';
+
+    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+    const params = new URLSearchParams(window.location.search);
+    let artistId = params.get('id') || localStorage.getItem('selectedArtistId');
+    console.log("artist.html loaded! artistId:", artistId);
+
+    if (!artistId) {
+      console.warn("No artistId found in URL or localStorage!");
+      document.getElementById('page-content').innerHTML = `<div class="page-loader" style="color:red; max-width:80%; text-align:center;"><p>Error: No Artist Selected. Please go back to the homepage and try clicking the artist name again.</p></div>`;
+    } else {
+      loadArtistPage();
+    }
+
+    let allWorks = [];
+    let activeFilter = 'All';
+
+    async function loadArtistPage() {
+      try {
+        const [artistRes, worksRes] = await Promise.all([
+          supabase.from('Artist').select('*').eq('id', artistId).single(),
+          supabase.from('Artworks').select('*').eq('artist_id', artistId).order('created_at', { ascending: false }),
+        ]);
+
+        if (artistRes.error) throw artistRes.error;
+        if (worksRes.error) console.warn("Works error:", worksRes.error);
+
+        const artistProfile = artistRes.data;
+        const artistWorks = worksRes.data || [];
+
+        if (!artistProfile) {
+          document.getElementById('page-content').innerHTML = `<div class="page-loader"><p class="loader-text">Artist not found in database</p></div>`;
+          return;
+        }
+
+        allWorks = artistWorks;
+        document.title = `${artistProfile.artist_name} — Atelier Coloré Canada`;
+
+        const types = ['All', ...new Set(allWorks.map(w => w.Type).filter(Boolean))];
+
+        renderPage(artistProfile, allWorks, types);
+      } catch (err) {
+        console.error("Error loading artist page:", err);
+        document.getElementById('page-content').innerHTML = `<div class="page-loader" style="color:red; max-width:80%; text-align:center;"><p>Error loading profile: ${err.message || err}</p></div>`;
+      }
+    }
+
+    function renderPage(artist, works, types) {
+      const portraitHtml = artist.Profile_image
+        ? `<img src="${artist.Profile_image}" alt="${artist.artist_name}" class="artist-portrait" />`
+        : `<div class="artist-portrait-placeholder"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg></div>`;
+
+      const typeTags = types.filter(t => t !== 'All').map(t =>
+        `<span class="strip-tag">${t}</span>`
+      ).join('');
+
+      document.getElementById('page-content').innerHTML = `
+        <!-- HERO -->
+        <section class="artist-hero" id="artist-hero">
+          <div class="artist-portrait-wrap">
+            ${portraitHtml}
+          </div>
+          <h1 class="artist-name">${artist.artist_name}</h1>
+          <p class="artist-tagline">${artist.bio ? `"${artist.bio}"` : ''}</p>
+          <div class="artist-stats">
+            <div class="stat-item">
+              <div class="stat-number">${works.length}</div>
+              <div class="stat-label">Original Works</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number">2026</div>
+              <div class="stat-label">Collection</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SPECIALTY STRIP -->
+        <div class="artist-strip">
+          <span class="strip-label">Specialties</span>
+          ${typeTags}
+        </div>
+
+        <!-- PORTFOLIO -->
+        <div class="portfolio-section">
+          <div class="portfolio-header">
+            <h2 class="portfolio-title">Full Portfolio</h2>
+            <div class="filter-tabs" id="filterTabs">
+              ${types.map(t => `
+                <button class="filter-tab ${t === 'All' ? 'active' : ''}" data-type="${t}" onclick="applyFilter('${t}')">
+                  ${t}
+                </button>
+              `).join('')}
+            </div>
+          </div>
+          <div class="portfolio-grid" id="portfolio-grid">
+            ${renderCards(works)}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderCards(works) {
+      if (works.length === 0) {
+        return `<div class="empty-grid">No works found in this category.</div>`;
+      }
+      return works.filter(w => w.Image_url).map(art => `
+        <a href="artwork.html?id=${art.id}" onclick="localStorage.setItem('selectedArtworkId', '${art.id}'); window.location.href='artwork.html?id=${art.id}'; return false;" class="portfolio-card">
+          <div class="portfolio-card-frame">
+            <img src="${art.Image_url}" alt="${art.Title}" class="portfolio-card-img" loading="lazy" />
+          </div>
+          <div class="portfolio-card-info">
+            <div class="portfolio-card-title">${art.Title || 'Untitled'}</div>
+            <div class="portfolio-card-price">$${Number(art.Price).toLocaleString()}</div>
+          </div>
+          <div class="portfolio-card-type">${art.Type || ''}</div>
+        </a>
+      `).join('');
+    }
+
+    window.applyFilter = function(type) {
+      activeFilter = type;
+      // Update tab state
+      document.querySelectorAll('.filter-tab').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.type === type);
+      });
+      const filtered = type === 'All' ? allWorks : allWorks.filter(w => w.Type === type);
+      document.getElementById('portfolio-grid').innerHTML = renderCards(filtered);
+    };
+
+    // loadArtistPage() is now called from the initial check above to prevent silent redirects
+    async function populateArtistsNav() {
+      const dropdown = document.getElementById('nav-artists-dropdown');
+      if (!dropdown) return;
+      const { data } = await supabase.from('Artist').select('id, artist_name').order('artist_name');
+      if (data) {
+        dropdown.innerHTML = data.map(a => `<li><a href="artist.html?id=${a.id}" onclick="localStorage.setItem('selectedArtistId', '${a.id}'); window.location.href='artist.html?id=${a.id}'; return false;">${a.artist_name}</a></li>`).join('');
+      }
+    }
+    populateArtistsNav();
+  </script>
+</body>
+</html>
