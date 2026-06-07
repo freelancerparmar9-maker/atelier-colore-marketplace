@@ -410,7 +410,7 @@
     <a href="index.html" class="nav-brand">Atelier Coloré</a>
     <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
-      <li><a href="artist?id=1">Artists</a></li>
+      <li><a href="/artist.html?id=1">Artists</a></li>
       <li><a href="catalog.html?type=Oil Painting">Oil Paintings</a></li>
       <li><a href="catalog.html?type=Sketch">Sketches</a></li>
       <li><a href="#">Private Sales</a></li>
@@ -559,7 +559,7 @@
       }
 
       grid.innerHTML = sorted.map(art => `
-        <a href="artwork?id=${art.id}" class="artwork-grid-card">
+        <a href="/artwork.html?id=${art.id}" class="artwork-grid-card">
           <div class="card-frame">
             <img src="${art.Image_url}" alt="${art.Title || 'Artwork'}" class="card-img" loading="lazy" />
             <span class="card-overlay-cta">View Work</span>
@@ -610,7 +610,7 @@
       if (!dropdown) return;
       const { data } = await supabase.from('Artist').select('id, artist_name').order('artist_name');
       if (data) {
-        dropdown.innerHTML = data.map(a => `<li><a href="artist?id=${a.id}">${a.artist_name}</a></li>`).join('');
+        dropdown.innerHTML = data.map(a => `<li><a href="/artist.html?id=${a.id}">${a.artist_name}</a></li>`).join('');
       }
     }
     populateArtistsNav();

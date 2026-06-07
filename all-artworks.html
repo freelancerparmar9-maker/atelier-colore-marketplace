@@ -148,7 +148,7 @@
       if (sorted.length === 0) { renderEmpty('No artworks available currently.'); return; }
       
       grid.innerHTML = sorted.map(art => `
-        <a href="artwork?id=${art.id}" class="artwork-grid-card">
+        <a href="/artwork.html?id=${art.id}" class="artwork-grid-card">
           <div class="card-frame"><img src="${art.Image_url}" class="card-img" /></div>
           <div class="card-meta">
             <div><div class="card-title">${art.Title||'Untitled'}</div><div class="card-medium">${art.Type||''}</div></div>
@@ -168,7 +168,7 @@
       if (!dropdown) return;
       const { data } = await supabase.from('Artist').select('id, artist_name').order('artist_name');
       if (data) {
-        dropdown.innerHTML = data.map(a => `<li><a href="artist?id=${a.id}">${a.artist_name}</a></li>`).join('');
+        dropdown.innerHTML = data.map(a => `<li><a href="/artist.html?id=${a.id}">${a.artist_name}</a></li>`).join('');
       }
     }
     populateArtistsNav();

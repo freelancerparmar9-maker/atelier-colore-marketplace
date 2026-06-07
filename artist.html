@@ -548,7 +548,7 @@
         return `<div class="empty-grid">No works found in this category.</div>`;
       }
       return works.filter(w => w.Image_url).map(art => `
-        <a href="artwork.html?id=${art.id}" onclick="localStorage.setItem('selectedArtworkId', '${art.id}'); window.location.href='artwork.html?id=${art.id}'; return false;" class="portfolio-card">
+        <a href="/artwork.html?id=${art.id}" onclick="localStorage.setItem('selectedArtworkId', '${art.id}'); window.location.href='/artwork.html?id=${art.id}'; return false;" class="portfolio-card">
           <div class="portfolio-card-frame">
             <img src="${art.Image_url}" alt="${art.Title}" class="portfolio-card-img" loading="lazy" />
           </div>
@@ -577,7 +577,7 @@
       if (!dropdown) return;
       const { data } = await supabase.from('Artist').select('id, artist_name').order('artist_name');
       if (data) {
-        dropdown.innerHTML = data.map(a => `<li><a href="artist.html?id=${a.id}" onclick="localStorage.setItem('selectedArtistId', '${a.id}'); window.location.href='artist.html?id=${a.id}'; return false;">${a.artist_name}</a></li>`).join('');
+        dropdown.innerHTML = data.map(a => `<li><a href="/artist.html?id=${a.id}" onclick="localStorage.setItem('selectedArtistId', '${a.id}'); window.location.href='/artist.html?id=${a.id}'; return false;">${a.artist_name}</a></li>`).join('');
       }
     }
     populateArtistsNav();
