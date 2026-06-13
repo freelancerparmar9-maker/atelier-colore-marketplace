@@ -793,20 +793,24 @@
     });
 
     async function init() {
-      const { data, error } = await supabase
-        .from('Artworks')
-        .select('*')
-        .eq('Type', 'Oil Painting')
-        .order('created_at', { ascending: false });
+      const { data, error } = await supabase.storage.from('gallery-assets').list('hero');
 
-      if (error || !data.length) {
-        console.error('Error fetching oil paintings', error);
+      if (error || !data || data.length === 0) {
+        console.error('Error fetching hero images from storage', error);
         return;
       }
 
-      oilPaintings = data.filter(d => d.Image_url);
+      const validFiles = data.filter(f => f.name && f.name !== '.emptyFolderPlaceholder' && !f.name.startsWith('.'));
+      if (validFiles.length === 0) return;
 
-      if (oilPaintings.length === 0) return;
+      oilPaintings = validFiles.map(file => {
+        const { data: publicUrlData } = supabase.storage.from('gallery-assets').getPublicUrl(`hero/${file.name}`);
+        const cleanTitle = file.name.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " ");
+        return {
+          Image_url: publicUrlData.publicUrl,
+          Title: cleanTitle
+        };
+      });
 
       // Inject layers
       const heroContainer = document.getElementById('hero-layer-container');
@@ -862,7 +866,11 @@
       
       // Make the big painting container clickable to view the artwork details
       document.querySelector('.big-painting-container').onclick = () => {
-        window.location.href = `artwork?id=${art.id}`;
+        if (art.id) {
+          window.location.href = `/artwork.html?id=${art.id}`;
+        } else {
+          window.location.href = `/all-artworks.html`;
+        }
       };
 
       document.querySelectorAll('.thumb-card').forEach((card, idx) => {
