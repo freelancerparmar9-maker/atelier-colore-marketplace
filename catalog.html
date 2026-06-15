@@ -558,21 +558,26 @@
         return;
       }
 
-      grid.innerHTML = sorted.map(art => `
-        <a href="/artwork.html?id=${art.id}" class="artwork-grid-card">
-          <div class="card-frame">
-            <img src="${art.Image_url}" alt="${art.Title || 'Artwork'}" class="card-img" loading="lazy" />
-            <span class="card-overlay-cta">View Work</span>
-          </div>
+      grid.innerHTML = sorted.map(art => {
+        const isAuction = art.Service && art.Service.toLowerCase().includes('auction');
+        const priceDisplay = isAuction ? 'Auction' : '$' + Number(art.Price).toLocaleString();
+        const targetUrl = isAuction ? '/auction.html' : `/artwork.html?id=${art.id}`;
+        return `
+        <a href="${targetUrl}" class="artwork-grid-card" onclick="if(!${isAuction}){localStorage.setItem('selectedArtworkId', '${art.id}');}; window.location.href='${targetUrl}'; return false;">
+          <div class="card-frame"><img src="${art.Image_url}" class="card-img" loading="lazy" /></div>
           <div class="card-meta">
-            <div class="card-meta-left">
-              <div class="card-title">${art.Title || 'Untitled'}</div>
-              <div class="card-medium">${art.Type || ''} ${art.Dimension ? '· ' + art.Dimension : ''}</div>
+            <div>
+              <div class="card-title">${art.Title||'Untitled'}</div>
+              <div class="card-medium">${art.Type||''}</div>
             </div>
-            <div class="card-price">$${Number(art.Price).toLocaleString()}</div>
+            <div class="card-price" style="${isAuction ? 'color: var(--gold); font-weight: 600;' : ''}">${priceDisplay}</div>
           </div>
-        </a>
-      `).join('');
+          <div class="card-meta" style="margin-top: 4px; padding-top: 0; border-top: none;">
+            <div class="card-medium" style="opacity: 0.8; font-size: 11px;">
+              ${art.Medium || ''} ${art.Medium && art.Dimension ? ' | ' : ''} ${art.Dimension || ''}
+            </div>
+          </div>
+        </a>`}).join('');
     }
 
     function sortItems(items, sortVal) {

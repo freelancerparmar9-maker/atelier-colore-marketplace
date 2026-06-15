@@ -615,7 +615,8 @@
         <ul class="dropdown-menu">
           <li><a href="all-artworks.html">All Artwork</a></li>
           <li><a href="sculptures.html">Sculpture and Objects</a></li>
-          <li><a href="oil-paintings.html">Oil Painting</a></li>
+          <li><a href="/acrylic-on-canvas.html">Acrylic On Canvas</a></li>
+          <li><a href="/oil-paintings.html">Oil Painting</a></li>
           <li><a href="sketches.html">Sketches</a></li>
         </ul>
       </li>
@@ -624,7 +625,7 @@
         <a href="#">Service <span style="font-size:8px; margin-left:4px;">▼</span></a>
         <ul class="dropdown-menu">
           <li><a href="#">Buy</a></li>
-          <li><a href="#">Bid</a></li>
+          <li><a href="/auction.html">Auction</a></li>
         </ul>
       </li>
     </ul>
@@ -736,11 +737,11 @@
       </div>
     </div>
 
-    <!-- Row 2: Oil Paintings -->
+    <!-- Row 2: Acrylic On Canvas -->
     <div class="showcase-row">
       <div class="row-header">
-        <h3 class="row-title">Oil Paintings</h3>
-        <a href="oil-paintings.html" class="row-see-more">See More &rarr;</a>
+        <h3 class="row-title">Acrylic On Canvas</h3>
+        <a href="/acrylic-on-canvas.html" class="row-see-more">See More &rarr;</a>
       </div>
       <div class="scroll-container-wrapper">
         <button class="nav-btn left" onclick="scrollRow('oil-paintings-track', 'left')">&lt;</button>
@@ -952,12 +953,12 @@
         renderShowcaseError('all-artworks-track');
       }
 
-      // Row 2: Oil Paintings
+      // Row 2: Acrylic On Canvas
       try {
         const { data: oilPaintings, error: err2 } = await supabase
           .from('Artworks')
           .select('*')
-          .eq('Type', 'Oil Painting')
+          .eq('Type', 'Acrylic On Canvas')
           .limit(6);
         
         renderShowcaseRow('oil-paintings-track', oilPaintings, err2, 5);
@@ -997,17 +998,24 @@
         return;
       }
 
-      trackEl.innerHTML = validData.map(art => `
-        <a href="/artwork.html?id=${art.id}" onclick="localStorage.setItem('selectedArtworkId', '${art.id}'); window.location.href='/artwork.html?id=${art.id}'; return false;" class="art-card">
+      trackEl.innerHTML = validData.map(art => {
+        const isAuction = art.Service && art.Service.toLowerCase().includes('auction');
+        const priceDisplay = isAuction ? 'Auction' : '$' + Number(art.Price).toLocaleString();
+        const targetUrl = isAuction ? '/auction.html' : `/artwork.html?id=${art.id}`;
+        return `
+        <a href="${targetUrl}" onclick="if(!${isAuction}){localStorage.setItem('selectedArtworkId', '${art.id}');}; window.location.href='${targetUrl}'; return false;" class="art-card">
           <div class="art-frame">
             <img src="${art.Image_url}" class="art-image" alt="${art.Title || 'Artwork'}" loading="lazy" />
           </div>
           <div class="art-info">
             <h4 class="art-card-title">${art.Title || 'Untitled'}</h4>
-            <span class="art-card-price">$${Number(art.Price).toLocaleString()}</span>
+            <span class="art-card-price">${priceDisplay}</span>
+          </div>
+          <div class="art-details" style="font-size: 11px; color: var(--gold); margin-top: 4px; text-transform: uppercase; letter-spacing: 1px;">
+            ${art.Medium || ''} ${art.Medium && art.Dimension ? ' | ' : ''} ${art.Dimension || ''}
           </div>
         </a>
-      `).join('');
+      `}).join('');
     }
 
     function renderShowcaseError(trackId) {

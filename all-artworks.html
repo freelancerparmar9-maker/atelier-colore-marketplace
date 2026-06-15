@@ -92,13 +92,14 @@
         <ul class="dropdown-menu">
           <li><a href="all-artworks.html">All Artwork</a></li>
           <li><a href="sculptures.html">Sculpture and Objects</a></li>
-          <li><a href="oil-paintings.html">Oil Painting</a></li>
+          <li><a href="/acrylic-on-canvas.html">Acrylic On Canvas</a></li>
+          <li><a href="/oil-paintings.html">Oil Painting</a></li>
           <li><a href="sketches.html">Sketches</a></li>
         </ul>
       </li>
       <li><a href="#">Sell</a></li>
       <li class="dropdown"><a href="#">Service <span>▼</span></a>
-        <ul class="dropdown-menu"><li><a href="#">Buy</a></li><li><a href="#">Bid</a></li></ul>
+        <ul class="dropdown-menu"><li><a href="#">Buy</a></li><li><a href="/auction.html">Auction</a></li></ul>
       </li>
     </ul>
   </nav>
@@ -147,14 +148,26 @@
       
       if (sorted.length === 0) { renderEmpty('No artworks available currently.'); return; }
       
-      grid.innerHTML = sorted.map(art => `
-        <a href="/artwork.html?id=${art.id}" class="artwork-grid-card">
-          <div class="card-frame"><img src="${art.Image_url}" class="card-img" /></div>
+      grid.innerHTML = sorted.map(art => {
+        const isAuction = art.Service && art.Service.toLowerCase().includes('auction');
+        const priceDisplay = isAuction ? 'Auction' : '$' + Number(art.Price).toLocaleString();
+        const targetUrl = isAuction ? '/auction.html' : `/artwork.html?id=${art.id}`;
+        return `
+        <a href="${targetUrl}" class="artwork-grid-card" onclick="if(!${isAuction}){localStorage.setItem('selectedArtworkId', '${art.id}');}; window.location.href='${targetUrl}'; return false;">
+          <div class="card-frame"><img src="${art.Image_url}" class="card-img" loading="lazy" /></div>
           <div class="card-meta">
-            <div><div class="card-title">${art.Title||'Untitled'}</div><div class="card-medium">${art.Type||''}</div></div>
-            <div class="card-price">$${Number(art.Price).toLocaleString()}</div>
+            <div>
+              <div class="card-title">${art.Title||'Untitled'}</div>
+              <div class="card-medium">${art.Type||''}</div>
+            </div>
+            <div class="card-price" style="${isAuction ? 'color: var(--gold); font-weight: 600;' : ''}">${priceDisplay}</div>
           </div>
-        </a>`).join('');
+          <div class="card-meta" style="margin-top: 4px; padding-top: 0; border-top: none;">
+            <div class="card-medium" style="opacity: 0.8; font-size: 11px;">
+              ${art.Medium || ''} ${art.Medium && art.Dimension ? ' | ' : ''} ${art.Dimension || ''}
+            </div>
+          </div>
+        </a>`}).join('');
     }
 
     window.applySort = renderGrid;

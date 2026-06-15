@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Oil Paintings — Atelier Coloré Canada</title>
-  <meta name="description" content="Browse our curated collection of original oil paintings at Atelier Coloré Canada." />
+  <title>Auctions — Atelier Coloré Canada</title>
+  <meta name="description" content="Exclusive art auctions by Atelier Coloré Canada." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -283,8 +283,7 @@
         <ul class="dropdown-menu">
           <li><a href="all-artworks.html">All Artwork</a></li>
           <li><a href="sculptures.html">Sculpture and Objects</a></li>
-          <li><a href="/acrylic-on-canvas.html">Acrylic On Canvas</a></li>
-          <li><a href="/oil-paintings.html">Oil Painting</a></li>
+          <li><a href="oil-paintings.html">Acrylic On Canvas</a></li>
           <li><a href="sketches.html">Sketches</a></li>
         </ul>
       </li>
@@ -303,15 +302,15 @@
   <div class="breadcrumb">
     <a href="index.html">Home</a>
     <span class="breadcrumb-sep">—</span>
-    <span>Oil Paintings</span>
+    <span>Acrylic On Canvas</span>
   </div>
 
   <!-- HERO HEADER -->
   <header class="catalog-hero">
     <div class="catalog-hero-line"></div>
     <p class="catalog-eyebrow">Original Works · Atelier Coloré</p>
-    <h1 class="catalog-heading">Oil Paintings</h1>
-    <p class="catalog-subtitle">Monumental oil paintings exploring Buddhist philosophy, Himalayan mysticism, and contemporary spirituality.</p>
+    <h1 class="catalog-heading">Auctions</h1>
+    <p class="catalog-subtitle">Rare and exclusive artworks currently available for auction.</p>
   </header>
 
   <!-- STICKY TOOLBAR -->
@@ -348,11 +347,11 @@
     let allItems = [];
 
     async function init() {
-      // Exclusively fetch Oil Paintings
+      // Exclusively fetch Acrylic On Canvas
       const { data, error } = await supabase
         .from('Artworks')
         .select('*')
-        .eq('Type', 'Oil Painting')
+        .ilike('Service', '%auction%')
         .order('created_at', { ascending: false });
 
       if (error || !data) {

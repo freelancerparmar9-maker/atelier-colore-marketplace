@@ -417,7 +417,8 @@
         <ul class="dropdown-menu">
           <li><a href="all-artworks.html">All Artwork</a></li>
           <li><a href="sculptures.html">Sculpture and Objects</a></li>
-          <li><a href="oil-paintings.html">Oil Painting</a></li>
+          <li><a href="/acrylic-on-canvas.html">Acrylic On Canvas</a></li>
+          <li><a href="/oil-paintings.html">Oil Painting</a></li>
           <li><a href="sketches.html">Sketches</a></li>
         </ul>
       </li>
@@ -425,7 +426,7 @@
         <a href="#">Service <span style="font-size:8px; margin-left:4px;">▼</span></a>
         <ul class="dropdown-menu">
           <li><a href="#">Buy</a></li>
-          <li><a href="#">Bid</a></li>
+          <li><a href="/auction.html">Auction</a></li>
         </ul>
       </li>
     </ul>
@@ -547,18 +548,27 @@
       if (works.length === 0) {
         return `<div class="empty-grid">No works found in this category.</div>`;
       }
-      return works.filter(w => w.Image_url).map(art => `
-        <a href="/artwork.html?id=${art.id}" onclick="localStorage.setItem('selectedArtworkId', '${art.id}'); window.location.href='/artwork.html?id=${art.id}'; return false;" class="portfolio-card">
+      return works.filter(w => w.Image_url).map(art => {
+        const isAuction = art.Service && art.Service.toLowerCase().includes('auction');
+        const priceDisplay = isAuction ? 'Auction' : '$' + Number(art.Price).toLocaleString();
+        const targetUrl = isAuction ? '/auction.html' : `/artwork.html?id=${art.id}`;
+        return `
+        <a href="${targetUrl}" onclick="if(!${isAuction}){localStorage.setItem('selectedArtworkId', '${art.id}');}; window.location.href='${targetUrl}'; return false;" class="portfolio-card">
           <div class="portfolio-card-frame">
             <img src="${art.Image_url}" alt="${art.Title}" class="portfolio-card-img" loading="lazy" />
           </div>
           <div class="portfolio-card-info">
             <div class="portfolio-card-title">${art.Title || 'Untitled'}</div>
-            <div class="portfolio-card-price">$${Number(art.Price).toLocaleString()}</div>
+            <div class="portfolio-card-price">${priceDisplay}</div>
           </div>
-          <div class="portfolio-card-type">${art.Type || ''}</div>
+          <div class="portfolio-card-type" style="display: flex; flex-direction: column; gap: 4px;">
+            <span style="font-weight: 600; color: var(--gold);">${art.Type || ''}</span>
+            <span style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--gold); opacity: 0.8;">
+              ${art.Medium || ''} ${art.Medium && art.Dimension ? ' | ' : ''} ${art.Dimension || ''}
+            </span>
+          </div>
         </a>
-      `).join('');
+      `}).join('');
     }
 
     window.applyFilter = function(type) {
