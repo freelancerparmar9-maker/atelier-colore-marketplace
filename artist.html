@@ -478,11 +478,22 @@
           return;
         }
 
-        allWorks = artistWorks;
-        document.title = `${artistProfile.artist_name} — Atelier Coloré Canada`;
-
         const toTitleCase = s => s.trim().replace(/\w\S*/g, w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase());
-        const types = ['All', ...new Set(allWorks.map(w => w.Type).filter(Boolean).map(toTitleCase))];
+        
+        const getOrder = t => {
+          const str = (t || '').trim().toLowerCase();
+          if (str.includes('acrylic')) return 1;
+          if (str.includes('sketch')) return 2;
+          return 3;
+        };
+
+        allWorks = artistWorks.sort((a, b) => getOrder(a.Type) - getOrder(b.Type));
+        
+        let rawTypes = [...new Set(allWorks.map(w => w.Type).filter(Boolean).map(toTitleCase))];
+        rawTypes.sort((a, b) => getOrder(a) - getOrder(b));
+        
+        const types = ['All', ...rawTypes];
+        document.title = `${artistProfile.artist_name} — Atelier Coloré Canada`;
 
         renderPage(artistProfile, allWorks, types);
       } catch (err) {

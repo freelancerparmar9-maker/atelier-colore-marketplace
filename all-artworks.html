@@ -143,7 +143,22 @@
 
     function renderGrid() {
       const sortVal = document.getElementById('sort-select')?.value || 'default';
-      const sorted = [...allItems].sort((a,b) => sortVal==='price-asc' ? Number(a.Price)-Number(b.Price) : sortVal==='price-desc' ? Number(b.Price)-Number(a.Price) : 0);
+      
+      const getOrder = t => {
+        const str = (t || '').trim().toLowerCase();
+        if (str.includes('acrylic')) return 1;
+        if (str.includes('sketch')) return 2;
+        return 3;
+      };
+
+      const sorted = [...allItems].sort((a,b) => {
+        if (sortVal === 'price-asc') return Number(a.Price) - Number(b.Price);
+        if (sortVal === 'price-desc') return Number(b.Price) - Number(a.Price);
+        
+        const orderA = getOrder(a.Type);
+        const orderB = getOrder(b.Type);
+        return orderA - orderB;
+      });
       const grid = document.getElementById('artwork-grid');
       
       if (sorted.length === 0) { renderEmpty('No artworks available currently.'); return; }
