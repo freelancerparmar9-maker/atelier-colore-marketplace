@@ -291,7 +291,7 @@
       <li class="dropdown">
         <a href="#">Service <span style="font-size:8px; margin-left:4px;">▼</span></a>
         <ul class="dropdown-menu">
-          <li><a href="#">Buy</a></li>
+          <li><a href="/buy.html">Buy</a></li>
           <li><a href="/auction.html">Auction</a></li>
         </ul>
       </li>
@@ -376,24 +376,25 @@
 
       grid.innerHTML = sorted.map(art => {
         const isAuction = art.Service && art.Service.toLowerCase().includes('auction');
-        const priceDisplay = isAuction ? 'Auction' : '$' + Number(art.Price).toLocaleString();
-        const targetUrl = isAuction ? '/auction.html' : `/artwork.html?id=${art.id}`;
+        const priceDisplay = isAuction ? 'Auction' : (art.Price ? '$' + Number(art.Price).toLocaleString() : 'Price on Request');
+        const targetUrl = isAuction ? '/auction.html' : '/artwork.html?id=' + art.id;
         return `
-        <a href="${targetUrl}" class="artwork-grid-card" onclick="if(!${isAuction}){localStorage.setItem('selectedArtworkId', '${art.id}');}; window.location.href='${targetUrl}'; return false;">
+        <a href="${targetUrl}" class="artwork-grid-card" onclick="if(!${isAuction}){localStorage.setItem('selectedArtworkId','${art.id}');}window.location.href='${targetUrl}';return false;">
           <div class="card-frame"><img src="${art.Image_url}" class="card-img" loading="lazy" /></div>
           <div class="card-meta">
             <div>
               <div class="card-title">${art.Title||'Untitled'}</div>
               <div class="card-medium">${art.Type||''}</div>
             </div>
-            <div class="card-price" style="${isAuction ? 'color: var(--gold); font-weight: 600;' : ''}">${priceDisplay}</div>
+            <div class="card-price" style="${isAuction ? 'color:var(--gold);font-weight:700;' : ''}">${priceDisplay}</div>
           </div>
-          <div class="card-meta" style="margin-top: 4px; padding-top: 0; border-top: none;">
-            <div class="card-medium" style="opacity: 0.8; font-size: 11px;">
-              ${art.Medium || ''} ${art.Medium && art.Dimension ? ' | ' : ''} ${art.Dimension || ''}
+          <div class="card-meta" style="margin-top:4px;padding-top:0;border-top:none;">
+            <div class="card-medium" style="opacity:0.75;font-size:11px;">
+              ${art.Medium ? art.Medium : ''}${art.Medium && art.Dimension ? ' | ' : ''}${art.Dimension || ''}
             </div>
           </div>
-        </a>`}).join('');
+        </a>`;
+      }).join('');
     }
 
     function sortItems(items, sortVal) {

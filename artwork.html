@@ -157,6 +157,35 @@
       color: var(--gold);
       background: rgba(178,138,47,0.06);
     }
+    .availability-badge.unavailable {
+      border-color: #c0392b;
+      color: #c0392b;
+      background: rgba(192,57,43,0.06);
+    }
+
+    /* TOAST NOTIFICATION */
+    .toast-notif {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #111;
+      color: #fff;
+      font-size: 13px;
+      font-family: 'Inter', sans-serif;
+      letter-spacing: 0.5px;
+      padding: 14px 28px;
+      border-left: 3px solid var(--gold);
+      z-index: 9999;
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .toast-notif.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
 
     /* RIGHT: DETAILS PANEL */
     .artwork-details-panel {
@@ -599,7 +628,7 @@
       </li>
       <li><a href="#">Sell</a></li>
       <li class="dropdown"><a href="#">Service <span>▼</span></a>
-        <ul class="dropdown-menu"><li><a href="#">Buy</a></li><li><a href="/auction.html">Auction</a></li></ul>
+        <ul class="dropdown-menu"><li><a href="/buy.html">Buy</a></li><li><a href="/auction.html">Auction</a></li></ul>
       </li>
     </ul>
   </nav>
@@ -620,6 +649,9 @@
       <p class="loader-text">Retrieving artwork</p>
     </div>
   </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div class="toast-notif" id="siteToast"></div>
 
   <!-- INQUIRY MODAL -->
   <div class="modal-overlay" id="inquiryModal">
@@ -653,7 +685,7 @@
 
     const SUPABASE_URL = 'https://hcnciegpfsmladslpkxx.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhjbmNpZWdwZnNtbGFkc2xwa3h4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk5NjMzMTcsImV4cCI6MjA5NTUzOTMxN30.XndWiaPVh8qzaHOA_5OQkaHx3y4N5UA0DHaFcWpOmXg';
-    const MAKE_WEBHOOK = 'https://hook.us1.make.com/YOUR_WEBHOOK_ID'; // Replace with your Make.com webhook URL
+    const MAKE_WEBHOOK = 'https://hook.eu1.make.com/bpamw2k1f566ez5qxoxkkseuxieq8owh';
 
     const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
@@ -699,14 +731,21 @@
     }
 
     function renderArtwork(artwork, artist) {
+      const isAuctionItem = artwork.Service && artwork.Service.toLowerCase().includes('auction');
       const priceNum = Number(artwork.Price);
-      const priceStr = priceNum ? `$${priceNum.toLocaleString()} CAD` : 'Price on Request';
+      const priceStr = isAuctionItem ? 'Auction' : (priceNum ? `$${priceNum.toLocaleString()} CAD` : 'Price on Request');
       const dimension = artwork.Dimension || 'N/A';
       const medium = artwork.Medium || artwork.Type || 'N/A';
       const desc = artwork.Description || '';
 
+      // Availability: null/empty = Available; 'no' (case-insensitive) = Not Available
+      const availVal = (artwork.Availability || '').toString().trim().toLowerCase();
+      const isAvailable = availVal !== 'no';
+      const availBadgeClass = isAvailable ? 'availability-badge' : 'availability-badge unavailable';
+      const availText = isAvailable ? 'Available' : 'Not Available';
+
       const avatarHtml = artist?.Profile_image
-        ? `<img src="${artist.Profile_image}" alt="${artist.Name}" class="artist-avatar" />`
+        ? `<img src="${artist.Profile_image}" alt="${artist.artist_name || ''}" class="artist-avatar" />`
         : '';
 
       document.getElementById('page-content').innerHTML = `
@@ -718,7 +757,7 @@
             </div>
             <div class="artwork-frame-caption">
               <span class="frame-caption-text">Original Work · Certificate of Authenticity</span>
-              <span class="availability-badge">Available</span>
+              <span class="${availBadgeClass}">${availText}</span>
             </div>
           </div>
 
@@ -822,13 +861,15 @@
         });
       } catch(_) {}
 
-      document.getElementById('modal-body').innerHTML = `
-        <div class="form-success">
-          <div class="form-success-icon">✦</div>
-          <h3 class="form-success-title">Inquiry Received</h3>
-          <p class="form-success-text">Thank you, ${name}. Our team will reach you at <strong>${email}</strong> within 24 hours with full acquisition details.</p>
-        </div>
-      `;
+      closeModal();
+      showToast('Inquiry sent. Please check your email for confirmation.');
+    };
+
+    window.showToast = function(msg) {
+      const t = document.getElementById('siteToast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 5000);
     };
 
     loadArtwork();

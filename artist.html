@@ -425,7 +425,7 @@
       <li class="dropdown">
         <a href="#">Service <span style="font-size:8px; margin-left:4px;">▼</span></a>
         <ul class="dropdown-menu">
-          <li><a href="#">Buy</a></li>
+          <li><a href="/buy.html">Buy</a></li>
           <li><a href="/auction.html">Auction</a></li>
         </ul>
       </li>
@@ -550,25 +550,25 @@
       }
       return works.filter(w => w.Image_url).map(art => {
         const isAuction = art.Service && art.Service.toLowerCase().includes('auction');
-        const priceDisplay = isAuction ? 'Auction' : '$' + Number(art.Price).toLocaleString();
-        const targetUrl = isAuction ? '/auction.html' : `/artwork.html?id=${art.id}`;
+        const priceDisplay = isAuction ? 'Auction' : (art.Price ? '$' + Number(art.Price).toLocaleString() : 'Price on Request');
+        const targetUrl = isAuction ? '/auction.html' : '/artwork.html?id=' + art.id;
         return `
-        <a href="${targetUrl}" onclick="if(!${isAuction}){localStorage.setItem('selectedArtworkId', '${art.id}');}; window.location.href='${targetUrl}'; return false;" class="portfolio-card">
+        <a href="${targetUrl}" class="portfolio-card" onclick="if(!${isAuction}){localStorage.setItem('selectedArtworkId','${art.id}');}window.location.href='${targetUrl}';return false;">
           <div class="portfolio-card-frame">
             <img src="${art.Image_url}" alt="${art.Title}" class="portfolio-card-img" loading="lazy" />
           </div>
           <div class="portfolio-card-info">
             <div class="portfolio-card-title">${art.Title || 'Untitled'}</div>
-            <div class="portfolio-card-price">${priceDisplay}</div>
+            <div class="portfolio-card-price" style="${isAuction ? 'color:var(--gold);font-weight:700;' : ''}">${priceDisplay}</div>
           </div>
-          <div class="portfolio-card-type" style="display: flex; flex-direction: column; gap: 4px;">
-            <span style="font-weight: 600; color: var(--gold);">${art.Type || ''}</span>
-            <span style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--gold); opacity: 0.8;">
-              ${art.Medium || ''} ${art.Medium && art.Dimension ? ' | ' : ''} ${art.Dimension || ''}
+          <div class="portfolio-card-type" style="display:flex;flex-direction:column;gap:4px;">
+            <span style="font-weight:600;color:var(--gold);">${art.Type || ''}</span>
+            <span style="font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gold);opacity:0.8;">
+              ${art.Medium ? art.Medium : ''}${art.Medium && art.Dimension ? ' | ' : ''}${art.Dimension || ''}
             </span>
           </div>
-        </a>
-      `}).join('');
+        </a>`;
+      }).join('');
     }
 
     window.applyFilter = function(type) {
