@@ -844,12 +844,16 @@
       btn.textContent = 'Sending…';
 
       const payload = {
-        name,
-        email,
-        message,
-        artwork_title: currentArtwork?.Title || '',
-        artwork_price: currentArtwork?.Price ? `$${currentArtwork.Price} CAD` : '',
-        artwork_id: artworkId,
+        name:              name,
+        email:             email,
+        message:           message || '',
+        artwork_title:     currentArtwork?.Title || '',
+        artwork_id:        String(artworkId),
+        artwork_price:     currentArtwork?.Price ? `$${Number(currentArtwork.Price).toLocaleString()} CAD` : 'Price on Request',
+        artwork_medium:    currentArtwork?.Medium || currentArtwork?.Type || '',
+        artwork_dimension: currentArtwork?.Dimension || '',
+        artist_name:       artistData?.artist_name || '',
+        submitted_at:      new Date().toISOString(),
       };
 
       try {
@@ -857,9 +861,11 @@
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
-          mode: 'no-cors',
         });
-      } catch(_) {}
+      } catch(_) {
+        // Network error — still show confirmation to user
+      }
+
 
       closeModal();
       showToast('Inquiry sent. Please check your email for confirmation.');
