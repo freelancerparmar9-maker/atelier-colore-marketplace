@@ -481,7 +481,8 @@
         allWorks = artistWorks;
         document.title = `${artistProfile.artist_name} — Atelier Coloré Canada`;
 
-        const types = ['All', ...new Set(allWorks.map(w => w.Type).filter(Boolean))];
+        const toTitleCase = s => s.trim().replace(/\w\S*/g, w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase());
+        const types = ['All', ...new Set(allWorks.map(w => w.Type).filter(Boolean).map(toTitleCase))];
 
         renderPage(artistProfile, allWorks, types);
       } catch (err) {
@@ -577,7 +578,7 @@
       document.querySelectorAll('.filter-tab').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.type === type);
       });
-      const filtered = type === 'All' ? allWorks : allWorks.filter(w => w.Type === type);
+      const filtered = type === 'All' ? allWorks : allWorks.filter(w => (w.Type || '').trim().toLowerCase() === type.trim().toLowerCase());
       document.getElementById('portfolio-grid').innerHTML = renderCards(filtered);
     };
 
