@@ -597,6 +597,54 @@
       .nav-bar { padding: 0 20px; }
       .nav-links { display: none; }
     }
+    /* REGIONAL INFO MODAL */
+    .region-modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 2000;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
+      padding: 20px;
+    }
+    .region-modal-overlay.open { opacity: 1; pointer-events: auto; }
+    
+    .region-modal {
+      background: #111;
+      border: 1px solid rgba(255,255,255,0.1);
+      width: 100%; max-width: 650px;
+      padding: 60px 50px;
+      position: relative;
+      transform: translateY(20px);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      color: #fff;
+      text-align: center;
+    }
+    .region-modal-overlay.open .region-modal { transform: translateY(0); }
+    
+    .region-modal-close {
+      position: absolute; top: 24px; right: 24px;
+      background: none; border: none; color: #fff;
+      font-size: 24px; cursor: pointer; opacity: 0.6; transition: opacity 0.3s;
+    }
+    .region-modal-close:hover { opacity: 1; }
+    
+    .rm-eyebrow {
+      font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 16px;
+    }
+    .rm-title {
+      font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 400;
+      margin-bottom: 24px; line-height: 1.2;
+    }
+    .rm-desc {
+      font-size: 14px; line-height: 1.8; color: rgba(255,255,255,0.8);
+      font-weight: 300; text-align: justify;
+    }
+    .rm-divider {
+      width: 40px; height: 1px; background: var(--gold);
+      margin: 30px auto;
+    }
   </style>
 </head>
 <body>
@@ -624,7 +672,7 @@
       <li class="dropdown">
         <a href="#">Service <span style="font-size:8px; margin-left:4px;">▼</span></a>
         <ul class="dropdown-menu">
-          <li><a href="/buy.html">Buy</a></li>
+          <li><a href="/buy.html">Evaluation</a></li>
           <li><a href="/auction.html">Auction</a></li>
         </ul>
       </li>
@@ -668,7 +716,7 @@
       
       <!-- Kashmir -->
       <div class="region-item">
-        <div class="region-header">Kashmir</div>
+        <div class="region-header" style="cursor:pointer;" onclick="openRegionModal('Kashmir')">Kashmir <span style="font-size:12px;opacity:0.6;margin-left:8px;font-weight:400;">ⓘ</span></div>
         <div class="region-content">
           <ul class="sub-cat-list">
             <li class="sub-cat-item" onclick="routeToCatalog('Kashmir', 'Silver Jewelry')">Silver Jewelry</li>
@@ -682,7 +730,7 @@
 
       <!-- Himachal Pradesh -->
       <div class="region-item">
-        <div class="region-header">Himachal Pradesh</div>
+        <div class="region-header" style="cursor:pointer;" onclick="openRegionModal('Himachal Pradesh')">Himachal Pradesh <span style="font-size:12px;opacity:0.6;margin-left:8px;font-weight:400;">ⓘ</span></div>
         <div class="region-content">
           <ul class="sub-cat-list">
             <li class="sub-cat-item" onclick="routeToCatalog('Himachal Pradesh', 'Kangra Painting')">Kangra Painting</li>
@@ -696,7 +744,7 @@
 
       <!-- Punjab -->
       <div class="region-item">
-        <div class="region-header">Punjab</div>
+        <div class="region-header" style="cursor:pointer;" onclick="openRegionModal('Punjab')">Punjab <span style="font-size:12px;opacity:0.6;margin-left:8px;font-weight:400;">ⓘ</span></div>
         <div class="region-content">
           <ul class="sub-cat-list">
             <li class="sub-cat-item" onclick="routeToCatalog('Punjab', 'Phulkari Embroidery')">Phulkari Embroidery</li>
@@ -707,7 +755,7 @@
 
       <!-- Rajasthan -->
       <div class="region-item">
-        <div class="region-header">Rajasthan</div>
+        <div class="region-header" style="cursor:pointer;" onclick="openRegionModal('Rajasthan')">Rajasthan <span style="font-size:12px;opacity:0.6;margin-left:8px;font-weight:400;">ⓘ</span></div>
         <div class="region-content">
           <ul class="sub-cat-list">
             <li class="sub-cat-item" onclick="routeToCatalog('Rajasthan', 'Blue Pottery')">Blue Pottery</li>
@@ -1037,6 +1085,54 @@
       }
     }
     populateArtistsNav();
+  </script>
+  <!-- REGIONAL INFO MODAL -->
+  <div class="region-modal-overlay" id="regionModal" onclick="if(event.target===this) closeRegionModal()">
+    <div class="region-modal">
+      <button class="region-modal-close" onclick="closeRegionModal()">&#x2715;</button>
+      <div class="rm-eyebrow" id="rm-eyebrow">Region Name</div>
+      <h2 class="rm-title" id="rm-title">Title</h2>
+      <div class="rm-divider"></div>
+      <p class="rm-desc" id="rm-desc">Description</p>
+    </div>
+  </div>
+
+  <script>
+    const regionData = {
+      'Kashmir': {
+        title: 'The Poetry of the Valley',
+        desc: 'Kashmiri handicrafts are a quiet symphony of elegance, born in the serenity of the valley. Walk on hand-knotted carpets where every motif is a living canvas of heritage, woven with centuries-old precision. Adorn yourself with nature-inspired jewellery, delicate and regal. And discover the magic of chain-stitch embroidery — thousands of looped stitches crafted with a single hooked needle, giving fabric unmatched depth and vibrancy. Bring home Kashmir: timeless, authentic, heirloom.',
+        eyebrow: 'Where every thread tells the story of the valley'
+      },
+      'Himachal Pradesh': {
+        title: 'The Soul of the Himalayas',
+        desc: 'Himachali handicrafts are devotion made visible, shaped by mountain air and royal courts. Lose yourself in Kangra miniatures — paintings of exquisite detail, natural dyes, and timeless love stories. Unfold a Chamba Rumal, a silk heirloom embroidered ‘Do-Rukha’ on both sides, a secret skill of generations. Wrap yourself in a Kullu stole, handwoven from pure wool with bold patterns that hold the warmth of Himalayan winters. Bring home Himachal: refined, storied, eternal.',
+        eyebrow: 'Artistry born in the lap of the Himalayas'
+      },
+      'Punjab': {
+        title: 'PUNJAB – The Spirit of Celebration',
+        desc: 'Punjab doesn’t whisper luxury — it wears it with pride. Wrap yourself in a Phulkari shawl, where thousands of silk stitches create fields of floral brilliance, each one a legacy passed down through generations. Step into hand-embroidered Juttis, leather and zari crafted to be noticed. And admire Amritsari brass & woodwork, carved with the same grandeur that built the Golden Temple. Bring home Punjab: bold, vibrant, unapologetically rich.',
+        eyebrow: 'Heritage you can wear, pride you can own'
+      },
+      'Rajasthan': {
+        title: 'The Grandeur of the Desert',
+        desc: 'Rajasthan doesn’t do subtle — it reigns. Drape yourself in a Bandhani saree, each tiny knot dyed by hand into hypnotic royal patterns. Showcase Jaipur blue pottery and Jodhpur jaali-carved wood, where cobalt hues and intricate latticework turn objects into palace heirlooms. Add the sparkle of Banjara mirror-work and the regal detail of Mojari juttis. Bring home Rajasthan: opulent, colorful, timeless',
+        eyebrow: 'The desert’s color, the Maharaja’s grandeur'
+      }
+    };
+
+    function openRegionModal(regionName) {
+      const data = regionData[regionName];
+      if(!data) return;
+      document.getElementById('rm-eyebrow').textContent = data.eyebrow;
+      document.getElementById('rm-title').textContent = data.title;
+      document.getElementById('rm-desc').textContent = data.desc;
+      document.getElementById('regionModal').classList.add('open');
+    }
+
+    function closeRegionModal() {
+      document.getElementById('regionModal').classList.remove('open');
+    }
   </script>
 </body>
 </html>
