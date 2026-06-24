@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Artwork Evaluation — Atelier Coloré Canada</title>
+  <meta name="description" content="Submit your artwork for a professional evaluation by an Art Collector or Artist at Atelier Coloré Canada." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,800;0,900;1,400;1,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d0c0a;
+      --surface: #161512;
+      --surface2: #1e1c18;
+      --text: #f0ede8;
+      --text-muted: rgba(240, 237, 232, 0.55);
+      --gold: #c9a84c;
+      --gold-light: rgba(201, 168, 76, 0.15);
+      --gold-border: rgba(201, 168, 76, 0.3);
+      --border: rgba(255, 255, 255, 0.08);
+      --nav-h: 72px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      overflow-x: hidden;
+      padding-top: var(--nav-h);
+      min-height: 100vh;
+    }
+
+    /* ─── NAV ─────────────────────────────────────────── */
+    .nav-bar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: var(--nav-h);
+      background: rgba(13, 12, 10, 0.95);
+      backdrop-filter: blur(16px);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px;
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px; font-weight: 800;
+      color: var(--text); text-decoration: none;
+      letter-spacing: 2px; text-transform: uppercase;
+    }
+    .nav-links { display: flex; gap: 32px; list-style: none; align-items: center; }
+    .nav-links a {
+      color: var(--text-muted); text-decoration: none;
+      font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px;
+      transition: color 0.3s; display: flex; align-items: center; gap: 6px;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--gold); }
+    .dropdown { position: relative; }
+    .dropdown-menu {
+      position: absolute; top: 100%; left: 0;
+      background: rgba(13, 12, 10, 0.98);
+      border: 1px solid var(--border);
+      list-style: none; padding: 12px 0;
+      min-width: 240px;
+      opacity: 0; visibility: hidden;
+      transform: translateY(10px);
+      transition: all 0.3s ease;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+    }
+    .dropdown:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+    .dropdown-menu a { padding: 10px 20px; display: block; color: var(--text-muted); font-size: 12px; letter-spacing: 1px; }
+    .dropdown-menu a:hover { background: rgba(255,255,255,0.04); color: var(--gold); }
+
+    /* ─── HERO BANNER ─────────────────────────────────── */
+    .eval-hero {
+      width: 100%;
+      padding: 90px 48px 70px;
+      text-align: center;
+      background: linear-gradient(180deg, rgba(201,168,76,0.06) 0%, transparent 100%);
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    .eval-hero::before {
+      content: '';
+      position: absolute;
+      top: -40%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .eval-eyebrow {
+      font-size: 11px;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+      display: block;
+    }
+    .eval-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(38px, 5vw, 64px);
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+    .eval-subtitle {
+      font-size: 16px;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.8;
+      font-weight: 300;
+    }
+
+    /* ─── MAIN LAYOUT ─────────────────────────────────── */
+    .eval-main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 70px 48px 120px;
+    }
+
+    /* ─── TAB SELECTOR ────────────────────────────────── */
+    .form-type-selector {
+      display: flex;
+      gap: 0;
+      border: 1px solid var(--gold-border);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 60px;
+      max-width: 600px;
+    }
+    .form-tab-btn {
+      flex: 1;
+      padding: 18px 24px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.35s;
+      position: relative;
+    }
+    .form-tab-btn:not(:last-child) {
+      border-right: 1px solid var(--gold-border);
+    }
+    .form-tab-btn.active {
+      background: var(--gold);
+      color: #0d0c0a;
+      font-weight: 600;
+    }
+    .form-tab-btn:hover:not(.active) {
+      background: var(--gold-light);
+      color: var(--gold);
+    }
+
+    /* ─── SECTION HEADERS ─────────────────────────────── */
+    .form-section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 28px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--gold-border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .form-section-title::before {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 1px;
+      background: var(--gold);
+    }
+
+    /* ─── IMAGE UPLOAD ────────────────────────────────── */
+    .image-upload-area {
+      border: 2px dashed var(--gold-border);
+      border-radius: 6px;
+      padding: 60px 40px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      background: var(--surface);
+      position: relative;
+      margin-bottom: 48px;
+    }
+    .image-upload-area:hover, .image-upload-area.dragover {
+      border-color: var(--gold);
+      background: var(--gold-light);
+    }
+    .image-upload-area input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+    .upload-icon {
+      font-size: 48px;
+      color: var(--gold);
+      margin-bottom: 16px;
+      display: block;
+    }
+    .upload-label {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .upload-hint {
+      font-size: 13px;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+    }
+    .upload-preview {
+      display: none;
+      max-height: 300px;
+      border-radius: 4px;
+      object-fit: contain;
+      max-width: 100%;
+      margin: 0 auto;
+    }
+
+    /* ─── FORM PANELS ─────────────────────────────────── */
+    .form-panel { display: none; }
+    .form-panel.active { display: block; }
+
+    /* ─── FORM GRID ───────────────────────────────────── */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px 32px;
+      margin-bottom: 40px;
+    }
+    .form-grid.one-col { grid-template-columns: 1fr; }
+    .form-group { display: flex; flex-direction: column; gap: 8px; }
+    .form-group.full { grid-column: 1 / -1; }
+
+    label {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    label .req { color: var(--gold); margin-left: 2px; }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="date"],
+    input[type="number"],
+    select,
+    textarea {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      padding: 14px 16px;
+      outline: none;
+      transition: border-color 0.3s, box-shadow 0.3s;
+      width: 100%;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.08);
+    }
+    select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c9a84c' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      padding-right: 40px;
+      cursor: pointer;
+    }
+    select option { background: #1e1c18; }
+    textarea { resize: vertical; min-height: 90px; }
+
+    /* Score range */
+    .score-group { display: flex; flex-direction: column; gap: 10px; }
+    .score-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 16px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      transition: border-color 0.2s;
+    }
+    .score-row:focus-within { border-color: var(--gold); }
+    .score-label {
+      flex: 1;
+      font-size: 13px;
+      color: var(--text-muted);
+      text-transform: none;
+      letter-spacing: 0;
+    }
+    .score-input {
+      width: 70px;
+      text-align: center;
+      border-radius: 4px;
+      padding: 8px;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+    .score-hint {
+      font-size: 11px;
+      color: var(--text-muted);
+      opacity: 0.6;
+      white-space: nowrap;
+    }
+
+    /* ─── MANDATORY NOTE ──────────────────────────────── */
+    .mandatory-note {
+      background: var(--gold-light);
+      border: 1px solid var(--gold-border);
+      border-radius: 4px;
+      padding: 14px 20px;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .mandatory-note .note-icon { color: var(--gold); font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+    /* ─── SUBMIT ──────────────────────────────────────── */
+    .form-submit-area { margin-top: 48px; display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+    .submit-btn {
+      padding: 18px 56px;
+      background: var(--gold);
+      color: #0d0c0a;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .submit-btn:hover {
+      background: #e0bc5e;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(201, 168, 76, 0.25);
+    }
+    .submit-note {
+      font-size: 12px;
+      color: var(--text-muted);
+      max-width: 340px;
+      line-height: 1.6;
+    }
+
+    /* ─── SUCCESS MESSAGE ─────────────────────────────── */
+    .success-msg {
+      display: none;
+      text-align: center;
+      padding: 60px 40px;
+      background: var(--surface);
+      border: 1px solid var(--gold-border);
+      border-radius: 6px;
+      margin-top: 40px;
+    }
+    .success-msg.visible { display: block; }
+    .success-icon { font-size: 48px; color: var(--gold); margin-bottom: 20px; }
+    .success-title { font-family: 'Playfair Display', serif; font-size: 28px; margin-bottom: 12px; }
+    .success-text { color: var(--text-muted); font-size: 15px; line-height: 1.7; }
+
+    /* ─── DIVIDER ─────────────────────────────────────── */
+    .section-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 40px 0;
+    }
+
+    /* ─── RESPONSIVE ──────────────────────────────────── */
+    @media (max-width: 768px) {
+      .nav-bar { padding: 0 24px; }
+      .nav-links { display: none; }
+      .eval-hero { padding: 60px 24px 50px; }
+      .eval-main { padding: 48px 24px 80px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-group.full { grid-column: auto; }
+      .form-type-selector { flex-direction: column; border-radius: 4px; }
+      .form-tab-btn:not(:last-child) { border-right: none; border-bottom: 1px solid var(--gold-border); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV BAR -->
+  <nav class="nav-bar" id="main-nav">
+    <a href="index.html" class="nav-brand">Atelier Coloré</a>
+    <ul class="nav-links">
+      <li><a href="search.html">Search</a></li>
+      <li><a href="index.html">Home</a></li>
+      <li class="dropdown">
+        <a href="#">Artists <span style="font-size:8px; margin-left:4px;">▼</span></a>
+        <ul class="dropdown-menu" id="nav-artists-dropdown"></ul>
+      </li>
+      <li class="dropdown">
+        <a href="#">Artwork Type <span style="font-size:8px; margin-left:4px;">▼</span></a>
+        <ul class="dropdown-menu">
+          <li><a href="all-artworks.html">All Artwork</a></li>
+          <li><a href="sculptures.html">Sculpture and Objects</a></li>
+          <li><a href="/acrylic-on-canvas.html">Acrylic On Canvas</a></li>
+          <li><a href="/oil-paintings.html">Oil Painting</a></li>
+          <li><a href="sketches.html">Sketches</a></li>
+        </ul>
+      </li>
+      <li><a href="#">Sell</a></li>
+      <li class="dropdown">
+        <a href="#">Service <span style="font-size:8px; margin-left:4px;">▼</span></a>
+        <ul class="dropdown-menu">
+          <li><a href="evaluation.html" class="active">Evaluation</a></li>
+          <li><a href="/auction.html">Auction</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <header class="eval-hero">
+    <span class="eval-eyebrow">Professional Artwork Assessment</span>
+    <h1 class="eval-title">Request an Evaluation</h1>
+    <p class="eval-subtitle">Submit your artwork for a thoughtful, expert evaluation — by a distinguished Art Collector or a practicing Artist. Each assessment is crafted with care and connoisseurship.</p>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="eval-main">
+
+    <!-- Mandatory Note -->
+    <div class="mandatory-note">
+      <span class="note-icon">★</span>
+      <span>Fields marked with <strong style="color:var(--gold);">*</strong> are mandatory. All other fields are optional but help us provide a more accurate and detailed evaluation of your artwork.</span>
+    </div>
+
+    <!-- Form Type Selector -->
+    <div class="form-type-selector" role="tablist">
+      <button class="form-tab-btn active" id="tab-collector" onclick="switchTab('collector')" role="tab" aria-selected="true">
+        For Art Collector
+      </button>
+      <button class="form-tab-btn" id="tab-artist" onclick="switchTab('artist')" role="tab" aria-selected="false">
+        For Artist
+      </button>
+    </div>
+
+    <!-- ══════════════════════════════════════════════ -->
+    <!--  PANEL 1: ART COLLECTOR FORM                  -->
+    <!-- ══════════════════════════════════════════════ -->
+    <div id="panel-collector" class="form-panel active">
+      <form id="form-collector" novalidate>
+
+        <!-- Image Upload -->
+        <div class="form-section-title">Upload Artwork Image</div>
+        <div class="image-upload-area" id="upload-collector">
+          <input type="file" id="artwork-image-collector" accept="image/*" />
+          <span class="upload-icon">🖼</span>
+          <p class="upload-label">Drag & drop your artwork image here</p>
+          <p class="upload-hint">or click to browse — JPG, PNG, WEBP up to 20MB</p>
+          <img class="upload-preview" id="preview-collector" alt="Preview" />
+        </div>
+
+        <!-- Artwork Details -->
+        <div class="form-section-title">Artwork Details</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="c-title">Artwork Title <span class="req">*</span></label>
+            <input type="text" id="c-title" placeholder="e.g. Moonrise over the Valley" required />
+          </div>
+          <div class="form-group">
+            <label for="c-artist">Artist Name <span class="req">*</span></label>
+            <input type="text" id="c-artist" placeholder="Artist's full name" required />
+          </div>
+          <div class="form-group">
+            <label for="c-medium">Medium <span class="req">*</span></label>
+            <input type="text" id="c-medium" placeholder="e.g. Oil on Canvas, Watercolour" required />
+          </div>
+          <div class="form-group">
+            <label for="c-year">Year <span class="req">*</span></label>
+            <input type="number" id="c-year" placeholder="e.g. 2019" min="1600" max="2100" required />
+          </div>
+          <div class="form-group">
+            <label for="c-dimensions">Dimensions <span class="req">*</span></label>
+            <input type="text" id="c-dimensions" placeholder='e.g. 24" × 36" or 60 × 90 cm' required />
+          </div>
+          <div class="form-group">
+            <label for="c-provenance">Provenance</label>
+            <input type="text" id="c-provenance" placeholder="e.g. Purchased from Gallery XYZ, 2020" />
+          </div>
+        </div>
+
+        <!-- Acquisition Purpose -->
+        <div class="form-section-title">Purpose</div>
+        <div class="form-grid">
+          <div class="form-group full">
+            <label for="c-purpose">Acquisition Purpose</label>
+            <select id="c-purpose">
+              <option value="" disabled selected>Select purpose…</option>
+              <option>Acquisition</option>
+              <option>Curation</option>
+              <option>Collection Management</option>
+              <option>Resale</option>
+              <option>Insurance / Documentation</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- Evaluation Criteria -->
+        <div class="form-section-title">Evaluation Criteria (Score 1–5)</div>
+        <p style="font-size:13px; color:var(--text-muted); margin-bottom:24px; line-height:1.6;">Please score each criterion from 1 (very low) to 5 (exceptional). Use the Notes field to add any observations.</p>
+
+        <div class="score-group">
+          <div style="display:grid; grid-template-columns:1fr auto auto; gap:12px 16px; align-items:center; padding:0 0 10px; border-bottom:1px solid var(--border); margin-bottom:4px;">
+            <span style="font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--gold);">Criterion</span>
+            <span style="font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--gold);">Score (1–5)</span>
+            <span style="font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--gold);">Notes</span>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 100px 1fr; gap:12px 16px; align-items:center;">
+            <span style="font-size:14px; color:var(--text-muted);">Aesthetic Appeal</span>
+            <input type="number" min="1" max="5" placeholder="1–5" class="score-input" style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:14px; text-align:center;" id="c-score-aesthetic" />
+            <input type="text" placeholder="Notes..." style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:13px;" id="c-note-aesthetic" />
+
+            <span style="font-size:14px; color:var(--text-muted);">Emotional / Intellectual Response</span>
+            <input type="number" min="1" max="5" placeholder="1–5" class="score-input" style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:14px; text-align:center;" id="c-score-emotional" />
+            <input type="text" placeholder="Notes..." style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:13px;" id="c-note-emotional" />
+
+            <span style="font-size:14px; color:var(--text-muted);">Craftsmanship & Condition</span>
+            <input type="number" min="1" max="5" placeholder="1–5" class="score-input" style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:14px; text-align:center;" id="c-score-craft" />
+            <input type="text" placeholder="Notes..." style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:13px;" id="c-note-craft" />
+
+            <span style="font-size:14px; color:var(--text-muted);">Artist Reputation / Fame</span>
+            <input type="number" min="1" max="5" placeholder="1–5" class="score-input" style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:14px; text-align:center;" id="c-score-reputation" />
+            <input type="text" placeholder="Notes..." style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:13px;" id="c-note-reputation" />
+          </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- Additional Information -->
+        <div class="form-section-title">Additional Information</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="c-preservation">Preservation Needs</label>
+            <select id="c-preservation">
+              <option value="" disabled selected>Select…</option>
+              <option value="Yes">Yes — indicate details in notes</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="c-authenticity">Certificate of Authenticity Held</label>
+            <select id="c-authenticity">
+              <option value="" disabled selected>Select…</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="c-exhibition">Exhibition History</label>
+            <input type="text" id="c-exhibition" placeholder="e.g. National Gallery, 2018" />
+          </div>
+          <div class="form-group">
+            <label for="c-special-notes">Special Notes</label>
+            <input type="text" id="c-special-notes" placeholder="Space, lighting, conservation needs…" />
+          </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- Collector Details -->
+        <div class="form-section-title">Collector Details</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="c-name">Collector Name <span class="req">*</span></label>
+            <input type="text" id="c-name" placeholder="Your full name" required />
+          </div>
+          <div class="form-group">
+            <label for="c-email">Email Address <span class="req">*</span></label>
+            <input type="email" id="c-email" placeholder="your@email.com" required />
+          </div>
+          <div class="form-group">
+            <label for="c-date">Date <span class="req">*</span></label>
+            <input type="date" id="c-date" required />
+          </div>
+        </div>
+
+        <!-- Submit -->
+        <div class="form-submit-area">
+          <button type="submit" class="submit-btn">Submit Evaluation</button>
+          <p class="submit-note">Your submission will be reviewed by our team and we will get back to you within 3–5 business days.</p>
+        </div>
+      </form>
+    </div>
+
+    <!-- ══════════════════════════════════════════════ -->
+    <!--  PANEL 2: ARTIST FORM                          -->
+    <!-- ══════════════════════════════════════════════ -->
+    <div id="panel-artist" class="form-panel">
+      <form id="form-artist" novalidate>
+
+        <!-- Image Upload -->
+        <div class="form-section-title">Upload Artwork Image</div>
+        <div class="image-upload-area" id="upload-artist">
+          <input type="file" id="artwork-image-artist" accept="image/*" />
+          <span class="upload-icon">🖼</span>
+          <p class="upload-label">Drag & drop your artwork image here</p>
+          <p class="upload-hint">or click to browse — JPG, PNG, WEBP up to 20MB</p>
+          <img class="upload-preview" id="preview-artist" alt="Preview" />
+        </div>
+
+        <p style="font-size:12px; color:var(--gold); letter-spacing:1px; margin-bottom:32px; font-style:italic;">
+          For Artist's Own Work Only, or with Written Authorisation of the Artist
+        </p>
+
+        <!-- Review Purpose -->
+        <div class="form-section-title">Review Purpose</div>
+        <div class="form-grid">
+          <div class="form-group full">
+            <label for="a-purpose">Review Purpose <span class="req">*</span></label>
+            <select id="a-purpose" required>
+              <option value="" disabled selected>Select purpose…</option>
+              <option>Gallery Submission</option>
+              <option>Auction</option>
+              <option>Sale on this website</option>
+              <option>Portfolio Review</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Artwork Details -->
+        <div class="form-section-title">Artwork Details</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="a-title">Artwork Title <span class="req">*</span></label>
+            <input type="text" id="a-title" placeholder="e.g. First Light" required />
+          </div>
+          <div class="form-group">
+            <label for="a-medium">Medium <span class="req">*</span></label>
+            <input type="text" id="a-medium" placeholder="e.g. Acrylic on Linen" required />
+          </div>
+          <div class="form-group">
+            <label for="a-dimensions">Dimensions <span class="req">*</span></label>
+            <input type="text" id="a-dimensions" placeholder='e.g. 18" × 24" or 45 × 60 cm' required />
+          </div>
+          <div class="form-group">
+            <label for="a-year">Year <span class="req">*</span></label>
+            <input type="number" id="a-year" placeholder="e.g. 2024" min="1600" max="2100" required />
+          </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- Evaluation Criteria -->
+        <div class="form-section-title">Evaluation Criteria (Score 1–5)</div>
+        <p style="font-size:13px; color:var(--text-muted); margin-bottom:24px; line-height:1.6;">Score each quality from 1 (minimal) to 5 (outstanding).</p>
+
+        <div style="display:grid; grid-template-columns:1fr 100px; gap:12px 16px; align-items:center;">
+          <span style="font-size:14px; color:var(--text-muted);">Concept & Intent</span>
+          <input type="number" min="1" max="5" placeholder="1–5" class="score-input" style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:14px; text-align:center;" id="a-score-concept" />
+
+          <span style="font-size:14px; color:var(--text-muted);">Idea / Emotion / Message</span>
+          <input type="number" min="1" max="5" placeholder="1–5" class="score-input" style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:14px; text-align:center;" id="a-score-emotion" />
+
+          <span style="font-size:14px; color:var(--text-muted);">Clarity / Technique & Craftsmanship</span>
+          <input type="number" min="1" max="5" placeholder="1–5" class="score-input" style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:14px; text-align:center;" id="a-score-technique" />
+
+          <span style="font-size:14px; color:var(--text-muted);">Skill in Materials</span>
+          <input type="number" min="1" max="5" placeholder="1–5" class="score-input" style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:14px; text-align:center;" id="a-score-skill" />
+
+          <span style="font-size:14px; color:var(--text-muted);">Finish</span>
+          <input type="number" min="1" max="5" placeholder="1–5" class="score-input" style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:14px; text-align:center;" id="a-score-finish" />
+
+          <span style="font-size:14px; color:var(--text-muted);">Uniqueness</span>
+          <input type="number" min="1" max="5" placeholder="1–5" class="score-input" style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:14px; text-align:center;" id="a-score-unique" />
+
+          <span style="font-size:14px; color:var(--text-muted);">Flow / Visual Impact</span>
+          <input type="number" min="1" max="5" placeholder="1–5" class="score-input" style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:14px; text-align:center;" id="a-score-flow" />
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- Reflective Questions -->
+        <div class="form-section-title">Reflective Questions</div>
+        <div class="form-grid one-col">
+          <div class="form-group full">
+            <label for="a-challenge">What challenge did you overcome in this piece?</label>
+            <textarea id="a-challenge" placeholder="Describe the challenge and how you approached it…" rows="3"></textarea>
+          </div>
+          <div class="form-group full">
+            <label for="a-change">What would you change if you made it again?</label>
+            <textarea id="a-change" placeholder="Your honest reflection…" rows="3"></textarea>
+          </div>
+          <div class="form-group full">
+            <label for="a-learning">What did this work give as an important learning?</label>
+            <textarea id="a-learning" placeholder="Key insight or lesson from making this piece…" rows="3"></textarea>
+          </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- Artist Details -->
+        <div class="form-section-title">Artist Details</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="a-name">Artist Name <span class="req">*</span></label>
+            <input type="text" id="a-name" placeholder="Your full name" required />
+          </div>
+          <div class="form-group">
+            <label for="a-email">Email Address <span class="req">*</span></label>
+            <input type="email" id="a-email" placeholder="your@email.com" required />
+          </div>
+          <div class="form-group">
+            <label for="a-date">Date <span class="req">*</span></label>
+            <input type="date" id="a-date" required />
+          </div>
+        </div>
+
+        <!-- Submit -->
+        <div class="form-submit-area">
+          <button type="submit" class="submit-btn">Submit Evaluation</button>
+          <p class="submit-note">Your submission will be reviewed by our team and we will get back to you within 3–5 business days.</p>
+        </div>
+      </form>
+    </div>
+
+    <!-- Success Message -->
+    <div class="success-msg" id="success-msg">
+      <div class="success-icon">✦</div>
+      <h2 class="success-title">Evaluation Submitted</h2>
+      <p class="success-text">Thank you for your submission. Our team of specialists will carefully review your artwork and respond to your email within 3–5 business days.</p>
+    </div>
+
+  </main>
+
+  <script>
+    // ── TAB SWITCHING ───────────────────────────────────────
+    function switchTab(tab) {
+      document.querySelectorAll('.form-tab-btn').forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      document.querySelectorAll('.form-panel').forEach(p => p.classList.remove('active'));
+
+      document.getElementById('tab-' + tab).classList.add('active');
+      document.getElementById('tab-' + tab).setAttribute('aria-selected', 'true');
+      document.getElementById('panel-' + tab).classList.add('active');
+    }
+
+    // ── IMAGE UPLOAD PREVIEW ────────────────────────────────
+    function setupUpload(inputId, previewId, uploadAreaId) {
+      const input = document.getElementById(inputId);
+      const preview = document.getElementById(previewId);
+      const area = document.getElementById(uploadAreaId);
+
+      input.addEventListener('change', () => {
+        const file = input.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          // Hide default icons/text
+          area.querySelectorAll('.upload-icon, .upload-label, .upload-hint').forEach(el => el.style.display = 'none');
+          preview.src = e.target.result;
+          preview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      });
+
+      // Drag & drop styling
+      area.addEventListener('dragover', e => { e.preventDefault(); area.classList.add('dragover'); });
+      area.addEventListener('dragleave', () => area.classList.remove('dragover'));
+      area.addEventListener('drop', e => {
+        e.preventDefault();
+        area.classList.remove('dragover');
+        const file = e.dataTransfer.files[0];
+        if (file && file.type.startsWith('image/')) {
+          const dt = new DataTransfer();
+          dt.items.add(file);
+          input.files = dt.files;
+          input.dispatchEvent(new Event('change'));
+        }
+      });
+    }
+
+    setupUpload('artwork-image-collector', 'preview-collector', 'upload-collector');
+    setupUpload('artwork-image-artist', 'preview-artist', 'upload-artist');
+
+    // ── FORM SUBMISSION ─────────────────────────────────────
+    function handleSubmit(formId) {
+      const form = document.getElementById(formId);
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        // Simple required field validation
+        const required = form.querySelectorAll('[required]');
+        let valid = true;
+        required.forEach(field => {
+          if (!field.value.trim()) {
+            field.style.borderColor = '#e05252';
+            field.addEventListener('input', () => field.style.borderColor = '', { once: true });
+            valid = false;
+          }
+        });
+        if (!valid) {
+          // Scroll to first invalid field
+          const firstInvalid = form.querySelector('[required]:invalid, [style*="e05252"]');
+          if (firstInvalid) firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          return;
+        }
+
+        // Show success
+        form.style.display = 'none';
+        document.getElementById('success-msg').classList.add('visible');
+        document.getElementById('success-msg').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+    }
+
+    handleSubmit('form-collector');
+    handleSubmit('form-artist');
+
+    // ── SET DEFAULT DATE ────────────────────────────────────
+    const today = new Date().toISOString().split('T')[0];
+    document.querySelectorAll('input[type="date"]').forEach(d => d.value = today);
+  </script>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+    const supabase = createClient(
+      'https://zbfdkuckvyrlebdvlghp.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpiZmRrdWNrdnlybGViZHZsZ2hwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwNTI1MTEsImV4cCI6MjA5NzYyODUxMX0.rHcc5-VEkQoM7GqkLuKCB7ueC-7iwDvOVSPUl32OeoY'
+    );
+    async function populateArtistsNav() {
+      const dropdown = document.getElementById('nav-artists-dropdown');
+      if (!dropdown) return;
+      const { data } = await supabase.from('Artist').select('id, artist_name').order('artist_name');
+      if (data) {
+        dropdown.innerHTML = data.map(a => `<li><a href="/artist.html?id=${a.id}">${a.artist_name}</a></li>`).join('');
+      }
+    }
+    populateArtistsNav();
+  </script>
+
+</body>
+</html>
