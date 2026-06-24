@@ -360,32 +360,7 @@
       transform: rotate(45deg);
     }
 
-    .region-close-btn {
-      display: none;
-      position: absolute;
-      top: 18px;
-      right: 18px;
-      width: 32px;
-      height: 32px;
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 50%;
-      color: #fff;
-      font-size: 18px;
-      line-height: 1;
-      cursor: pointer;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.2s, transform 0.2s;
-      z-index: 10;
-    }
-    .region-close-btn:hover {
-      background: var(--gold);
-      transform: rotate(90deg);
-    }
-    .region-item.open .region-close-btn {
-      display: flex;
-    }
+
 
     .region-content {
       max-height: 0;
@@ -750,7 +725,6 @@
       
       <!-- Kashmir -->
       <div class="region-item" data-region="Kashmir">
-        <button class="region-close-btn" aria-label="Close">&#x2715;</button>
         <div class="region-header">Kashmir</div>
         <div class="region-content">
           <div class="region-content-inner">
@@ -774,7 +748,6 @@
 
       <!-- Himachal Pradesh -->
       <div class="region-item" data-region="Himachal">
-        <button class="region-close-btn" aria-label="Close">&#x2715;</button>
         <div class="region-header">Himachal Pradesh</div>
         <div class="region-content">
           <div class="region-content-inner">
@@ -798,7 +771,6 @@
 
       <!-- Punjab -->
       <div class="region-item" data-region="Punjab">
-        <button class="region-close-btn" aria-label="Close">&#x2715;</button>
         <div class="region-header">Punjab</div>
         <div class="region-content">
           <div class="region-content-inner">
@@ -819,7 +791,6 @@
 
       <!-- Rajasthan -->
       <div class="region-item" data-region="Rajasthan">
-        <button class="region-close-btn" aria-label="Close">&#x2715;</button>
         <div class="region-header">Rajasthan</div>
         <div class="region-content">
           <div class="region-content-inner">
@@ -1189,7 +1160,6 @@
         });
 
         // Close button
-        const closeBtn = item.querySelector('.region-close-btn');
         if (closeBtn) {
           closeBtn.addEventListener('click', (e) => {
             e.stopPropagation();
