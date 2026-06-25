@@ -417,7 +417,29 @@
     .success-msg.visible { display: block; }
     .success-icon { font-size: 48px; color: var(--gold); margin-bottom: 20px; }
     .success-title { font-family: 'Playfair Display', serif; font-size: 28px; margin-bottom: 12px; }
-    .success-text { color: var(--text-muted); font-size: 15px; line-height: 1.7; }
+    .success-text { color: var(--text-muted); font-size: 15px; line-height: 1.7; margin-bottom: 32px; }
+    .submit-another-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 36px;
+      background: transparent;
+      border: 1px solid var(--gold-border);
+      border-radius: 3px;
+      color: var(--gold);
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .submit-another-btn:hover {
+      background: var(--gold-light);
+      border-color: var(--gold);
+      transform: translateY(-2px);
+    }
 
     /* ─── DIVIDER ─────────────────────────────────────── */
     .section-divider {
@@ -793,6 +815,7 @@
       <div class="success-icon">✦</div>
       <h2 class="success-title">Evaluation Submitted</h2>
       <p class="success-text">Thank you for your submission. Our team of specialists will carefully review your artwork and respond to your email within 3–5 business days.</p>
+      <button class="submit-another-btn" id="btn-submit-another">&#43; Submit Another Evaluation</button>
     </div>
 
   </main>
@@ -868,6 +891,41 @@
     // ── SET DEFAULT DATE ────────────────────────────────────
     const today = new Date().toISOString().split('T')[0];
     document.querySelectorAll('input[type="date"]').forEach(d => d.value = today);
+
+    // ── RESET FORM COMPLETELY ────────────────────────────────
+    function resetForm(form, imageInputId) {
+      // Clear all input / select / textarea values
+      form.reset();
+
+      // Reset date fields to today
+      const today = new Date().toISOString().split('T')[0];
+      form.querySelectorAll('input[type="date"]').forEach(d => d.value = today);
+
+      // Restore image upload area to its default state
+      const imageInput = document.getElementById(imageInputId);
+      if (imageInput) {
+        // Derive upload area ID from input ID
+        const uploadAreaId = imageInputId.replace('artwork-image-', 'upload-');
+        const previewId    = imageInputId.replace('artwork-image-', 'preview-');
+        const area    = document.getElementById(uploadAreaId);
+        const preview = document.getElementById(previewId);
+        if (area) {
+          area.querySelectorAll('.upload-icon, .upload-label, .upload-hint')
+              .forEach(el => el.style.display = '');
+        }
+        if (preview) {
+          preview.src = '';
+          preview.style.display = 'none';
+        }
+      }
+
+      // Clear any lingering error banners
+      form.querySelectorAll('.error-banner, .error-msg').forEach(el => el.classList.remove('visible'));
+
+      // Re-enable and restore submit button
+      const btn = form.querySelector('.submit-btn');
+      if (btn) { btn.classList.remove('loading'); btn.disabled = false; }
+    }
 
     // ── UPLOAD IMAGE TO SUPABASE STORAGE ────────────────────
     async function uploadImageToSupabase(file) {
@@ -1035,11 +1093,22 @@
           // 5. Send to Make.com webhook
           await sendToWebhook(payload);
 
-          // 6. Success — hide form, show confirmation
+          // 6. Reset form data completely
+          resetForm(form, imageInputId);
+
+          // 7. Success — hide form, show confirmation
           form.style.display = 'none';
           const successEl = document.getElementById('success-msg');
           successEl.classList.add('visible');
           successEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+          // 8. Wire the "Submit Another" button (once)
+          const anotherBtn = document.getElementById('btn-submit-another');
+          anotherBtn.onclick = () => {
+            successEl.classList.remove('visible');
+            form.style.display = '';
+            form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          };
 
         } catch (err) {
           console.error('Submission error:', err);
