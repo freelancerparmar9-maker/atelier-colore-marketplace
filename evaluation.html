@@ -524,7 +524,7 @@
     <!--  PANEL 1: ART COLLECTOR FORM                  -->
     <!-- ══════════════════════════════════════════════ -->
     <div id="panel-collector" class="form-panel active">
-      <form id="form-collector" novalidate>
+      <form id="form-collector" novalidate autocomplete="off">
 
         <!-- Image Upload -->
         <div class="form-section-title">Upload Artwork Image</div>
@@ -541,27 +541,27 @@
         <div class="form-grid">
           <div class="form-group">
             <label for="c-title">Artwork Title <span class="req">*</span></label>
-            <input type="text" id="c-title" placeholder="e.g. Moonrise over the Valley" required />
+            <input type="text" autocomplete="off" id="c-title" placeholder="e.g. Moonrise over the Valley" required />
           </div>
           <div class="form-group">
             <label for="c-artist">Artist Name <span class="req">*</span></label>
-            <input type="text" id="c-artist" placeholder="Artist's full name" required />
+            <input type="text" autocomplete="off" id="c-artist" placeholder="Artist's full name" required />
           </div>
           <div class="form-group">
             <label for="c-medium">Medium <span class="req">*</span></label>
-            <input type="text" id="c-medium" placeholder="e.g. Oil on Canvas, Watercolour" required />
+            <input type="text" autocomplete="off" id="c-medium" placeholder="e.g. Oil on Canvas, Watercolour" required />
           </div>
           <div class="form-group">
             <label for="c-year">Year <span class="req">*</span></label>
-            <input type="number" id="c-year" placeholder="e.g. 2019" min="1600" max="2100" required />
+            <input type="number" autocomplete="off" id="c-year" placeholder="e.g. 2019" min="1600" max="2100" required />
           </div>
           <div class="form-group">
             <label for="c-dimensions">Dimensions <span class="req">*</span></label>
-            <input type="text" id="c-dimensions" placeholder='e.g. 24" × 36" or 60 × 90 cm' required />
+            <input type="text" autocomplete="off" id="c-dimensions" placeholder='e.g. 24" × 36" or 60 × 90 cm' required />
           </div>
           <div class="form-group">
             <label for="c-provenance">Provenance</label>
-            <input type="text" id="c-provenance" placeholder="e.g. Purchased from Gallery XYZ, 2020" />
+            <input type="text" autocomplete="off" id="c-provenance" placeholder="e.g. Purchased from Gallery XYZ, 2020" />
           </div>
         </div>
 
@@ -597,20 +597,20 @@
 
           <div style="display:grid; grid-template-columns:1fr 100px 1fr; gap:12px 16px; align-items:center;">
             <span style="font-size:14px; color:var(--text-muted);">Aesthetic Appeal</span>
-            <input type="number" min="1" max="5" placeholder="1–5" class="score-input" style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:14px; text-align:center;" id="c-score-aesthetic" />
-            <input type="text" placeholder="Notes..." style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:13px;" id="c-note-aesthetic" />
+            <input type="number" autocomplete="off" min="1" max="5" placeholder="1–5" class="score-input" style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:14px; text-align:center;" id="c-score-aesthetic" />
+            <input type="text" autocomplete="off" placeholder="Notes..." style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:13px;" id="c-note-aesthetic" />
 
             <span style="font-size:14px; color:var(--text-muted);">Emotional / Intellectual Response</span>
-            <input type="number" min="1" max="5" placeholder="1–5" class="score-input" style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:14px; text-align:center;" id="c-score-emotional" />
-            <input type="text" placeholder="Notes..." style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:13px;" id="c-note-emotional" />
+            <input type="number" autocomplete="off" min="1" max="5" placeholder="1–5" class="score-input" style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:14px; text-align:center;" id="c-score-emotional" />
+            <input type="text" autocomplete="off" placeholder="Notes..." style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:13px;" id="c-note-emotional" />
 
             <span style="font-size:14px; color:var(--text-muted);">Craftsmanship & Condition</span>
-            <input type="number" min="1" max="5" placeholder="1–5" class="score-input" style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:14px; text-align:center;" id="c-score-craft" />
-            <input type="text" placeholder="Notes..." style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:13px;" id="c-note-craft" />
+            <input type="number" autocomplete="off" min="1" max="5" placeholder="1–5" class="score-input" style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:14px; text-align:center;" id="c-score-craft" />
+            <input type="text" autocomplete="off" placeholder="Notes..." style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:13px;" id="c-note-craft" />
 
             <span style="font-size:14px; color:var(--text-muted);">Artist Reputation / Fame</span>
-            <input type="number" min="1" max="5" placeholder="1–5" class="score-input" style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:14px; text-align:center;" id="c-score-reputation" />
-            <input type="text" placeholder="Notes..." style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:13px;" id="c-note-reputation" />
+            <input type="number" autocomplete="off" min="1" max="5" placeholder="1–5" class="score-input" style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:14px; text-align:center;" id="c-score-reputation" />
+            <input type="text" autocomplete="off" placeholder="Notes..." style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:13px;" id="c-note-reputation" />
           </div>
         </div>
 
@@ -637,11 +637,11 @@
           </div>
           <div class="form-group">
             <label for="c-exhibition">Exhibition History</label>
-            <input type="text" id="c-exhibition" placeholder="e.g. National Gallery, 2018" />
+            <input type="text" autocomplete="off" id="c-exhibition" placeholder="e.g. National Gallery, 2018" />
           </div>
           <div class="form-group">
             <label for="c-special-notes">Special Notes</label>
-            <input type="text" id="c-special-notes" placeholder="Space, lighting, conservation needs…" />
+            <input type="text" autocomplete="off" id="c-special-notes" placeholder="Space, lighting, conservation needs…" />
           </div>
         </div>
 
@@ -652,15 +652,15 @@
         <div class="form-grid">
           <div class="form-group">
             <label for="c-name">Collector Name <span class="req">*</span></label>
-            <input type="text" id="c-name" placeholder="Your full name" required />
+            <input type="text" autocomplete="off" id="c-name" placeholder="Your full name" required />
           </div>
           <div class="form-group">
             <label for="c-email">Email Address <span class="req">*</span></label>
-            <input type="email" id="c-email" placeholder="your@email.com" required />
+            <input type="email" autocomplete="off" id="c-email" placeholder="your@email.com" required />
           </div>
           <div class="form-group">
             <label for="c-date">Date <span class="req">*</span></label>
-            <input type="date" id="c-date" required />
+            <input type="date" autocomplete="off" id="c-date" required />
           </div>
         </div>
 
@@ -679,7 +679,7 @@
     <!--  PANEL 2: ARTIST FORM                          -->
     <!-- ══════════════════════════════════════════════ -->
     <div id="panel-artist" class="form-panel">
-      <form id="form-artist" novalidate>
+      <form id="form-artist" novalidate autocomplete="off">
 
         <!-- Image Upload -->
         <div class="form-section-title">Upload Artwork Image</div>
@@ -716,19 +716,19 @@
         <div class="form-grid">
           <div class="form-group">
             <label for="a-title">Artwork Title <span class="req">*</span></label>
-            <input type="text" id="a-title" placeholder="e.g. First Light" required />
+            <input type="text" autocomplete="off" id="a-title" placeholder="e.g. First Light" required />
           </div>
           <div class="form-group">
             <label for="a-medium">Medium <span class="req">*</span></label>
-            <input type="text" id="a-medium" placeholder="e.g. Acrylic on Linen" required />
+            <input type="text" autocomplete="off" id="a-medium" placeholder="e.g. Acrylic on Linen" required />
           </div>
           <div class="form-group">
             <label for="a-dimensions">Dimensions <span class="req">*</span></label>
-            <input type="text" id="a-dimensions" placeholder='e.g. 18" × 24" or 45 × 60 cm' required />
+            <input type="text" autocomplete="off" id="a-dimensions" placeholder='e.g. 18" × 24" or 45 × 60 cm' required />
           </div>
           <div class="form-group">
             <label for="a-year">Year <span class="req">*</span></label>
-            <input type="number" id="a-year" placeholder="e.g. 2024" min="1600" max="2100" required />
+            <input type="number" autocomplete="off" id="a-year" placeholder="e.g. 2024" min="1600" max="2100" required />
           </div>
         </div>
 
@@ -740,25 +740,25 @@
 
         <div style="display:grid; grid-template-columns:1fr 100px; gap:12px 16px; align-items:center;">
           <span style="font-size:14px; color:var(--text-muted);">Concept & Intent</span>
-          <input type="number" min="1" max="5" placeholder="1–5" class="score-input" style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:14px; text-align:center;" id="a-score-concept" />
+          <input type="number" autocomplete="off" min="1" max="5" placeholder="1–5" class="score-input" style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:14px; text-align:center;" id="a-score-concept" />
 
           <span style="font-size:14px; color:var(--text-muted);">Idea / Emotion / Message</span>
-          <input type="number" min="1" max="5" placeholder="1–5" class="score-input" style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:14px; text-align:center;" id="a-score-emotion" />
+          <input type="number" autocomplete="off" min="1" max="5" placeholder="1–5" class="score-input" style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:14px; text-align:center;" id="a-score-emotion" />
 
           <span style="font-size:14px; color:var(--text-muted);">Clarity / Technique & Craftsmanship</span>
-          <input type="number" min="1" max="5" placeholder="1–5" class="score-input" style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:14px; text-align:center;" id="a-score-technique" />
+          <input type="number" autocomplete="off" min="1" max="5" placeholder="1–5" class="score-input" style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:14px; text-align:center;" id="a-score-technique" />
 
           <span style="font-size:14px; color:var(--text-muted);">Skill in Materials</span>
-          <input type="number" min="1" max="5" placeholder="1–5" class="score-input" style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:14px; text-align:center;" id="a-score-skill" />
+          <input type="number" autocomplete="off" min="1" max="5" placeholder="1–5" class="score-input" style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:14px; text-align:center;" id="a-score-skill" />
 
           <span style="font-size:14px; color:var(--text-muted);">Finish</span>
-          <input type="number" min="1" max="5" placeholder="1–5" class="score-input" style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:14px; text-align:center;" id="a-score-finish" />
+          <input type="number" autocomplete="off" min="1" max="5" placeholder="1–5" class="score-input" style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:14px; text-align:center;" id="a-score-finish" />
 
           <span style="font-size:14px; color:var(--text-muted);">Uniqueness</span>
-          <input type="number" min="1" max="5" placeholder="1–5" class="score-input" style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:14px; text-align:center;" id="a-score-unique" />
+          <input type="number" autocomplete="off" min="1" max="5" placeholder="1–5" class="score-input" style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:14px; text-align:center;" id="a-score-unique" />
 
           <span style="font-size:14px; color:var(--text-muted);">Flow / Visual Impact</span>
-          <input type="number" min="1" max="5" placeholder="1–5" class="score-input" style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:14px; text-align:center;" id="a-score-flow" />
+          <input type="number" autocomplete="off" min="1" max="5" placeholder="1–5" class="score-input" style="background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:4px; padding:10px; font-size:14px; text-align:center;" id="a-score-flow" />
         </div>
 
         <div class="section-divider"></div>
@@ -787,15 +787,15 @@
         <div class="form-grid">
           <div class="form-group">
             <label for="a-name">Artist Name <span class="req">*</span></label>
-            <input type="text" id="a-name" placeholder="Your full name" required />
+            <input type="text" autocomplete="off" id="a-name" placeholder="Your full name" required />
           </div>
           <div class="form-group">
             <label for="a-email">Email Address <span class="req">*</span></label>
-            <input type="email" id="a-email" placeholder="your@email.com" required />
+            <input type="email" autocomplete="off" id="a-email" placeholder="your@email.com" required />
           </div>
           <div class="form-group">
             <label for="a-date">Date <span class="req">*</span></label>
-            <input type="date" id="a-date" required />
+            <input type="date" autocomplete="off" id="a-date" required />
           </div>
         </div>
 
