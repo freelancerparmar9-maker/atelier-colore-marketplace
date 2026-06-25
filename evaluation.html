@@ -14,15 +14,15 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #0d0c0a;
-      --surface: #161512;
-      --surface2: #1e1c18;
-      --text: #f0ede8;
-      --text-muted: rgba(240, 237, 232, 0.55);
-      --gold: #c9a84c;
-      --gold-light: rgba(201, 168, 76, 0.15);
-      --gold-border: rgba(201, 168, 76, 0.3);
-      --border: rgba(255, 255, 255, 0.08);
+      --bg: #1a1712;
+      --surface: #252118;
+      --surface2: #2e2a20;
+      --text: #f5f2ec;
+      --text-muted: rgba(245, 242, 236, 0.70);
+      --gold: #d4a843;
+      --gold-light: rgba(212, 168, 67, 0.18);
+      --gold-border: rgba(212, 168, 67, 0.45);
+      --border: rgba(255, 255, 255, 0.13);
       --nav-h: 72px;
     }
 
@@ -40,7 +40,7 @@
     .nav-bar {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       height: var(--nav-h);
-      background: rgba(13, 12, 10, 0.95);
+      background: rgba(26, 23, 18, 0.97);
       backdrop-filter: blur(16px);
       display: flex; align-items: center; justify-content: space-between;
       padding: 0 48px;
@@ -269,8 +269,8 @@
     input[type="number"],
     select,
     textarea {
-      background: var(--surface2);
-      border: 1px solid var(--border);
+      background: #2e2a20;
+      border: 1px solid rgba(255,255,255,0.18);
       border-radius: 4px;
       color: var(--text);
       font-family: 'Inter', sans-serif;
@@ -282,7 +282,7 @@
     }
     input:focus, select:focus, textarea:focus {
       border-color: var(--gold);
-      box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.08);
+      box-shadow: 0 0 0 3px rgba(212, 168, 67, 0.12);
     }
     select {
       appearance: none;
@@ -453,7 +453,7 @@
 
     <!-- Mandatory Note -->
     <div class="mandatory-note">
-      <span class="note-icon">★</span>
+      <span class="note-icon">◆</span>
       <span>Fields marked with <strong style="color:var(--gold);">*</strong> are mandatory. All other fields are optional but help us provide a more accurate and detailed evaluation of your artwork.</span>
     </div>
 
