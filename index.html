@@ -296,20 +296,34 @@
     
     .hc-title {
       font-family: 'Playfair Display', serif;
-      font-size: 32px;
-      color: #ffffff;
+      font-size: 42px;
+      color: var(--gold);
       margin-bottom: 24px;
       letter-spacing: 4px;
       text-transform: uppercase;
+      font-weight: 700;
+      position: relative;
+      display: inline-block;
+    }
+    .hc-title::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -10px;
+      width: 60px;
+      height: 2px;
+      background: var(--gold);
     }
 
     .hc-desc {
       font-family: 'Inter', sans-serif;
       font-size: 16px;
-      font-weight: 400;
+      font-weight: 300;
       line-height: 1.9;
-      color: rgba(255, 255, 255, 0.7);
+      color: rgba(255, 255, 255, 0.85);
       letter-spacing: 0.5px;
+      text-align: justify;
+      margin-top: 20px;
     }
 
     .handicrafts-grid {
@@ -338,11 +352,11 @@
     .region-header {
       padding: 24px 32px;
       font-family: 'Playfair Display', serif;
-      font-size: 24px;
+      font-size: 26px;
       font-weight: 700;
       letter-spacing: 3px;
       text-transform: uppercase;
-      color: #ffffff;
+      color: var(--gold);
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -1137,41 +1151,34 @@
     document.addEventListener('DOMContentLoaded', () => {
       document.querySelectorAll('.region-item').forEach(item => {
 
-        // Click on header to open/toggle card
-        const header = item.querySelector('.region-header');
-        header.addEventListener('click', () => {
-          const isOpen = item.classList.contains('open');
-          // Close all cards first
+        // Hover to open card
+        item.addEventListener('mouseenter', () => {
           document.querySelectorAll('.region-item').forEach(i => {
-            i.classList.remove('open');
-            const v = document.getElementById('video-' + i.getAttribute('data-region'));
-            if (v) { v.classList.remove('active'); setTimeout(() => { if (!v.classList.contains('active')) v.pause(); }, 800); }
-          });
-          // If it wasn't open, open this one
-          if (!isOpen) {
-            item.classList.add('open');
-            const region = item.getAttribute('data-region');
-            const vid = document.getElementById('video-' + region);
-            if (vid) {
-              vid.classList.add('active');
-              vid.play().catch(e => console.log('Video autoplay prevented:', e));
+            if (i !== item) {
+              i.classList.remove('open');
+              const v = document.getElementById('video-' + i.getAttribute('data-region'));
+              if (v) { v.classList.remove('active'); setTimeout(() => { if (!v.classList.contains('active')) v.pause(); }, 800); }
             }
+          });
+          item.classList.add('open');
+          const region = item.getAttribute('data-region');
+          const vid = document.getElementById('video-' + region);
+          if (vid) {
+            vid.classList.add('active');
+            vid.play().catch(e => console.log('Video autoplay prevented:', e));
           }
         });
 
-        // Close button
-        if (closeBtn) {
-          closeBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            item.classList.remove('open');
-            const region = item.getAttribute('data-region');
-            const vid = document.getElementById('video-' + region);
-            if (vid) {
-              vid.classList.remove('active');
-              setTimeout(() => { if (!vid.classList.contains('active')) vid.pause(); }, 800);
-            }
-          });
-        }
+        // Hover out to close card
+        item.addEventListener('mouseleave', () => {
+          item.classList.remove('open');
+          const region = item.getAttribute('data-region');
+          const vid = document.getElementById('video-' + region);
+          if (vid) {
+            vid.classList.remove('active');
+            setTimeout(() => { if (!vid.classList.contains('active')) vid.pause(); }, 800);
+          }
+        });
 
       });
     });
