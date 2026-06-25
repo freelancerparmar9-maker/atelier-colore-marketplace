@@ -390,10 +390,10 @@
       max-width: 340px;
       line-height: 1.6;
     }
-    .error-banner {
+    .error-msg, .error-banner {
       display: none;
-      background: rgba(220, 70, 70, 0.12);
-      border: 1px solid rgba(220, 70, 70, 0.4);
+      background: rgba(224, 82, 82, 0.12);
+      border: 1px solid rgba(224, 82, 82, 0.4);
       border-radius: 4px;
       padding: 14px 20px;
       font-size: 13px;
@@ -402,7 +402,7 @@
       align-items: center;
       gap: 10px;
     }
-    .error-banner.visible { display: flex; }
+    .error-msg.visible, .error-banner.visible { display: flex; }
 
     /* ─── SUCCESS MESSAGE ─────────────────────────────── */
     .success-msg {
@@ -1015,24 +1015,22 @@
         btn.disabled = true;
 
         try {
-          // 3. Upload image to Supabase storage
+          // 3. Upload image to Supabase storage (non-blocking — webhook sends even if image fails)
           const imageInput = document.getElementById(imageInputId);
           const imageFile = imageInput && imageInput.files[0];
           let artworkImageUrl = null;
 
           if (imageFile) {
-            artworkImageUrl = await uploadImageToSupabase(imageFile);
-            if (!artworkImageUrl) {
-              showError(formId, 'Image upload failed. Please try again or remove the image.');
-              btn.classList.remove('loading');
-              btn.disabled = false;
-              return;
+            try {
+              artworkImageUrl = await uploadImageToSupabase(imageFile);
+            } catch (imgErr) {
+              console.warn('Image upload failed, continuing without image URL:', imgErr);
             }
           }
 
           // 4. Build payload
           const payload = collectFn();
-          if (artworkImageUrl) payload.artwork_image_url = artworkImageUrl;
+          payload.artwork_image_url = artworkImageUrl || null;
 
           // 5. Send to Make.com webhook
           await sendToWebhook(payload);
