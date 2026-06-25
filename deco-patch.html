@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deco Patch — Atelier Coloré Canada</title>
+  <meta name="description" content="Deco Patch transforms discarded liquor bottles into objects of refined luxury, giving waste a second life." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,800;0,900;1,400;1,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0a0a;
+      --surface: #141414;
+      --text: #f0f0f0;
+      --text-muted: rgba(240, 240, 240, 0.7);
+      --gold: #d4a843;
+      --gold-light: rgba(212, 168, 67, 0.15);
+      --border: rgba(255, 255, 255, 0.1);
+      --nav-h: 70px;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); font-family: 'Inter', sans-serif; color: var(--text); overflow-x: hidden; padding-top: var(--nav-h); }
+    
+    /* NAV */
+    .nav-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: var(--nav-h); background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: space-between; padding: 0 40px; border-bottom: 1px solid var(--border); }
+    .nav-brand { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 800; color: var(--text); text-decoration: none; letter-spacing: 2px; text-transform: uppercase; }
+    .nav-links { display: flex; gap: 32px; list-style: none; align-items: center; }
+    .nav-links a { color: rgba(240, 240, 240, 0.85); text-decoration: none; font-size: 13px; text-transform: uppercase; letter-spacing: 1.5px; transition: color 0.3s; display: flex; align-items: center; gap: 6px; }
+    .nav-links a:hover, .nav-links a.active { color: var(--gold); }
+    .dropdown { position: relative; }
+    .dropdown-menu { position: absolute; top: 100%; left: 0; background: var(--surface); border: 1px solid var(--border); list-style: none; padding: 12px 0; min-width: 240px; opacity: 0; visibility: hidden; transform: translateY(10px); transition: all 0.3s ease; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+    .dropdown:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+    .dropdown-menu a { padding: 10px 20px; display: block; color: var(--text-muted); font-size: 12px; letter-spacing: 1px; }
+    .dropdown-menu a:hover { background: var(--bg); color: var(--gold); }
+
+    /* HERO */
+    .deco-hero { 
+      width: 100%; 
+      padding: 100px 80px; 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      text-align: center;
+      background: radial-gradient(circle at center, rgba(212, 168, 67, 0.05) 0%, transparent 60%);
+    }
+    .deco-eyebrow { font-size: 12px; letter-spacing: 5px; text-transform: uppercase; color: var(--gold); margin-bottom: 24px; }
+    .deco-heading { font-family: 'Playfair Display', serif; font-size: clamp(40px, 6vw, 72px); font-weight: 800; color: var(--text); margin-bottom: 40px; letter-spacing: 2px; }
+    .deco-description {
+      font-size: 18px;
+      line-height: 1.9;
+      color: var(--text-muted);
+      max-width: 900px;
+      font-weight: 300;
+      text-align: justify;
+      position: relative;
+    }
+    .deco-description::before {
+      content: '“';
+      font-family: 'Playfair Display', serif;
+      font-size: 80px;
+      color: var(--gold-light);
+      position: absolute;
+      top: -30px;
+      left: -40px;
+    }
+
+    /* GALLERY */
+    .deco-gallery-section { padding: 40px 80px 120px; }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+    }
+    .gallery-item {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      aspect-ratio: 4/5;
+      cursor: pointer;
+      border: 1px solid var(--border);
+    }
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease, filter 0.6s ease;
+      filter: brightness(0.9);
+    }
+    .gallery-item:hover img {
+      transform: scale(1.05);
+      filter: brightness(1.1);
+    }
+    .gallery-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.8), transparent 50%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      display: flex;
+      align-items: flex-end;
+      padding: 30px;
+    }
+    .gallery-item:hover .gallery-overlay {
+      opacity: 1;
+    }
+    .gallery-overlay-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      color: var(--gold);
+      letter-spacing: 2px;
+      transform: translateY(20px);
+      transition: transform 0.4s ease;
+    }
+    .gallery-item:hover .gallery-overlay-text {
+      transform: translateY(0);
+    }
+
+    /* LIGHTBOX */
+    .lightbox {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.95);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      backdrop-filter: blur(10px);
+    }
+    .lightbox.active { display: flex; }
+    .lightbox img {
+      max-width: 90%;
+      max-height: 90%;
+      object-fit: contain;
+      box-shadow: 0 0 50px rgba(212, 168, 67, 0.15);
+      border: 1px solid var(--border);
+    }
+    .lightbox-close {
+      position: absolute;
+      top: 40px; right: 40px;
+      font-size: 40px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+    .lightbox-close:hover { color: var(--gold); }
+
+    .breadcrumb { padding: 0 80px; display: flex; align-items: center; gap: 10px; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); margin-bottom: -12px; margin-top: 40px; }
+    .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--gold); }
+    .breadcrumb span { color: var(--gold); }
+    .breadcrumb-sep { opacity: 0.4; }
+
+    @media (max-width: 1024px) { .gallery-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 768px) { .gallery-grid { grid-template-columns: 1fr; } .deco-hero { padding: 60px 40px; } .deco-description { font-size: 16px; text-align: left; } }
+  </style>
+</head>
+<body>
+
+  <nav class="nav-bar">
+    <a href="index.html" class="nav-brand">Atelier Coloré</a>
+    <ul class="nav-links">
+      <li><a href="search.html">Search</a></li>
+      <li><a href="index.html">Home</a></li>
+      <li class="dropdown"><a href="#">Artists <span>▼</span></a>
+        <ul class="dropdown-menu" id="nav-artists-dropdown"></ul>
+      </li>
+      <li class="dropdown"><a href="#" class="active">Artwork Type <span>▼</span></a>
+        <ul class="dropdown-menu">
+          <li><a href="all-artworks.html">All Artwork</a></li>
+          <li><a href="sculptures.html">Sculpture and Objects</a></li>
+          <li><a href="/acrylic-on-canvas.html">Acrylic On Canvas</a></li>
+          <li><a href="/oil-paintings.html">Oil Painting</a></li>
+          <li><a href="sketches.html">Sketches</a></li>
+          <li><a href="deco-patch.html">Deco Patch</a></li>
+        </ul>
+      </li>
+      <li><a href="#">Sell</a></li>
+      <li class="dropdown"><a href="#">Service <span>▼</span></a>
+        <ul class="dropdown-menu"><li><a href="/evaluation.html">Evaluation</a></li><li><a href="/auction.html">Auction</a></li></ul>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="breadcrumb">
+    <a href="index.html">Home</a><span class="breadcrumb-sep">—</span><span>Deco Patch</span>
+  </div>
+
+  <header class="deco-hero">
+    <p class="deco-eyebrow">Eco-Conscious Opulence</p>
+    <h1 class="deco-heading">Deco Patch</h1>
+    <p class="deco-description">
+      Deco Patch transforms discarded liquor bottles into objects of refined luxury, giving waste a second life. Through meticulous hand-applied patchwork of metallic foils, textured papers, and artisanal motifs, each empty bottle is upcycled in an eco-conscious way that honors sustainability without compromising style. The results are luminous table lamps, vases etc that cast a warm, mosaic glow, sculptural vases with a jewel-toned presence, and statement showpieces that elevate any interior. No two pieces are alike, making every creation a collectible heirloom. Deco Patch merges green innovation with couture craftsmanship — proving that responsible design can still be opulent, radiant, and deeply personal.
+    </p>
+  </header>
+
+  <section class="deco-gallery-section">
+    <div class="gallery-grid" id="gallery-grid">
+      <!-- Images will be injected here -->
+    </div>
+  </section>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+    <div class="lightbox-close">&times;</div>
+    <img src="" id="lightbox-img" alt="Enlarged view">
+  </div>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+    const supabase = createClient('https://zbfdkuckvyrlebdvlghp.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpiZmRrdWNrdnlybGViZHZsZ2hwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwNTI1MTEsImV4cCI6MjA5NzYyODUxMX0.rHcc5-VEkQoM7GqkLuKCB7ueC-7iwDvOVSPUl32OeoY');
+
+    const STORAGE_URL = 'https://zbfdkuckvyrlebdvlghp.supabase.co/storage/v1/object/public/gallery-assets/Artwork%20main/Deco/';
+    const images = [
+      'vase.jpeg',
+      'WhatsApp%20Image%202026-06-23%20at%2017.38.35%20(2).jpeg',
+      'WhatsApp%20Image%202026-06-23%20at%2017.38.35%20(3).jpeg',
+      'WhatsApp%20Image%202026-06-23%20at%2017.38.35%20(4).jpeg',
+      'WhatsApp%20Image%202026-06-23%20at%2017.38.35.jpeg',
+      'WhatsApp%20Image%202026-06-23%20at%2017.38.36.jpeg'
+    ];
+
+    const grid = document.getElementById('gallery-grid');
+    grid.innerHTML = images.map((img, index) => `
+      <div class="gallery-item" onclick="openLightbox('${STORAGE_URL}${img}')">
+        <img src="${STORAGE_URL}${img}" alt="Deco Patch Artwork ${index + 1}" loading="lazy" />
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-text">View Detail</div>
+        </div>
+      </div>
+    `).join('');
+
+    // Lightbox Logic
+    window.openLightbox = function(url) {
+      document.getElementById('lightbox-img').src = url;
+      document.getElementById('lightbox').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    };
+    
+    window.closeLightbox = function(e) {
+      if (e.target.id === 'lightbox' || e.target.classList.contains('lightbox-close')) {
+        document.getElementById('lightbox').classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    };
+
+    // Artists Dropdown
+    async function populateArtistsNav() {
+      const dropdown = document.getElementById('nav-artists-dropdown');
+      if (!dropdown) return;
+      const { data } = await supabase.from('Artist').select('id, artist_name').order('artist_name');
+      if (data) {
+        dropdown.innerHTML = data.map(a => `<li><a href="/artist.html?id=${a.id}">${a.artist_name}</a></li>`).join('');
+      }
+    }
+    populateArtistsNav();
+  </script>
+</body>
+</html>
