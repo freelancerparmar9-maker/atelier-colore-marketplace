@@ -360,18 +360,49 @@
       border-radius: 3px;
       cursor: pointer;
       transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-width: 220px;
     }
-    .submit-btn:hover {
+    .submit-btn:hover:not(:disabled) {
       background: #e0bc5e;
       transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(201, 168, 76, 0.25);
+      box-shadow: 0 8px 24px rgba(212, 168, 67, 0.3);
     }
+    .submit-btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+    .submit-btn .btn-spinner {
+      width: 15px; height: 15px;
+      border: 2px solid rgba(13,12,10,0.3);
+      border-top-color: #0d0c0a;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+      flex-shrink: 0;
+    }
+    .submit-btn.loading .btn-spinner { display: block; }
+    .submit-btn.loading .btn-text { display: none; }
+    @keyframes spin { to { transform: rotate(360deg); } }
     .submit-note {
       font-size: 12px;
       color: var(--text-muted);
       max-width: 340px;
       line-height: 1.6;
     }
+    .error-banner {
+      display: none;
+      background: rgba(220, 70, 70, 0.12);
+      border: 1px solid rgba(220, 70, 70, 0.4);
+      border-radius: 4px;
+      padding: 14px 20px;
+      font-size: 13px;
+      color: #f08080;
+      margin-top: 20px;
+      align-items: center;
+      gap: 10px;
+    }
+    .error-banner.visible { display: flex; }
 
     /* ─── SUCCESS MESSAGE ─────────────────────────────── */
     .success-msg {
@@ -613,7 +644,10 @@
 
         <!-- Submit -->
         <div class="form-submit-area">
-          <button type="submit" class="submit-btn">Submit Evaluation</button>
+          <button type="submit" class="submit-btn" id="btn-collector">
+            <span class="btn-spinner"></span>
+            <span class="btn-text">Submit Evaluation</span>
+          </button>
           <p class="submit-note">Your submission will be reviewed by our team and we will get back to you within 3–5 business days.</p>
         </div>
       </form>
@@ -745,7 +779,10 @@
 
         <!-- Submit -->
         <div class="form-submit-area">
-          <button type="submit" class="submit-btn">Submit Evaluation</button>
+          <button type="submit" class="submit-btn" id="btn-artist">
+            <span class="btn-spinner"></span>
+            <span class="btn-text">Submit Evaluation</span>
+          </button>
           <p class="submit-note">Your submission will be reviewed by our team and we will get back to you within 3–5 business days.</p>
         </div>
       </form>
@@ -760,19 +797,25 @@
 
   </main>
 
-  <script>
-    // ── TAB SWITCHING ───────────────────────────────────────
-    function switchTab(tab) {
-      document.querySelectorAll('.form-tab-btn').forEach(b => {
-        b.classList.remove('active');
-        b.setAttribute('aria-selected', 'false');
-      });
-      document.querySelectorAll('.form-panel').forEach(p => p.classList.remove('active'));
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-      document.getElementById('tab-' + tab).classList.add('active');
-      document.getElementById('tab-' + tab).setAttribute('aria-selected', 'true');
-      document.getElementById('panel-' + tab).classList.add('active');
+    const SUPABASE_URL = 'https://zbfdkuckvyrlebdvlghp.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpiZmRrdWNrdnlybGViZHZsZ2hwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwNTI1MTEsImV4cCI6MjA5NzYyODUxMX0.rHcc5-VEkQoM7GqkLuKCB7ueC-7iwDvOVSPUl32OeoY';
+    const WEBHOOK_URL = 'https://hook.us2.make.com/vlw23vj1tw8ghkda8i9f5axripohm5mg';
+
+    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // ── POPULATE ARTISTS NAV ────────────────────────────────
+    async function populateArtistsNav() {
+      const dropdown = document.getElementById('nav-artists-dropdown');
+      if (!dropdown) return;
+      const { data } = await supabase.from('Artist').select('id, artist_name').order('artist_name');
+      if (data) {
+        dropdown.innerHTML = data.map(a => `<li><a href="/artist.html?id=${a.id}">${a.artist_name}</a></li>`).join('');
+      }
     }
+    populateArtistsNav();
 
     // ── IMAGE UPLOAD PREVIEW ────────────────────────────────
     function setupUpload(inputId, previewId, uploadAreaId) {
@@ -785,7 +828,6 @@
         if (!file) return;
         const reader = new FileReader();
         reader.onload = (e) => {
-          // Hide default icons/text
           area.querySelectorAll('.upload-icon, .upload-label, .upload-hint').forEach(el => el.style.display = 'none');
           preview.src = e.target.result;
           preview.style.display = 'block';
@@ -793,7 +835,6 @@
         reader.readAsDataURL(file);
       });
 
-      // Drag & drop styling
       area.addEventListener('dragover', e => { e.preventDefault(); area.classList.add('dragover'); });
       area.addEventListener('dragleave', () => area.classList.remove('dragover'));
       area.addEventListener('drop', e => {
@@ -812,13 +853,146 @@
     setupUpload('artwork-image-collector', 'preview-collector', 'upload-collector');
     setupUpload('artwork-image-artist', 'preview-artist', 'upload-artist');
 
-    // ── FORM SUBMISSION ─────────────────────────────────────
-    function handleSubmit(formId) {
-      const form = document.getElementById(formId);
-      form.addEventListener('submit', (e) => {
-        e.preventDefault();
+    // ── TAB SWITCHING ───────────────────────────────────────
+    window.switchTab = function(tab) {
+      document.querySelectorAll('.form-tab-btn').forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      document.querySelectorAll('.form-panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('tab-' + tab).classList.add('active');
+      document.getElementById('tab-' + tab).setAttribute('aria-selected', 'true');
+      document.getElementById('panel-' + tab).classList.add('active');
+    };
 
-        // Simple required field validation
+    // ── SET DEFAULT DATE ────────────────────────────────────
+    const today = new Date().toISOString().split('T')[0];
+    document.querySelectorAll('input[type="date"]').forEach(d => d.value = today);
+
+    // ── UPLOAD IMAGE TO SUPABASE STORAGE ────────────────────
+    async function uploadImageToSupabase(file) {
+      if (!file) return null;
+      const ext = file.name.split('.').pop();
+      const filename = `evaluations/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
+      const { data, error } = await supabase.storage
+        .from('gallery-assets')
+        .upload(filename, file, { cacheControl: '3600', upsert: false, contentType: file.type });
+      if (error) {
+        console.error('Image upload error:', error);
+        return null;
+      }
+      const { data: urlData } = supabase.storage.from('gallery-assets').getPublicUrl(filename);
+      return urlData.publicUrl;
+    }
+
+    // ── SEND WEBHOOK ────────────────────────────────────────
+    async function sendToWebhook(payload) {
+      const response = await fetch(WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (!response.ok) throw new Error(`Webhook responded with status ${response.status}`);
+      return response;
+    }
+
+    // ── SHOW/HIDE ERROR ─────────────────────────────────────
+    function showError(formId, msg) {
+      let err = document.getElementById('error-' + formId);
+      if (!err) {
+        err = document.createElement('div');
+        err.id = 'error-' + formId;
+        err.className = 'error-banner';
+        document.getElementById(formId).appendChild(err);
+      }
+      err.innerHTML = `<span>⚠</span><span>${msg}</span>`;
+      err.classList.add('visible');
+      err.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    function hideError(formId) {
+      const err = document.getElementById('error-' + formId);
+      if (err) err.classList.remove('visible');
+    }
+
+    // ── COLLECT COLLECTOR FORM DATA ─────────────────────────
+    function collectCollectorData() {
+      const v = id => (document.getElementById(id) || {}).value || '';
+      return {
+        form_type: 'Art Collector',
+        submitted_at: new Date().toISOString(),
+        artwork: {
+          title:      v('c-title'),
+          artist:     v('c-artist'),
+          medium:     v('c-medium'),
+          year:       v('c-year'),
+          dimensions: v('c-dimensions'),
+          provenance: v('c-provenance')
+        },
+        purpose: v('c-purpose'),
+        scores: {
+          aesthetic_appeal:        { score: v('c-score-aesthetic'),  notes: v('c-note-aesthetic') },
+          emotional_response:      { score: v('c-score-emotional'),  notes: v('c-note-emotional') },
+          craftsmanship_condition: { score: v('c-score-craft'),      notes: v('c-note-craft') },
+          artist_reputation:       { score: v('c-score-reputation'), notes: v('c-note-reputation') }
+        },
+        additional_info: {
+          preservation_needs: v('c-preservation'),
+          authenticity_cert:  v('c-authenticity'),
+          exhibition_history: v('c-exhibition'),
+          special_notes:      v('c-special-notes')
+        },
+        collector: {
+          name:  v('c-name'),
+          email: v('c-email'),
+          date:  v('c-date')
+        }
+      };
+    }
+
+    // ── COLLECT ARTIST FORM DATA ─────────────────────────────
+    function collectArtistData() {
+      const v = id => (document.getElementById(id) || {}).value || '';
+      return {
+        form_type: 'Artist',
+        submitted_at: new Date().toISOString(),
+        review_purpose: v('a-purpose'),
+        artwork: {
+          title:      v('a-title'),
+          medium:     v('a-medium'),
+          dimensions: v('a-dimensions'),
+          year:       v('a-year')
+        },
+        scores: {
+          concept_intent:           v('a-score-concept'),
+          idea_emotion_message:     v('a-score-emotion'),
+          clarity_technique_craft:  v('a-score-technique'),
+          skill_in_materials:       v('a-score-skill'),
+          finish:                   v('a-score-finish'),
+          uniqueness:               v('a-score-unique'),
+          flow_visual_impact:       v('a-score-flow')
+        },
+        reflections: {
+          challenge_overcome: v('a-challenge'),
+          what_would_change:  v('a-change'),
+          important_learning: v('a-learning')
+        },
+        artist: {
+          name:  v('a-name'),
+          email: v('a-email'),
+          date:  v('a-date')
+        }
+      };
+    }
+
+    // ── MAIN SUBMIT HANDLER ─────────────────────────────────
+    function wireForm(formId, imageInputId, collectFn) {
+      const form = document.getElementById(formId);
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        hideError(formId);
+
+        // 1. Validate required fields
         const required = form.querySelectorAll('[required]');
         let valid = true;
         required.forEach(field => {
@@ -829,42 +1003,59 @@
           }
         });
         if (!valid) {
-          // Scroll to first invalid field
-          const firstInvalid = form.querySelector('[required]:invalid, [style*="e05252"]');
-          if (firstInvalid) firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          const firstBad = form.querySelector('[style*="e05252"]');
+          if (firstBad) firstBad.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          showError(formId, 'Please fill in all required fields marked with *');
           return;
         }
 
-        // Show success
-        form.style.display = 'none';
-        document.getElementById('success-msg').classList.add('visible');
-        document.getElementById('success-msg').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // 2. Set loading state
+        const btn = form.querySelector('.submit-btn');
+        btn.classList.add('loading');
+        btn.disabled = true;
+
+        try {
+          // 3. Upload image to Supabase storage
+          const imageInput = document.getElementById(imageInputId);
+          const imageFile = imageInput && imageInput.files[0];
+          let artworkImageUrl = null;
+
+          if (imageFile) {
+            artworkImageUrl = await uploadImageToSupabase(imageFile);
+            if (!artworkImageUrl) {
+              showError(formId, 'Image upload failed. Please try again or remove the image.');
+              btn.classList.remove('loading');
+              btn.disabled = false;
+              return;
+            }
+          }
+
+          // 4. Build payload
+          const payload = collectFn();
+          if (artworkImageUrl) payload.artwork_image_url = artworkImageUrl;
+
+          // 5. Send to Make.com webhook
+          await sendToWebhook(payload);
+
+          // 6. Success — hide form, show confirmation
+          form.style.display = 'none';
+          const successEl = document.getElementById('success-msg');
+          successEl.classList.add('visible');
+          successEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        } catch (err) {
+          console.error('Submission error:', err);
+          showError(formId, 'Submission failed. Please check your connection and try again.');
+          btn.classList.remove('loading');
+          btn.disabled = false;
+        }
       });
     }
 
-    handleSubmit('form-collector');
-    handleSubmit('form-artist');
+    // Wire up both forms
+    wireForm('form-collector', 'artwork-image-collector', collectCollectorData);
+    wireForm('form-artist',    'artwork-image-artist',    collectArtistData);
 
-    // ── SET DEFAULT DATE ────────────────────────────────────
-    const today = new Date().toISOString().split('T')[0];
-    document.querySelectorAll('input[type="date"]').forEach(d => d.value = today);
-  </script>
-
-  <script type="module">
-    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
-    const supabase = createClient(
-      'https://zbfdkuckvyrlebdvlghp.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpiZmRrdWNrdnlybGViZHZsZ2hwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwNTI1MTEsImV4cCI6MjA5NzYyODUxMX0.rHcc5-VEkQoM7GqkLuKCB7ueC-7iwDvOVSPUl32OeoY'
-    );
-    async function populateArtistsNav() {
-      const dropdown = document.getElementById('nav-artists-dropdown');
-      if (!dropdown) return;
-      const { data } = await supabase.from('Artist').select('id, artist_name').order('artist_name');
-      if (data) {
-        dropdown.innerHTML = data.map(a => `<li><a href="/artist.html?id=${a.id}">${a.artist_name}</a></li>`).join('');
-      }
-    }
-    populateArtistsNav();
   </script>
 
 </body>
