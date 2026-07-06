@@ -16,147 +16,138 @@
       --bg: #0a0a0a;
       --surface: #141414;
       --text: #f0f0f0;
-      --text-muted: rgba(240, 240, 240, 0.7);
+      --text-muted: rgba(240, 240, 240, 0.65);
       --gold: #d4a843;
-      --gold-light: rgba(212, 168, 67, 0.15);
+      --gold-dim: rgba(212, 168, 67, 0.12);
       --border: rgba(255, 255, 255, 0.1);
       --nav-h: 70px;
     }
     html { scroll-behavior: smooth; }
     body { background: var(--bg); font-family: 'Inter', sans-serif; color: var(--text); overflow-x: hidden; padding-top: var(--nav-h); }
-    
-    /* NAV */
-    .nav-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: var(--nav-h); background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: space-between; padding: 0 40px; border-bottom: 1px solid var(--border); }
+
+    /* ── NAV ── */
+    .nav-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 200; height: var(--nav-h); background: rgba(10,10,10,0.96); backdrop-filter: blur(14px); display: flex; align-items: center; justify-content: space-between; padding: 0 40px; border-bottom: 1px solid var(--border); }
     .nav-brand { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 800; color: var(--text); text-decoration: none; letter-spacing: 2px; text-transform: uppercase; }
     .nav-links { display: flex; gap: 32px; list-style: none; align-items: center; }
-    .nav-links a { color: rgba(240, 240, 240, 0.85); text-decoration: none; font-size: 13px; text-transform: uppercase; letter-spacing: 1.5px; transition: color 0.3s; display: flex; align-items: center; gap: 6px; }
+    .nav-links a { color: rgba(240,240,240,0.8); text-decoration: none; font-size: 13px; text-transform: uppercase; letter-spacing: 1.5px; transition: color 0.3s; display: flex; align-items: center; gap: 6px; }
     .nav-links a:hover, .nav-links a.active { color: var(--gold); }
     .dropdown { position: relative; }
-    .dropdown-menu { position: absolute; top: 100%; left: 0; background: var(--surface); border: 1px solid var(--border); list-style: none; padding: 12px 0; min-width: 240px; opacity: 0; visibility: hidden; transform: translateY(10px); transition: all 0.3s ease; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+    .dropdown-menu { position: absolute; top: 100%; left: 0; background: rgba(14,14,14,0.98); border: 1px solid var(--border); list-style: none; padding: 12px 0; min-width: 240px; opacity: 0; visibility: hidden; transform: translateY(10px); transition: all 0.3s ease; box-shadow: 0 16px 40px rgba(0,0,0,0.6); z-index: 300; }
     .dropdown:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
     .dropdown-menu a { padding: 10px 20px; display: block; color: var(--text-muted); font-size: 12px; letter-spacing: 1px; }
-    .dropdown-menu a:hover { background: var(--bg); color: var(--gold); }
+    .dropdown-menu a:hover { background: rgba(255,255,255,0.04); color: var(--gold); }
 
-    /* HERO */
-    .deco-hero { 
-      width: 100%; 
-      padding: 100px 80px; 
-      display: flex; 
-      flex-direction: column; 
-      align-items: center; 
-      text-align: center;
-      background: radial-gradient(circle at center, rgba(212, 168, 67, 0.05) 0%, transparent 60%);
-    }
-    .deco-eyebrow { font-size: 12px; letter-spacing: 5px; text-transform: uppercase; color: var(--gold); margin-bottom: 24px; }
-    .deco-heading { font-family: 'Playfair Display', serif; font-size: clamp(40px, 6vw, 72px); font-weight: 800; color: var(--text); margin-bottom: 40px; letter-spacing: 2px; }
-    .deco-description {
-      font-size: 18px;
-      line-height: 1.9;
-      color: var(--text-muted);
-      max-width: 900px;
-      font-weight: 300;
-      text-align: justify;
-      position: relative;
-    }
-    .deco-description::before {
-      content: '“';
-      font-family: 'Playfair Display', serif;
-      font-size: 80px;
-      color: var(--gold-light);
-      position: absolute;
-      top: -30px;
-      left: -40px;
-    }
-
-    /* GALLERY */
-    .deco-gallery-section { padding: 40px 80px 120px; }
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 30px;
-    }
-    .gallery-item {
-      position: relative;
-      border-radius: 8px;
-      overflow: hidden;
-      aspect-ratio: 4/5;
-      cursor: pointer;
-      border: 1px solid var(--border);
-    }
-    .gallery-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.6s ease, filter 0.6s ease;
-      filter: brightness(0.9);
-    }
-    .gallery-item:hover img {
-      transform: scale(1.05);
-      filter: brightness(1.1);
-    }
-    .gallery-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(0,0,0,0.8), transparent 50%);
-      opacity: 0;
-      transition: opacity 0.4s ease;
-      display: flex;
-      align-items: flex-end;
-      padding: 30px;
-    }
-    .gallery-item:hover .gallery-overlay {
-      opacity: 1;
-    }
-    .gallery-overlay-text {
-      font-family: 'Playfair Display', serif;
-      font-size: 20px;
-      color: var(--gold);
-      letter-spacing: 2px;
-      transform: translateY(20px);
-      transition: transform 0.4s ease;
-    }
-    .gallery-item:hover .gallery-overlay-text {
-      transform: translateY(0);
-    }
-
-    /* LIGHTBOX */
-    .lightbox {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.95);
-      z-index: 1000;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 40px;
-      backdrop-filter: blur(10px);
-    }
-    .lightbox.active { display: flex; }
-    .lightbox img {
-      max-width: 90%;
-      max-height: 90%;
-      object-fit: contain;
-      box-shadow: 0 0 50px rgba(212, 168, 67, 0.15);
-      border: 1px solid var(--border);
-    }
-    .lightbox-close {
-      position: absolute;
-      top: 40px; right: 40px;
-      font-size: 40px;
-      color: var(--text-muted);
-      cursor: pointer;
-      transition: color 0.3s;
-    }
-    .lightbox-close:hover { color: var(--gold); }
-
-    .breadcrumb { padding: 0 80px; display: flex; align-items: center; gap: 10px; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); margin-bottom: -12px; margin-top: 40px; }
-    .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+    /* ── BREADCRUMB ── */
+    .breadcrumb { padding: 0 80px; display: flex; align-items: center; gap: 10px; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); margin-top: 40px; margin-bottom: -12px; }
+    .breadcrumb a { color: var(--text-muted); text-decoration: none; transition: color 0.3s; }
     .breadcrumb a:hover { color: var(--gold); }
     .breadcrumb span { color: var(--gold); }
     .breadcrumb-sep { opacity: 0.4; }
 
+    /* ── HERO ── */
+    .deco-hero { width: 100%; padding: 80px 80px 60px; display: flex; flex-direction: column; align-items: center; text-align: center; background: radial-gradient(ellipse at 50% 0%, rgba(212,168,67,0.07) 0%, transparent 65%); }
+    .deco-eyebrow { font-size: 11px; letter-spacing: 5px; text-transform: uppercase; color: var(--gold); margin-bottom: 20px; }
+    .deco-heading { font-family: 'Playfair Display', serif; font-size: clamp(38px, 6vw, 72px); font-weight: 800; color: var(--text); margin-bottom: 36px; letter-spacing: 2px; }
+    .deco-description { font-size: 17px; line-height: 1.9; color: var(--text-muted); max-width: 860px; font-weight: 300; text-align: justify; position: relative; padding-left: 30px; border-left: 2px solid var(--gold); }
+
+    /* ── GALLERY GRID ── */
+    .deco-gallery-section { padding: 60px 80px 120px; }
+    .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+
+    .gallery-card { background: var(--surface); border: 1px solid var(--border); overflow: hidden; transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease; cursor: pointer; display: flex; flex-direction: column; }
+    .gallery-card:hover { transform: translateY(-8px); border-color: var(--gold); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+
+    .gallery-card-image-wrap { width: 100%; aspect-ratio: 4/5; overflow: hidden; position: relative; }
+    .gallery-card-image-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease, filter 0.4s ease; filter: brightness(0.92); }
+    .gallery-card:hover .gallery-card-image-wrap img { transform: scale(1.06); filter: brightness(1.02); }
+
+    /* Availability badge on image */
+    .availability-tag { position: absolute; top: 12px; right: 12px; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; padding: 5px 12px; font-weight: 600; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.15); color: #aaa; }
+    .availability-tag.available { color: #7ecb7e; border-color: rgba(126,203,126,0.3); }
+
+    .gallery-card-info { padding: 20px 24px 24px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+    .gallery-card-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--text); }
+    .gallery-card-price { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--gold); }
+    .gallery-card-notes { font-size: 12px; color: var(--text-muted); line-height: 1.6; font-style: italic; }
+    .gallery-card-actions { display: flex; gap: 10px; margin-top: auto; padding-top: 16px; border-top: 1px solid var(--border); }
+    .btn-view { flex: 1; padding: 11px 0; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; font-weight: 600; background: transparent; border: 1px solid var(--border); color: var(--text-muted); cursor: pointer; transition: all 0.3s; font-family: 'Inter', sans-serif; }
+    .btn-view:hover { border-color: var(--text-muted); color: var(--text); }
+    .btn-buy { flex: 1; padding: 11px 0; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; font-weight: 600; background: var(--gold); border: 1px solid var(--gold); color: #111; cursor: pointer; transition: all 0.3s; font-family: 'Inter', sans-serif; }
+    .btn-buy:hover { background: #e8b84a; }
+    .btn-buy:disabled { background: #555; border-color: #555; color: #999; cursor: not-allowed; }
+
+    /* ── EMPTY / LOADING ── */
+    .page-state { grid-column: 1/-1; text-align: center; padding: 80px 40px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+    .loader-ring { width: 44px; height: 44px; border: 2px solid var(--border); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.9s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .page-state p { font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: var(--text-muted); }
+
+    /* ── DETAIL MODAL ── */
+    .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 500; display: none; align-items: center; justify-content: center; padding: 24px; }
+    .modal-backdrop.open { display: flex; }
+
+    .detail-modal { background: var(--surface); border: 1px solid var(--border); max-width: 900px; width: 100%; max-height: 90vh; overflow-y: auto; display: flex; gap: 0; position: relative; }
+    .detail-modal-close { position: absolute; top: 20px; right: 20px; width: 36px; height: 36px; background: rgba(255,255,255,0.06); border: 1px solid var(--border); color: var(--text-muted); font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s; z-index: 10; border-radius: 50%; }
+    .detail-modal-close:hover { background: rgba(255,255,255,0.12); color: var(--text); }
+
+    .detail-modal-img { flex: 1; min-height: 400px; background: #0a0a0a; }
+    .detail-modal-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .detail-modal-content { flex: 1; padding: 48px 40px; display: flex; flex-direction: column; gap: 20px; }
+
+    .detail-eyebrow { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); }
+    .detail-title { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; color: var(--text); line-height: 1.2; }
+    .detail-divider { height: 1px; background: var(--border); }
+    .detail-row { display: flex; flex-direction: column; gap: 4px; }
+    .detail-row label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); }
+    .detail-row .val { font-size: 16px; color: var(--text); }
+    .detail-row .val.price { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--gold); }
+    .detail-row .val.avail-yes { color: #7ecb7e; font-size: 14px; font-weight: 600; }
+    .detail-row .val.avail-no { color: #e88; font-size: 14px; font-weight: 600; }
+    .detail-notes-box { background: rgba(212,168,67,0.07); border: 1px solid rgba(212,168,67,0.2); padding: 14px 18px; font-size: 13px; color: var(--text-muted); line-height: 1.7; font-style: italic; }
+    .detail-cta { display: flex; gap: 12px; margin-top: auto; padding-top: 20px; border-top: 1px solid var(--border); }
+    .detail-cta .btn-buy-modal { flex: 1; padding: 15px 0; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; font-weight: 600; background: var(--gold); border: 1px solid var(--gold); color: #111; cursor: pointer; transition: all 0.3s; font-family: 'Inter', sans-serif; }
+    .detail-cta .btn-buy-modal:hover { background: #e8b84a; }
+    .detail-cta .btn-buy-modal:disabled { background: #555; border-color: #555; color: #999; cursor: not-allowed; }
+    .detail-cta .btn-close-modal { flex: 0.5; padding: 15px 0; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; font-weight: 600; background: transparent; border: 1px solid var(--border); color: var(--text-muted); cursor: pointer; transition: all 0.3s; font-family: 'Inter', sans-serif; }
+    .detail-cta .btn-close-modal:hover { border-color: var(--text-muted); color: var(--text); }
+
+    /* ── BUY / INQUIRY MODAL ── */
+    .inquiry-modal { background: var(--surface); border: 1px solid var(--border); max-width: 520px; width: 100%; padding: 48px 44px; position: relative; }
+    .inquiry-modal h2 { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+    .inquiry-modal .sub { font-size: 13px; color: var(--text-muted); margin-bottom: 28px; line-height: 1.6; }
+    .inquiry-modal .item-preview { background: var(--gold-dim); border: 1px solid rgba(212,168,67,0.2); padding: 14px 18px; margin-bottom: 24px; }
+    .inquiry-modal .item-preview .ip-title { font-family: 'Playfair Display', serif; font-size: 17px; color: var(--text); font-weight: 700; }
+    .inquiry-modal .item-preview .ip-price { font-size: 13px; color: var(--gold); margin-top: 4px; }
+
+    .form-group { display: flex; flex-direction: column; gap: 7px; margin-bottom: 16px; }
+    .form-group label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); }
+    .form-group label .req { color: var(--gold); }
+    .form-group input, .form-group textarea { background: rgba(255,255,255,0.04); border: 1px solid var(--border); color: var(--text); font-family: 'Inter', sans-serif; font-size: 14px; padding: 12px 16px; transition: border-color 0.3s; outline: none; resize: none; autocomplete: off; }
+    .form-group input:focus, .form-group textarea:focus { border-color: var(--gold); }
+    .form-mandatory-note { font-size: 11px; color: var(--text-muted); margin-bottom: 20px; }
+    .form-mandatory-note span { color: var(--gold); }
+    .btn-submit-inquiry { width: 100%; padding: 16px; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; font-weight: 600; background: var(--gold); border: none; color: #111; cursor: pointer; transition: all 0.3s; font-family: 'Inter', sans-serif; margin-top: 4px; }
+    .btn-submit-inquiry:hover { background: #e8b84a; }
+    .btn-submit-inquiry:disabled { background: #555; color: #999; cursor: not-allowed; }
+    .inquiry-modal .modal-close-x { position: absolute; top: 20px; right: 20px; width: 36px; height: 36px; background: rgba(255,255,255,0.06); border: 1px solid var(--border); color: var(--text-muted); font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s; border-radius: 50%; }
+    .inquiry-modal .modal-close-x:hover { background: rgba(255,255,255,0.12); color: var(--text); }
+
+    /* ── TOAST ── */
+    #siteToast { position: fixed; bottom: 32px; right: 32px; background: #1a1a1a; border: 1px solid var(--gold); color: var(--text); padding: 16px 24px; font-size: 13px; letter-spacing: 0.5px; z-index: 9999; opacity: 0; transform: translateY(16px); transition: all 0.4s ease; pointer-events: none; max-width: 340px; }
+    #siteToast.show { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ── */
     @media (max-width: 1024px) { .gallery-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 768px) { .gallery-grid { grid-template-columns: 1fr; } .deco-hero { padding: 60px 40px; } .deco-description { font-size: 16px; text-align: left; } }
+    @media (max-width: 768px) {
+      .gallery-grid { grid-template-columns: 1fr; }
+      .deco-hero { padding: 60px 30px 40px; }
+      .deco-description { font-size: 15px; text-align: left; }
+      .deco-gallery-section { padding: 40px 30px 80px; }
+      .breadcrumb { padding: 0 30px; }
+      .detail-modal { flex-direction: column; }
+      .detail-modal-img { min-height: 260px; }
+      .nav-links { display: none; }
+    }
   </style>
 </head>
 <body>
@@ -173,15 +164,18 @@
         <ul class="dropdown-menu">
           <li><a href="all-artworks.html">All Artwork</a></li>
           <li><a href="sculptures.html">Sculpture and Objects</a></li>
-          <li><a href="/acrylic-on-canvas.html">Acrylic On Canvas</a></li>
-          <li><a href="/oil-paintings.html">Oil Painting</a></li>
+          <li><a href="acrylic-on-canvas.html">Acrylic On Canvas</a></li>
+          <li><a href="oil-paintings.html">Oil Painting</a></li>
           <li><a href="sketches.html">Sketches</a></li>
           <li><a href="deco-patch.html">Deco Patch</a></li>
         </ul>
       </li>
       <li><a href="#">Sell</a></li>
       <li class="dropdown"><a href="#">Service <span>▼</span></a>
-        <ul class="dropdown-menu"><li><a href="/evaluation.html">Evaluation</a></li><li><a href="/auction.html">Auction</a></li></ul>
+        <ul class="dropdown-menu">
+          <li><a href="evaluation.html">Evaluation</a></li>
+          <li><a href="auction.html">Auction</a></li>
+        </ul>
       </li>
     </ul>
   </nav>
@@ -191,7 +185,7 @@
   </div>
 
   <header class="deco-hero">
-    <p class="deco-eyebrow">Eco-Conscious Opulence</p>
+    <p class="deco-eyebrow">Eco-Conscious Opulence · Atelier Coloré</p>
     <h1 class="deco-heading">Deco Patch</h1>
     <p class="deco-description">
       Deco Patch transforms discarded liquor bottles into objects of refined luxury, giving waste a second life. Through meticulous hand-applied patchwork of metallic foils, textured papers, and artisanal motifs, each empty bottle is upcycled in an eco-conscious way that honors sustainability without compromising style. The results are luminous table lamps, vases etc that cast a warm, mosaic glow, sculptural vases with a jewel-toned presence, and statement showpieces that elevate any interior. No two pieces are alike, making every creation a collectible heirloom. Deco Patch merges green innovation with couture craftsmanship — proving that responsible design can still be opulent, radiant, and deeply personal.
@@ -200,55 +194,225 @@
 
   <section class="deco-gallery-section">
     <div class="gallery-grid" id="gallery-grid">
-      <!-- Images will be injected here -->
+      <div class="page-state">
+        <div class="loader-ring"></div>
+        <p>Curating collection…</p>
+      </div>
     </div>
   </section>
 
-  <!-- Lightbox -->
-  <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
-    <div class="lightbox-close">&times;</div>
-    <img src="" id="lightbox-img" alt="Enlarged view">
+  <!-- DETAIL MODAL -->
+  <div class="modal-backdrop" id="detailModal">
+    <div class="detail-modal" id="detailModalInner">
+      <button class="detail-modal-close" onclick="closeDetailModal()" aria-label="Close">✕</button>
+      <div class="detail-modal-img" id="detailImg"></div>
+      <div class="detail-modal-content" id="detailContent"></div>
+    </div>
   </div>
+
+  <!-- BUY INQUIRY MODAL -->
+  <div class="modal-backdrop" id="buyModal">
+    <div class="inquiry-modal">
+      <button class="modal-close-x" onclick="closeBuyModal()" aria-label="Close">✕</button>
+      <h2>Send Inquiry</h2>
+      <p class="sub">Express your interest in this piece. Our team will reach out to confirm availability and discuss next steps.</p>
+      <div class="item-preview" id="buyItemPreview"></div>
+      <p class="form-mandatory-note"><span>✦</span> Indicates mandatory fields</p>
+      <form id="buyForm" onsubmit="submitBuyInquiry(event)" autocomplete="off" novalidate>
+        <div class="form-group">
+          <label for="buy-name">Full Name <span class="req">✦</span></label>
+          <input type="text" id="buy-name" placeholder="Your full name" required autocomplete="off" />
+        </div>
+        <div class="form-group">
+          <label for="buy-email">Email Address <span class="req">✦</span></label>
+          <input type="email" id="buy-email" placeholder="your@email.com" required autocomplete="off" />
+        </div>
+        <div class="form-group">
+          <label for="buy-message">Special Message <span style="color:var(--text-muted); font-size:9px;">(Optional)</span></label>
+          <textarea id="buy-message" rows="4" placeholder="Any special requests, questions or details…" autocomplete="off"></textarea>
+        </div>
+        <button type="submit" class="btn-submit-inquiry" id="buy-submit-btn">Send Inquiry</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div id="siteToast"></div>
 
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
-    const supabase = createClient('https://zbfdkuckvyrlebdvlghp.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpiZmRrdWNrdnlybGViZHZsZ2hwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwNTI1MTEsImV4cCI6MjA5NzYyODUxMX0.rHcc5-VEkQoM7GqkLuKCB7ueC-7iwDvOVSPUl32OeoY');
 
-    const STORAGE_URL = 'https://zbfdkuckvyrlebdvlghp.supabase.co/storage/v1/object/public/gallery-assets/Artwork%20main/Deco/';
-    const images = [
-      'vase.jpeg',
-      'WhatsApp%20Image%202026-06-23%20at%2017.38.35%20(2).jpeg',
-      'WhatsApp%20Image%202026-06-23%20at%2017.38.35%20(3).jpeg',
-      'WhatsApp%20Image%202026-06-23%20at%2017.38.35%20(4).jpeg',
-      'WhatsApp%20Image%202026-06-23%20at%2017.38.35.jpeg',
-      'WhatsApp%20Image%202026-06-23%20at%2017.38.36.jpeg'
-    ];
+    const SUPABASE_URL = 'https://zbfdkuckvyrlebdvlghp.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpiZmRrdWNrdnlybGViZHZsZ2hwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwNTI1MTEsImV4cCI6MjA5NzYyODUxMX0.rHcc5-VEkQoM7GqkLuKCB7ueC-7iwDvOVSPUl32OeoY';
+    const WEBHOOK = 'https://hook.us2.make.com/e5ecspvb9mk1gl7q9yffrn5y0wv1hyq3';
 
-    const grid = document.getElementById('gallery-grid');
-    grid.innerHTML = images.map((img, index) => `
-      <div class="gallery-item" onclick="openLightbox('${STORAGE_URL}${img}')">
-        <img src="${STORAGE_URL}${img}" alt="Deco Patch Artwork ${index + 1}" loading="lazy" />
-        <div class="gallery-overlay">
-          <div class="gallery-overlay-text">View Detail</div>
+    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    let currentItem = null; // the deco item currently targeted for buy
+
+    // ── LOAD & RENDER GALLERY ──────────────────────────────────
+    async function init() {
+      const { data, error } = await supabase
+        .from('deco')
+        .select('*')
+        .order('id', { ascending: true });
+
+      const grid = document.getElementById('gallery-grid');
+
+      if (error || !data || data.length === 0) {
+        grid.innerHTML = `<div class="page-state"><p>Collection coming soon.</p></div>`;
+        return;
+      }
+
+      grid.innerHTML = data.map(item => {
+        const isAvail = (item.Availability || '').toLowerCase() !== 'unavailable' && (item.Availability || '').toLowerCase() !== 'sold';
+        const availLabel = item.Availability || 'Available';
+        return `
+          <div class="gallery-card">
+            <div class="gallery-card-image-wrap" onclick="openDetailModal(${item.id})" title="Click to view details">
+              <img src="${item.Image_URL}" alt="${item.Title}" loading="lazy" />
+              <span class="availability-tag ${isAvail ? 'available' : ''}">${availLabel}</span>
+            </div>
+            <div class="gallery-card-info">
+              <div class="gallery-card-title">${item.Title || 'Untitled'}</div>
+              <div class="gallery-card-price">$${Number(item.Price_CAD).toLocaleString()} CAD</div>
+              ${item.Notes ? `<div class="gallery-card-notes">${item.Notes}</div>` : ''}
+              <div class="gallery-card-actions">
+                <button class="btn-view" onclick="openDetailModal(${item.id})">View Details</button>
+                <button class="btn-buy" onclick="openBuyModal(${item.id})" ${!isAvail ? 'disabled title="Not available"' : ''}>Buy</button>
+              </div>
+            </div>
+          </div>`;
+      }).join('');
+
+      // Store data globally for modal access
+      window._decoItems = data;
+    }
+
+    // ── DETAIL MODAL ──────────────────────────────────────────
+    window.openDetailModal = function(id) {
+      const item = (window._decoItems || []).find(i => i.id === id);
+      if (!item) return;
+
+      const isAvail = (item.Availability || '').toLowerCase() !== 'unavailable' && (item.Availability || '').toLowerCase() !== 'sold';
+      const availLabel = item.Availability || 'Available';
+
+      document.getElementById('detailImg').innerHTML = `<img src="${item.Image_URL}" alt="${item.Title}" />`;
+      document.getElementById('detailContent').innerHTML = `
+        <div class="detail-eyebrow">Deco Patch · Atelier Coloré</div>
+        <div class="detail-title">${item.Title || 'Untitled'}</div>
+        <div class="detail-divider"></div>
+        <div class="detail-row">
+          <label>Price</label>
+          <div class="val price">$${Number(item.Price_CAD).toLocaleString()} CAD</div>
         </div>
-      </div>
-    `).join('');
+        <div class="detail-row">
+          <label>Availability</label>
+          <div class="val ${isAvail ? 'avail-yes' : 'avail-no'}">${availLabel}</div>
+        </div>
+        ${item.Notes ? `
+        <div class="detail-notes-box">
+          <strong style="display:block;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Notes</strong>
+          ${item.Notes}
+        </div>` : ''}
+        <div class="detail-cta">
+          <button class="btn-buy-modal" onclick="closeDetailModal(); openBuyModal(${item.id});" ${!isAvail ? 'disabled title="Not available"' : ''}>
+            ${isAvail ? 'Send Inquiry to Buy' : 'Not Available'}
+          </button>
+          <button class="btn-close-modal" onclick="closeDetailModal()">Close</button>
+        </div>
+      `;
 
-    // Lightbox Logic
-    window.openLightbox = function(url) {
-      document.getElementById('lightbox-img').src = url;
-      document.getElementById('lightbox').classList.add('active');
+      document.getElementById('detailModal').classList.add('open');
       document.body.style.overflow = 'hidden';
     };
-    
-    window.closeLightbox = function(e) {
-      if (e.target.id === 'lightbox' || e.target.classList.contains('lightbox-close')) {
-        document.getElementById('lightbox').classList.remove('active');
-        document.body.style.overflow = '';
-      }
+
+    window.closeDetailModal = function() {
+      document.getElementById('detailModal').classList.remove('open');
+      document.body.style.overflow = '';
+    };
+    document.getElementById('detailModal').addEventListener('click', function(e) {
+      if (e.target === this) closeDetailModal();
+    });
+
+    // ── BUY MODAL ─────────────────────────────────────────────
+    window.openBuyModal = function(id) {
+      const item = (window._decoItems || []).find(i => i.id === id);
+      if (!item) return;
+      currentItem = item;
+
+      document.getElementById('buyItemPreview').innerHTML = `
+        <div class="ip-title">${item.Title || 'Untitled'}</div>
+        <div class="ip-price">$${Number(item.Price_CAD).toLocaleString()} CAD</div>
+      `;
+
+      // Reset form
+      document.getElementById('buyForm').reset();
+      const btn = document.getElementById('buy-submit-btn');
+      btn.textContent = 'Send Inquiry';
+      btn.disabled = false;
+
+      document.getElementById('buyModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
     };
 
-    // Artists Dropdown
+    window.closeBuyModal = function() {
+      document.getElementById('buyModal').classList.remove('open');
+      document.body.style.overflow = '';
+      currentItem = null;
+    };
+    document.getElementById('buyModal').addEventListener('click', function(e) {
+      if (e.target === this) closeBuyModal();
+    });
+
+    // ── SUBMIT BUY INQUIRY ────────────────────────────────────
+    window.submitBuyInquiry = async function(e) {
+      e.preventDefault();
+      const name    = document.getElementById('buy-name').value.trim();
+      const email   = document.getElementById('buy-email').value.trim();
+      const message = document.getElementById('buy-message').value.trim();
+      const btn     = document.getElementById('buy-submit-btn');
+
+      if (!name) { showToast('Please enter your full name.'); return; }
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showToast('Please enter a valid email address.'); return; }
+
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+
+      const payload = {
+        type:        'deco',
+        name,
+        email,
+        message:     message || '',
+        item_title:  currentItem?.Title || '',
+        item_id:     String(currentItem?.id || ''),
+        item_price:  currentItem?.Price_CAD ? `$${Number(currentItem.Price_CAD).toLocaleString()} CAD` : '',
+        submitted_at: new Date().toISOString(),
+      };
+
+      try {
+        await fetch(WEBHOOK, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+      } catch(_) {
+        // Network error — still confirm to user
+      }
+
+      closeBuyModal();
+      showToast('✦ Inquiry sent successfully. We will be in touch shortly.');
+    };
+
+    // ── TOAST ─────────────────────────────────────────────────
+    window.showToast = function(msg) {
+      const t = document.getElementById('siteToast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 5000);
+    };
+
+    // ── ARTISTS NAV ───────────────────────────────────────────
     async function populateArtistsNav() {
       const dropdown = document.getElementById('nav-artists-dropdown');
       if (!dropdown) return;
@@ -257,6 +421,8 @@
         dropdown.innerHTML = data.map(a => `<li><a href="/artist.html?id=${a.id}">${a.artist_name}</a></li>`).join('');
       }
     }
+
+    init();
     populateArtistsNav();
   </script>
 </body>

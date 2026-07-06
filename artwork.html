@@ -686,7 +686,7 @@
 
     const SUPABASE_URL = 'https://zbfdkuckvyrlebdvlghp.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpiZmRrdWNrdnlybGViZHZsZ2hwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwNTI1MTEsImV4cCI6MjA5NzYyODUxMX0.rHcc5-VEkQoM7GqkLuKCB7ueC-7iwDvOVSPUl32OeoY';
-    const MAKE_WEBHOOK = 'https://hook.eu1.make.com/klc0ndxe84ff91yglfrp0202kf816ybl';
+    const MAKE_WEBHOOK = 'https://hook.us2.make.com/e5ecspvb9mk1gl7q9yffrn5y0wv1hyq3';
 
     const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
@@ -854,6 +854,7 @@
       btn.textContent = 'Sending…';
 
       const payload = {
+        type:              'buy now',
         name:              name,
         email:             email,
         message:           message || '',
