@@ -834,6 +834,13 @@
 
     // MODAL
     window.openModal = function() {
+      // Always clear the form before showing it
+      document.getElementById('inq-name').value = '';
+      document.getElementById('inq-email').value = '';
+      document.getElementById('inq-message').value = '';
+      const btn = document.getElementById('form-submit-btn');
+      btn.disabled = false;
+      btn.textContent = 'Send Inquiry';
       document.getElementById('inquiryModal').classList.add('open');
     };
     window.closeModal = function() {
@@ -879,6 +886,12 @@
 
 
       closeModal();
+      // Clear form fields after successful submit
+      document.getElementById('inq-name').value = '';
+      document.getElementById('inq-email').value = '';
+      document.getElementById('inq-message').value = '';
+      btn.disabled = false;
+      btn.textContent = 'Send Inquiry';
       showToast('Inquiry sent. Please check your email for confirmation.');
     };
 
