@@ -82,12 +82,53 @@
     }
     @media(max-width:850px){ .features-grid { grid-template-columns: 1fr; } }
     .feature-card {
-      background: #FFFFFF; border: 1px solid var(--border); padding: 36px 28px; border-radius: 4px; transition: transform 0.3s, box-shadow 0.3s;
+      position: relative;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 40px 30px;
+      border-radius: 6px;
+      overflow: hidden;
+      color: #FFFFFF;
+      transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      min-height: 320px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
     }
-    .feature-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.06); }
-    .feature-icon { color: var(--gold); margin-bottom: 16px; }
-    .feature-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; margin-bottom: 12px; color: #111111; }
-    .feature-desc { font-size: 14px; color: #555555; line-height: 1.7; }
+    .feature-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(10, 10, 10, 0.6) 0%, rgba(10, 10, 10, 0.88) 100%);
+      transition: background 0.4s ease;
+      z-index: 1;
+    }
+    .feature-card:hover::before {
+      background: linear-gradient(180deg, rgba(10, 10, 10, 0.45) 0%, rgba(10, 10, 10, 0.92) 100%);
+    }
+    .feature-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      border-color: rgba(212, 168, 67, 0.5);
+    }
+    .feature-card-content {
+      position: relative;
+      z-index: 2;
+    }
+    .feature-card.card-paintings {
+      background-image: url('images/card_paintings.webp');
+    }
+    .feature-card.card-regional {
+      background-image: url('images/card_regional.webp');
+    }
+    .feature-card.card-deco {
+      background-image: url('images/card_deco.webp');
+    }
+    .feature-icon { color: #d4a843; margin-bottom: 16px; display: inline-block; }
+    .feature-title { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; margin-bottom: 12px; color: #FFFFFF; letter-spacing: 0.5px; }
+    .feature-desc { font-size: 14px; color: rgba(255, 255, 255, 0.85); line-height: 1.7; font-weight: 300; }
 
     .regional-banner {
       background: #111111; color: #FFFFFF; padding: 80px 40px; margin-top: 60px; text-align: center;
@@ -160,8 +201,28 @@ html.lang-fr .en-text{display:none !important;}
     <ul class="nav-links">
       <li><a href="search.html">Search</a></li>
       <li><a href="index.html">Home</a></li>
+      <li><a href="about.html" class="active">About Us</a></li>
       <li class="dropdown"><a href="#">Artists <span style="font-size:8px; margin-left:4px;">▼</span></a>
         <ul class="dropdown-menu" id="nav-artists-dropdown"></ul>
+      </li>
+      <li class="dropdown"><a href="#">Artwork Type <span style="font-size:8px; margin-left:4px;">▼</span></a>
+        <ul class="dropdown-menu">
+          <li><a href="all-artworks.html">All Artwork</a></li>
+          <li><a href="sculptures.html">Sculpture</a></li>
+          <li><a href="acrylic-on-canvas.html">Acrylic On Canvas</a></li>
+          <li><a href="oil-paintings.html">Oil Painting</a></li>
+          <li><a href="sketches.html">Sketches</a></li>
+          <li><a href="deco-patch.html">Deco Patch</a></li>
+        </ul>
+      </li>
+      <li class="dropdown"><a href="#">Service <span style="font-size:8px; margin-left:4px;">▼</span></a>
+        <ul class="dropdown-menu">
+          <li><a href="evaluation.html">Evaluation</a></li>
+          <li><a href="auction.html">Auction</a></li>
+        </ul>
+      </li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
       </li>
       <li class="dropdown"><a href="#">Artwork Type <span style="font-size:8px; margin-left:4px;">▼</span></a>
         <ul class="dropdown-menu">
@@ -206,28 +267,34 @@ html.lang-fr .en-text{display:none !important;}
     </div>
 
     <div class="features-grid">
-      <div class="feature-card">
-        <div class="feature-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+      <div class="feature-card card-paintings">
+        <div class="feature-card-content">
+          <div class="feature-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </div>
+          <h3 class="feature-title">Original Paintings</h3>
+          <p class="feature-desc">Oil, acrylic, and sketch originals crafted by our collective of artists exploring Buddhist philosophy, portraiture, and modern abstraction.</p>
         </div>
-        <h3 class="feature-title">Original Paintings</h3>
-        <p class="feature-desc">Oil, acrylic, and sketch originals crafted by our collective of artists exploring Buddhist philosophy, portraiture, and modern abstraction.</p>
       </div>
 
-      <div class="feature-card">
-        <div class="feature-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      <div class="feature-card card-regional">
+        <div class="feature-card-content">
+          <div class="feature-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <h3 class="feature-title">Regional Treasures</h3>
+          <p class="feature-desc">Authentic Himalayan handicrafts, connecting you directly to Kashmir, Himachal Pradesh, Punjab, and Rajasthan through textiles, wood carvings, and jewelry.</p>
         </div>
-        <h3 class="feature-title">Regional Treasures</h3>
-        <p class="feature-desc">Authentic Himalayan handicrafts, connecting you directly to Kashmir, Himachal Pradesh, Punjab, and Rajasthan through textiles, wood carvings, and jewelry.</p>
       </div>
 
-      <div class="feature-card">
-        <div class="feature-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+      <div class="feature-card card-deco">
+        <div class="feature-card-content">
+          <div class="feature-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          </div>
+          <h3 class="feature-title">Deco Patch</h3>
+          <p class="feature-desc">Eco-conscious luxury upcycled art objects. Discarded bottles transformed into luminous table lamps and jewel-toned statement sculptures.</p>
         </div>
-        <h3 class="feature-title">Deco Patch</h3>
-        <p class="feature-desc">Eco-conscious luxury upcycled art objects. Discarded bottles transformed into luminous table lamps and jewel-toned statement sculptures.</p>
       </div>
     </div>
   </main>
