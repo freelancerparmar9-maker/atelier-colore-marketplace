@@ -1,0 +1,331 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terms of Sale — Atelier Coloré Canada</title>
+  <meta name="description" content="Terms of Sale for ateliercolorecanada.com" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #FAFAFA;
+      --surface: #FFFFFF;
+      --text: #111111;
+      --text-muted: rgba(17, 17, 17, 0.6);
+      --gold: #b28a2f;
+      --border: #E5E5E5;
+      --nav-h: 70px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); font-family: 'Inter', sans-serif; color: var(--text); overflow-x: hidden; line-height: 1.6; }
+
+    .nav-bar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: var(--nav-h); background: rgba(250, 250, 250, 0.98);
+      backdrop-filter: blur(8px); border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px; transition: all 0.4s ease;
+    }
+    .nav-brand {
+      font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 800;
+      color: var(--text); letter-spacing: 2px; text-transform: uppercase; text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 32px; list-style: none; align-items: center; }
+    .nav-links a {
+      color: var(--text); text-decoration: none; font-size: 13px; text-transform: uppercase;
+      letter-spacing: 1.5px; transition: color 0.3s; display: flex; align-items: center; gap: 6px;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--gold); }
+    .dropdown { position: relative; }
+    .dropdown-menu {
+      position: absolute; top: 100%; left: 0; background: rgba(17, 17, 17, 0.98);
+      border: 1px solid #333; list-style: none; padding: 12px 0; min-width: 240px;
+      opacity: 0; visibility: hidden; transform: translateY(10px); transition: all 0.3s ease;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .dropdown:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+    .dropdown-menu a { padding: 10px 20px; display: block; color: rgba(255, 255, 255, 0.75); font-size: 12px; letter-spacing: 1px; }
+    .dropdown-menu a:hover { background: #222; color: var(--gold); }
+
+    .page-hero {
+      background: #111111; color: #FFFFFF; padding: 120px 40px 60px; text-align: center;
+    }
+    .hero-eyebrow {
+      font-size: 11px; text-transform: uppercase; letter-spacing: 3px; color: #d4a843; margin-bottom: 12px; font-weight: 600;
+    }
+    .hero-title {
+      font-family: 'Playfair Display', serif; font-size: clamp(28px, 4vw, 48px); font-weight: 800; letter-spacing: 1px; margin-bottom: 16px;
+    }
+    .hero-meta { font-size: 13px; color: rgba(255, 255, 255, 0.5); }
+
+    .breadcrumb {
+      padding: 16px 40px; background: #FFFFFF; border-bottom: 1px solid var(--border); font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted);
+    }
+    .breadcrumb a { color: var(--text); text-decoration: none; }
+    .breadcrumb span { margin: 0 8px; color: var(--border); }
+
+    .legal-container {
+      max-width: 860px; margin: 0 auto; padding: 60px 40px; background: #FFFFFF; box-shadow: 0 4px 20px rgba(0,0,0,0.02); margin-top: 40px; margin-bottom: 60px; border-radius: 4px; border: 1px solid var(--border);
+    }
+    .legal-container h2 {
+      font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: #111111;
+      margin: 40px 0 16px; padding-left: 16px; border-left: 4px solid var(--gold); line-height: 1.3;
+    }
+    .legal-container p { font-size: 15px; color: #333333; line-height: 1.8; margin-bottom: 16px; }
+    .legal-container ul { margin: 0 0 20px 24px; color: #333333; }
+    .legal-container li { font-size: 15px; line-height: 1.8; margin-bottom: 8px; }
+    .legal-container strong { color: #111111; }
+    .legal-note {
+      margin-top: 40px; padding: 18px 24px; background: #FAFAFA; border: 1px solid #EAEAEA; font-size: 13px; color: #666666; font-style: italic; border-radius: 4px;
+    }
+
+    
+.site-footer{background:#111111;color:rgba(255,255,255,.82);padding:64px 80px 32px;margin-top:80px;--footer-gold:#d4a843;}
+.footer-inner{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:1.6fr 1fr 1fr 1.6fr;gap:48px;padding-bottom:48px;border-bottom:1px solid rgba(255,255,255,.1);}
+.footer-logo{font-family:'Playfair Display',serif;font-size:20px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#fff;text-decoration:none;display:block;margin-bottom:14px;}
+.footer-tagline{font-size:12.5px;letter-spacing:.5px;color:rgba(255,255,255,.45);margin-bottom:22px;line-height:1.7;}
+.footer-contact-info{font-size:13px;line-height:1.9;color:rgba(255,255,255,.6);margin-bottom:22px;}
+.footer-contact-info strong{color:rgba(255,255,255,.85);}
+.footer-contact-info a{color:var(--footer-gold);text-decoration:none;}
+.footer-social{display:flex;gap:10px;margin-top:4px;}
+.social-icon{color:rgba(255,255,255,.45);transition:color .3s,border-color .3s;display:flex;align-items:center;justify-content:center;width:36px;height:36px;border:1px solid rgba(255,255,255,.12);border-radius:50%;text-decoration:none;}
+.social-icon:hover{color:var(--footer-gold);border-color:rgba(212,168,67,.4);}
+.footer-heading{font-family:'Playfair Display',serif;font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--footer-gold);margin-bottom:18px;}
+.footer-links{list-style:none;display:flex;flex-direction:column;gap:11px;}
+.footer-links a{font-size:13px;color:rgba(255,255,255,.62);text-decoration:none;transition:color .3s;}
+.footer-links a:hover{color:var(--footer-gold);}
+.footer-newsletter-desc{font-size:12.5px;color:rgba(255,255,255,.5);line-height:1.7;margin-bottom:16px;}
+.footer-newsletter-form{display:flex;flex-direction:column;gap:10px;}
+.footer-newsletter-form input[type=email]{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:#fff;font-family:'Inter',sans-serif;font-size:13px;padding:11px 14px;outline:none;transition:border-color .3s;width:100%;}
+.footer-newsletter-form input[type=email]::placeholder{color:rgba(255,255,255,.28);}
+.footer-newsletter-form input[type=email]:focus{border-color:var(--footer-gold);}
+.casl-consent-label{display:flex;gap:10px;align-items:flex-start;cursor:pointer;}
+.casl-consent-label input[type=checkbox]{margin-top:3px;flex-shrink:0;width:14px;height:14px;accent-color:var(--footer-gold);}
+.casl-consent-label span{font-size:11px;color:rgba(255,255,255,.4);line-height:1.65;}
+.casl-consent-label a{color:var(--footer-gold) !important;text-decoration:none;}
+.footer-nl-btn{background:var(--footer-gold);color:#111;border:none;padding:12px 20px;font-family:'Inter',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;font-weight:600;cursor:pointer;transition:background .3s;width:100%;margin-top:2px;}
+.footer-nl-btn:hover{background:#e8c050;}
+.footer-nl-btn:disabled{background:#444;color:#888;cursor:not-allowed;}
+.footer-bottom{max-width:1400px;margin:28px auto 0;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+.footer-copyright{font-size:12px;color:rgba(255,255,255,.3);letter-spacing:.4px;}
+.footer-lang-toggle{display:flex;align-items:center;gap:8px;}
+.lang-btn{background:none;border:1px solid transparent;color:rgba(255,255,255,.4);font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;padding:5px 10px;transition:all .25s;font-family:'Inter',sans-serif;border-radius:2px;}
+.lang-btn.active{color:var(--footer-gold);border-color:rgba(212,168,67,.3);}
+.lang-btn:hover{color:var(--footer-gold);}
+.lang-sep{color:rgba(255,255,255,.2);font-size:10px;}
+.fr-text{display:none !important;}
+html.lang-fr .fr-text{display:inherit !important;}
+html.lang-fr .en-text{display:none !important;}
+@media(max-width:1100px){.footer-inner{grid-template-columns:1fr 1fr;gap:40px;}.site-footer{padding:48px 40px 28px;}}
+@media(max-width:600px){.footer-inner{grid-template-columns:1fr;gap:32px;}.site-footer{padding:40px 24px 24px;}.footer-bottom{flex-direction:column;align-items:flex-start;}}
+
+  </style>
+</head>
+<body>
+  
+  <nav class="nav-bar">
+    <a href="index.html" class="nav-brand">Atelier Coloré</a>
+    <ul class="nav-links">
+      <li><a href="search.html">Search</a></li>
+      <li><a href="index.html">Home</a></li>
+      <li class="dropdown"><a href="#">Artists <span style="font-size:8px; margin-left:4px;">▼</span></a>
+        <ul class="dropdown-menu" id="nav-artists-dropdown"></ul>
+      </li>
+      <li class="dropdown"><a href="#">Artwork Type <span style="font-size:8px; margin-left:4px;">▼</span></a>
+        <ul class="dropdown-menu">
+          <li><a href="all-artworks.html">All Artwork</a></li>
+          <li><a href="sculptures.html">Sculpture and Objects</a></li>
+          <li><a href="acrylic-on-canvas.html">Acrylic On Canvas</a></li>
+          <li><a href="oil-paintings.html">Oil Painting</a></li>
+          <li><a href="sketches.html">Sketches</a></li>
+          <li><a href="deco-patch.html">Deco Patch</a></li>
+        </ul>
+      </li>
+      <li class="dropdown"><a href="#">Service <span style="font-size:8px; margin-left:4px;">▼</span></a>
+        <ul class="dropdown-menu">
+          <li><a href="evaluation.html">Evaluation</a></li>
+          <li><a href="auction.html">Auction</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+
+
+  <header class="page-hero">
+    <div class="hero-eyebrow">Legal &amp; Conditions</div>
+    <h1 class="hero-title">Terms of Sale</h1>
+    <div class="hero-meta">Last updated: [DATE]</div>
+  </header>
+  <div class="breadcrumb">
+    <a href="index.html">Home</a><span>—</span>Terms of Sale
+  </div>
+  <main class="legal-container">
+    <div class="en-text">
+      <p>These Terms of Sale govern all purchases made through ateliercolorecanada.com (the "Site"), operated by Atelier Coloré Canada ("we," "us," "our"). By placing an order, you agree to these terms.</p>
+
+      <h2>1. Seller Information</h2>
+      <p>Atelier Coloré Canada<br>
+      Contact: Saloni Gupta<br>
+      Email: salonig2cando@gmail.com<br>
+      Address: [BUSINESS ADDRESS — TO BE ADDED]<br>
+      Phone: [PHONE NUMBER — TO BE ADDED]<br>
+      GST/HST Registration Number: [TO BE ADDED, if applicable]</p>
+
+      <h2>2. Products</h2>
+      <p>We sell original and reproduction artwork (oil paintings, acrylic on canvas, sketches, sculptures) and curated Himalayan/regional handicrafts. Product descriptions, dimensions, and materials are provided as accurately as possible; minor variations in color or texture may occur due to the handmade nature of the items and differences in screen display.</p>
+
+      <h2>3. Pricing &amp; Currency</h2>
+      <p>All prices are listed in Canadian Dollars (CAD) unless otherwise stated. Prices displayed [include/exclude — TO BE CONFIRMED] applicable federal and provincial taxes (GST/HST/PST/QST as applicable to your shipping location). Shipping costs are calculated and disclosed at checkout before payment is finalized.</p>
+
+      <h2>4. Order Acceptance</h2>
+      <p>Your order is an offer to purchase. We reserve the right to accept or decline any order, including in cases of pricing errors, suspected fraud, or item unavailability. You will receive an order confirmation email once your order is accepted; this confirmation does not guarantee availability of one-of-a-kind original artworks until shipment is confirmed.</p>
+
+      <h2>5. Payment</h2>
+      <p>Payment is processed securely through [PAYMENT PROCESSOR — TO BE ADDED]. We do not store your full payment card details. Payment is due in full at the time of order.</p>
+
+      <h2>6. Shipping</h2>
+      <p>See our <a href="shipping.html" style="color:var(--gold);">Shipping Policy</a> for processing times, carriers, and estimated delivery windows. Risk of loss and title for items pass to you upon delivery to the shipping carrier, unless otherwise required by law.</p>
+
+      <h2>7. Returns &amp; Refunds</h2>
+      <p>See our <a href="returns.html" style="color:var(--gold);">Return &amp; Refund Policy</a> for full details on eligibility, timelines, and process.</p>
+
+      <h2>8. Original Artwork &amp; Authenticity</h2>
+      <p>Where an item is sold as an original, one-of-a-kind work, we represent that it is authentic as described. Any certificates of authenticity, artist information, or provenance details provided are accurate to the best of our knowledge at the time of listing.</p>
+
+      <h2>9. Limitation of Liability</h2>
+      <p>To the extent permitted by law, our liability for any claim arising from your purchase is limited to the amount paid for the item in question. We are not liable for indirect, incidental, or consequential damages.</p>
+
+      <h2>10. Governing Law</h2>
+      <p>These Terms are governed by the laws of the Province of [PROVINCE — TO BE ADDED] and the federal laws of Canada applicable therein. Nothing in these Terms limits any statutory rights you have under applicable Canadian consumer protection legislation.</p>
+
+      <h2>11. Dispute Resolution</h2>
+      <p>If you have a concern about an order, please contact us first at salonig2cando@gmail.com so we can attempt to resolve it directly.</p>
+
+      <h2>12. Changes to These Terms</h2>
+      <p>We may update these Terms of Sale from time to time. The version in effect at the time you place an order will govern that order.</p>
+
+      <h2>13. Contact Us</h2>
+      <p>Saloni Gupta<br>
+      Atelier Coloré Canada<br>
+      Email: salonig2cando@gmail.com<br>
+      Address: [BUSINESS ADDRESS — TO BE ADDED]</p>
+
+      <div class="legal-note">
+        *This document is a general template and does not constitute legal advice. Review with a qualified lawyer before publishing, particularly around tax treatment, governing province, and liability terms specific to your business.*
+      </div>
+    </div>
+
+    <div class="fr-text">
+      <p style="background:#FFFBEB; border-left:4px solid #F59E0B; padding:12px 16px; color:#92400E; font-size:13px; margin-bottom:24px;">
+        Traduction française requise pour se conformer aux exigences de la Loi 96 du Québec. Veuillez faire réviser par un juriste qualifié avant publication officielle.
+      </p>
+      <h2>Conditions de vente — Atelier Coloré Canada</h2>
+      <p>Dernière mise à jour : [DATE]</p>
+      <p>Les présentes Conditions de vente régissent tous les achats effectués sur ateliercolorecanada.com. En passant une commande, vous acceptez ces conditions.</p>
+    </div>
+  </main>
+
+  
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-inner">
+      <div class="footer-col">
+        <a href="index.html" class="footer-logo">Atelier Coloré</a>
+        <p class="footer-tagline">Contemporary art from the Himalayas to the world.</p>
+        <div class="footer-contact-info">
+          <div><strong>Atelier Coloré Canada</strong></div>
+          <div><a href="mailto:salonig2cando@gmail.com">salonig2cando@gmail.com</a></div>
+          <div>[PHONE NUMBER — TO BE ADDED]</div>
+          <div>[BUSINESS ADDRESS — TO BE ADDED]</div>
+        </div>
+        <div class="footer-social">
+          <a href="#" class="social-icon" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+          <a href="#" class="social-icon" aria-label="Facebook"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-heading">Legal</h4>
+        <ul class="footer-links">
+          <li><a href="privacy-policy.html">Privacy Policy</a></li>
+          <li><a href="terms-of-sale.html">Terms of Sale</a></li>
+          <li><a href="returns.html">Return &amp; Refund Policy</a></li>
+          <li><a href="shipping.html">Shipping Policy</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-heading">Explore</h4>
+        <ul class="footer-links">
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="all-artworks.html">All Artworks</a></li>
+          <li><a href="deco-patch.html">Deco Patch</a></li>
+          <li><a href="auction.html">Auctions</a></li>
+          <li><a href="evaluation.html">Art Evaluation</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-heading">Stay in the Loop</h4>
+        <p class="footer-newsletter-desc">New artworks, curations, and stories — directly to your inbox.</p>
+        <form class="footer-newsletter-form" id="footerNewsletterForm" onsubmit="submitNewsletter(event)" novalidate autocomplete="off">
+          <input type="email" id="footer-nl-email" placeholder="your@email.com" autocomplete="off" required aria-label="Email for newsletter" />
+          <label class="casl-consent-label">
+            <input type="checkbox" id="footer-nl-consent" />
+            <span>I agree to receive marketing emails from Atelier Coloré Canada. Unsubscribe any time. <a href="privacy-policy.html">Privacy Policy</a>.</span>
+          </label>
+          <button type="submit" class="footer-nl-btn"><span class="en-text">Subscribe</span><span class="fr-text">S'abonner</span></button>
+        </form>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copyright">© 2025 Atelier Coloré Canada. All rights reserved.</p>
+      <div class="footer-lang-toggle" role="group" aria-label="Language selection">
+        <button onclick="setLang('en')" class="lang-btn active" id="lang-btn-en">EN</button>
+        <span class="lang-sep">|</span>
+        <button onclick="setLang('fr')" class="lang-btn" id="lang-btn-fr">FR</button>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    
+window.submitNewsletter = function(e) {
+  e.preventDefault();
+  var email = document.getElementById('footer-nl-email').value.trim();
+  var consent = document.getElementById('footer-nl-consent').checked;
+  var btn = e.target.querySelector('.footer-nl-btn');
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { alert('Please enter a valid email address.'); return; }
+  if (!consent) { alert('Please check the consent box to subscribe.'); return; }
+  btn.disabled = true; btn.textContent = 'Subscribing...';
+  btn.textContent = 'Subscribed!';
+  document.getElementById('footer-nl-email').value = '';
+  document.getElementById('footer-nl-consent').checked = false;
+  setTimeout(function() { btn.textContent = 'Subscribe'; btn.disabled = false; }, 4000);
+};
+window.setLang = function(lang) {
+  document.documentElement.classList.toggle('lang-fr', lang==='fr');
+  var en=document.getElementById('lang-btn-en'),fr=document.getElementById('lang-btn-fr');
+  if(en) en.classList.toggle('active',lang==='en');
+  if(fr) fr.classList.toggle('active',lang==='fr');
+  try{localStorage.setItem('ac-lang',lang);}catch(x){}
+};
+(function(){ try{var s=localStorage.getItem('ac-lang');if(s==='fr')window.setLang('fr');}catch(x){} })();
+
+  </script>
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+    const SUPABASE_URL = 'https://zbfdkuckvyrlebdvlghp.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpiZmRrdWNrdnlybGViZHZsZ2hwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwNTI1MTEsImV4cCI6MjA5NzYyODUxMX0.rHcc5-VEkQoM7GqkLuKCB7ueC-7iwDvOVSPUl32OeoY';
+    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+    async function populateArtistsNav() {
+      const { data } = await supabase.from('Artist').select('id, artist_name').order('artist_name');
+      const dd = document.getElementById('nav-artists-dropdown');
+      if (dd && data) dd.innerHTML = data.map(a => `<li><a href="artist.html?id=${a.id}">${a.artist_name}</a></li>`).join('');
+    }
+    populateArtistsNav();
+  </script>
+</body>
+</html>
+
