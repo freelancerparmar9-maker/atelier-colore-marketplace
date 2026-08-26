@@ -157,6 +157,14 @@
       color: var(--gold);
       background: rgba(178,138,47,0.06);
     }
+    
+    .availability-badge.unavailable {
+      border-color: #d9534f;
+      color: #d9534f;
+      background: rgba(217, 83, 79, 0.08);
+      font-weight: 700;
+    }
+  
     .availability-badge.unavailable {
       border-color: #c0392b;
       color: #c0392b;
@@ -822,11 +830,13 @@ html.lang-fr .en-text{display:none !important;}
         }).join('');
       }
 
-      // Availability: null/empty = Available; 'no' (case-insensitive) = Not Available
-      const availVal = (artwork.Availability || '').toString().trim().toLowerCase();
-      const isAvailable = availVal !== 'no';
+      // Availability check: 'Available' vs 'Sold Out' from Supabase column 'Availability'
+      const availRaw = (artwork.Availability || '').toString().trim();
+      const availLower = availRaw.toLowerCase();
+      const isSold = availLower.includes('sold') || availLower.includes('unavail') || availLower === 'no';
+      const isAvailable = !isSold;
       const availBadgeClass = isAvailable ? 'availability-badge' : 'availability-badge unavailable';
-      const availText = isAvailable ? 'Available' : 'Not Available';
+      const availText = isAvailable ? (availRaw || 'Available') : (availLower.includes('sold') ? 'Sold Out' : 'Not Available');
 
       const avatarHtml = artist?.Profile_image
         ? `<img src="${artist.Profile_image}" alt="${artist.artist_name || ''}" class="artist-avatar" />`
@@ -874,17 +884,23 @@ html.lang-fr .en-text{display:none !important;}
               </div>
             </div>
 
-
             <div class="artwork-description">
               <div class="description-label">Description</div>
               <div class="desc-body">${formatDescription(desc)}</div>
             </div>
 
             <div class="cta-stack">
+              ${isAvailable ? `
               <button class="btn-primary" onclick="openModal()">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
                 <span class="en-text">Buy Now</span><span class="fr-text">Acheter maintenant</span>
               </button>
+              ` : `
+              <button class="btn-primary" style="background:#444; border-color:#444; color:#aaa; cursor:not-allowed; opacity:0.85;" disabled title="This painting is sold out">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/></svg>
+                <span class="en-text">Sold Out</span><span class="fr-text">Vendu</span>
+              </button>
+              `}
               <a href="/artist.html?id=${artist?.id || ''}" class="btn-secondary">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
                 View All Works by ${artist?.artist_name || 'This Artist'}
@@ -926,6 +942,13 @@ html.lang-fr .en-text{display:none !important;}
 
     // MODAL
     window.openModal = function() {
+      if (typeof currentArtwork !== 'undefined' && currentArtwork) {
+        const str = (currentArtwork.Availability || '').toString().trim().toLowerCase();
+        if (str.includes('sold') || str.includes('unavail') || str === 'no') {
+          alert('This painting is currently Sold Out.');
+          return;
+        }
+      }
       // Always clear the form before showing it
       document.getElementById('inq-name').value = '';
       document.getElementById('inq-email').value = '';
