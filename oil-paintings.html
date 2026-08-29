@@ -425,7 +425,10 @@ html.lang-fr .en-text{display:none !important;}
         return;
       }
 
-      allItems = data.filter(a => a.Image_url);
+      allItems = data.filter(a => {
+        const t = (a.Type || '').toString().trim().toLowerCase();
+        return t.includes('oil') && a.Image_url;
+      });
       renderGrid();
     }
 

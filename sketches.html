@@ -218,10 +218,46 @@ html.lang-fr .en-text{display:none !important;}
     let allItems = [];
 
     async function init() {
-      const { data, error } = await supabase.from('Artworks').select('*').eq('Type', 'Sketch').order('created_at', { ascending: false });
+      // Fetch all artworks and filter sketches in JS to ensure items with whitespace like 'Sketch ' (Yak-II) are retrieved
+      const { data, error } = await supabase
+        .from('Artworks')
+        .select('*')
+        .order('created_at', { ascending: false });
+
       if (error || !data) { renderEmpty('Unable to load collection.'); return; }
-      allItems = data.filter(a => a.Image_url);
+      
+      allItems = data.filter(a => {
+        const type = (a.Type || '').toString().trim().toLowerCase();
+        return type.includes('sketch') && a.Image_url;
+      });
+
       renderGrid();
+    }
+
+    function getIsLatestWeight(item) {
+      const v = item.is_latest;
+      if (v === true || v === 'true' || v === 1 || v === '1') return 1;
+      return 0; // false, null, undefined
+    }
+
+    function sortItems(items, sortVal) {
+      return [...items].sort((a, b) => {
+        if (sortVal === 'price-asc') {
+          return Number(a.Price || 0) - Number(b.Price || 0);
+        }
+        if (sortVal === 'price-desc') {
+          return Number(b.Price || 0) - Number(a.Price || 0);
+        }
+        // Default / Featured sort: is_latest = true first, then newest created_at / id
+        const latestA = getIsLatestWeight(a);
+        const latestB = getIsLatestWeight(b);
+        if (latestA !== latestB) {
+          return latestB - latestA; // 1 (true) before 0 (false)
+        }
+        const timeA = a.created_at ? new Date(a.created_at).getTime() : (a.id || 0);
+        const timeB = b.created_at ? new Date(b.created_at).getTime() : (b.id || 0);
+        return timeB - timeA;
+      });
     }
 
     function renderCard(art) {
@@ -242,7 +278,7 @@ html.lang-fr .en-text{display:none !important;}
           <div class="card-meta">
             <div>
               <div class="card-title">${art.Title || 'Untitled'}</div>
-              <div class="card-medium">${art.Type || 'Sketch'}</div>
+              <div class="card-medium">${art.Type ? art.Type.trim() : 'Sketch'}</div>
             </div>
             <div class="card-price" style="${isAuction ? 'color: var(--gold); font-weight: 600;' : ''}">${priceDisplay}</div>
           </div>
@@ -256,25 +292,27 @@ html.lang-fr .en-text{display:none !important;}
 
     function renderGrid() {
       const sortVal = document.getElementById('sort-select')?.value || 'default';
-      const sorted = [...allItems].sort((a,b) => sortVal==='price-asc' ? Number(a.Price)-Number(b.Price) : sortVal==='price-desc' ? Number(b.Price)-Number(a.Price) : 0);
       const container = document.getElementById('catalog-main-content');
       
-      if (sorted.length === 0) { renderEmpty('No sketches available currently.'); return; }
+      if (allItems.length === 0) { renderEmpty('No sketches available currently.'); return; }
 
-      // Dynamic grouping based on Supabase Series column
-      const yakSeries = sorted.filter(a => {
+      // Dynamic grouping by Series column
+      const yakItems = allItems.filter(a => {
         const s = (a.Series || '').toString().trim().toLowerCase();
         return s === 'yak series' || s === 'yak';
       });
-      const otherSketches = sorted.filter(a => {
+      const otherItems = allItems.filter(a => {
         const s = (a.Series || '').toString().trim().toLowerCase();
         return s !== 'yak series' && s !== 'yak';
       });
 
+      const sortedYak = sortItems(yakItems, sortVal);
+      const sortedOther = sortItems(otherItems, sortVal);
+
       let html = '';
 
-      // 1. Yak Series Dedicated Subsection
-      if (yakSeries.length > 0) {
+      // 1. Yak Series Dedicated Subsection (with intro text)
+      if (sortedYak.length > 0) {
         html += `
           <section class="series-section" id="yak-series">
             <div class="series-header">
@@ -285,31 +323,31 @@ html.lang-fr .en-text{display:none !important;}
               </p>
             </div>
             <div class="artwork-grid">
-              ${yakSeries.map(renderCard).join('')}
+              ${sortedYak.map(renderCard).join('')}
             </div>
           </section>
         `;
       }
 
       // 2. General / Other Sketches Subsection
-      if (otherSketches.length > 0) {
-        if (yakSeries.length > 0) {
+      if (sortedOther.length > 0) {
+        if (sortedYak.length > 0) {
           html += `
             <hr class="series-divider" />
             <section class="series-section" id="general-sketches">
               <div class="series-header">
                 <div class="series-eyebrow">Original Works · Atelier Coloré</div>
-                <h2 class="series-title">Drawings &amp; Studies</h2>
+                <h2 class="series-title">Sketches &amp; Drawings</h2>
               </div>
               <div class="artwork-grid">
-                ${otherSketches.map(renderCard).join('')}
+                ${sortedOther.map(renderCard).join('')}
               </div>
             </section>
           `;
         } else {
           html += `
             <div class="artwork-grid">
-              ${otherSketches.map(renderCard).join('')}
+              ${sortedOther.map(renderCard).join('')}
             </div>
           `;
         }
@@ -320,7 +358,7 @@ html.lang-fr .en-text{display:none !important;}
 
     window.applySort = renderGrid;
     function renderEmpty(msg) {
-      document.getElementById('artwork-grid').innerHTML = `<div class="empty-state"><div class="empty-glyph">✦</div><h2 class="empty-title">Not available</h2><p class="empty-text">${msg}</p><a href="index.html" class="empty-link">Back to Home</a></div>`;
+      document.getElementById('catalog-main-content').innerHTML = `<div class="empty-state"><div class="empty-glyph">✦</div><h2 class="empty-title">Not available</h2><p class="empty-text">${msg}</p><a href="index.html" class="empty-link">Back to Home</a></div>`;
     }
     init();
   

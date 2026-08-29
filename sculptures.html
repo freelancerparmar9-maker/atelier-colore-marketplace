@@ -213,7 +213,16 @@ html.lang-fr .en-text{display:none !important;}
 
     function renderGrid() {
       const sortVal = document.getElementById('sort-select')?.value || 'default';
-      const sorted = [...allItems].sort((a,b) => sortVal==='price-asc' ? Number(a.Price)-Number(b.Price) : sortVal==='price-desc' ? Number(b.Price)-Number(a.Price) : 0);
+      const sorted = [...allItems].sort((a,b) => {
+        if (sortVal === 'price-asc') return Number(a.Price)-Number(b.Price);
+        if (sortVal === 'price-desc') return Number(b.Price)-Number(a.Price);
+        const getWeight = (x) => (x.is_latest === true || x.is_latest === 'true' || x.is_latest === 1) ? 1 : 0;
+        const wA = getWeight(a), wB = getWeight(b);
+        if (wA !== wB) return wB - wA;
+        const timeA = a.created_at ? new Date(a.created_at).getTime() : (a.id || 0);
+        const timeB = b.created_at ? new Date(b.created_at).getTime() : (b.id || 0);
+        return timeB - timeA;
+      });
       const grid = document.getElementById('artwork-grid');
       
       if (sorted.length === 0) { renderEmpty('No sculptures available currently.'); return; }
