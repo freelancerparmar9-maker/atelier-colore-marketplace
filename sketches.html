@@ -75,7 +75,20 @@
     @media (max-width: 1200px) { .artwork-grid { grid-template-columns: repeat(3, 1fr); gap: 24px; } }
     @media (max-width: 900px) { .artwork-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; } .catalog-hero { padding: 48px 40px 40px; } .catalog-toolbar, .catalog-body, .breadcrumb { padding-left: 40px; padding-right: 40px; } }
     @media (max-width: 600px) { .artwork-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; } .nav-links { display: none; } .catalog-toolbar, .catalog-body, .breadcrumb { padding-left: 20px; padding-right: 20px; } }
-  </style>
+  
+    /* SERIES SUBSECTIONS */
+    .series-section { margin-bottom: 80px; }
+    .series-header { margin-bottom: 36px; text-align: left; max-width: 960px; }
+    .series-eyebrow { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; font-weight: 600; }
+    .series-title { font-family: 'Playfair Display', serif; font-size: clamp(24px, 3.5vw, 38px); font-weight: 800; color: var(--text); margin-bottom: 16px; letter-spacing: -0.5px; line-height: 1.2; }
+    .series-intro {
+      font-size: 15px; font-style: italic; font-weight: 400; color: rgba(17, 17, 17, 0.78);
+      line-height: 1.85; border-left: 3px solid var(--gold); background: rgba(178, 138, 47, 0.04);
+      padding: 18px 24px; border-radius: 0 4px 4px 0; margin-bottom: 32px;
+    }
+    .series-divider { margin: 80px 0 48px; border: none; border-top: 1px solid var(--border); }
+
+</style>
 <style>
 
 /* SITE FOOTER */
@@ -196,7 +209,7 @@ html.lang-fr .en-text{display:none !important;}
     </div>
   </div>
 
-  <main class="catalog-body"><div id="artwork-grid" class="artwork-grid"></div></main>
+  <main class="catalog-body" id="catalog-main-content"><div id="artwork-grid" class="artwork-grid"></div></main>
 
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
@@ -211,39 +224,98 @@ html.lang-fr .en-text{display:none !important;}
       renderGrid();
     }
 
-    function renderGrid() {
-      const sortVal = document.getElementById('sort-select')?.value || 'default';
-      const sorted = [...allItems].sort((a,b) => sortVal==='price-asc' ? Number(a.Price)-Number(b.Price) : sortVal==='price-desc' ? Number(b.Price)-Number(a.Price) : 0);
-      const grid = document.getElementById('artwork-grid');
-      
-      if (sorted.length === 0) { renderEmpty('No sketches available currently.'); return; }
-      
-      grid.innerHTML = sorted.map(art => {
-        const isAuction = art.Service && art.Service.toLowerCase().includes('auction');
-        const priceDisplay = isAuction ? 'Auction' : '$' + Number(art.Price).toLocaleString();
-        const targetUrl = isAuction ? '/auction.html' : `/artwork.html?id=${art.id}`;
-        return `
+    function renderCard(art) {
+      const isAuction = art.Service && art.Service.toLowerCase().includes('auction');
+      const priceDisplay = isAuction ? 'Auction' : '$' + Number(art.Price).toLocaleString();
+      const targetUrl = isAuction ? '/auction.html' : `/artwork.html?id=${art.id}`;
+      const isSold = (function(){
+        const str = (art.Availability || '').toString().trim().toLowerCase();
+        return str.includes('sold') || str.includes('unavail') || str === 'no';
+      })();
+
+      return `
         <a href="${targetUrl}" class="artwork-grid-card" onclick="if(!${isAuction}){localStorage.setItem('selectedArtworkId', '${art.id}');}; window.location.href='${targetUrl}'; return false;">
           <div class="card-frame">
-          <img src="${art.Image_url}" class="card-img" loading="lazy" />
-          ${(function(){
-            const str = (art.Availability || '').toString().trim().toLowerCase();
-            return (str.includes('sold') || str.includes('unavail') || str === 'no') ? '<span class="card-status-tag sold-out">Sold Out</span>' : '';
-          })()}
-        </div>
+            <img src="${art.Image_url}" class="card-img" loading="lazy" alt="${art.Title || 'Sketch'} — Atelier Coloré" />
+            ${isSold ? '<span class="card-status-tag sold-out">Sold Out</span>' : ''}
+          </div>
           <div class="card-meta">
             <div>
-              <div class="card-title">${art.Title||'Untitled'}</div>
-              <div class="card-medium">${art.Type||''}</div>
+              <div class="card-title">${art.Title || 'Untitled'}</div>
+              <div class="card-medium">${art.Type || 'Sketch'}</div>
             </div>
             <div class="card-price" style="${isAuction ? 'color: var(--gold); font-weight: 600;' : ''}">${priceDisplay}</div>
           </div>
           <div class="card-meta" style="margin-top: 4px; padding-top: 0; border-top: none;">
             <div class="card-medium" style="opacity: 0.8; font-size: 11px;">
-              ${art.Medium || ''} ${art.Medium && art.Dimension ? ' | ' : ''} ${art.Dimension || ''}
+              ${art.Medium || 'Charcoal / Graphite'} ${(art.Medium || art.Dimension) ? ' | ' : ''} ${art.Dimension || ''}
             </div>
           </div>
-        </a>`}).join('');
+        </a>`;
+    }
+
+    function renderGrid() {
+      const sortVal = document.getElementById('sort-select')?.value || 'default';
+      const sorted = [...allItems].sort((a,b) => sortVal==='price-asc' ? Number(a.Price)-Number(b.Price) : sortVal==='price-desc' ? Number(b.Price)-Number(a.Price) : 0);
+      const container = document.getElementById('catalog-main-content');
+      
+      if (sorted.length === 0) { renderEmpty('No sketches available currently.'); return; }
+
+      // Dynamic grouping based on Supabase Series column
+      const yakSeries = sorted.filter(a => {
+        const s = (a.Series || '').toString().trim().toLowerCase();
+        return s === 'yak series' || s === 'yak';
+      });
+      const otherSketches = sorted.filter(a => {
+        const s = (a.Series || '').toString().trim().toLowerCase();
+        return s !== 'yak series' && s !== 'yak';
+      });
+
+      let html = '';
+
+      // 1. Yak Series Dedicated Subsection
+      if (yakSeries.length > 0) {
+        html += `
+          <section class="series-section" id="yak-series">
+            <div class="series-header">
+              <div class="series-eyebrow">Featured Curation · The Yak Series</div>
+              <h2 class="series-title">The Yak Series</h2>
+              <p class="series-intro">
+                "The Himalayan yak; an animal as deeply rooted in the mountain terrain as the snow, wind and stone. Across these works, the yak appears in varied moods and moments: grazing, walking, watching, nurturing, even confronting. Each canvas captures a fleeting gesture, a quiet instinct, a moment of life stilled in motion."
+              </p>
+            </div>
+            <div class="artwork-grid">
+              ${yakSeries.map(renderCard).join('')}
+            </div>
+          </section>
+        `;
+      }
+
+      // 2. General / Other Sketches Subsection
+      if (otherSketches.length > 0) {
+        if (yakSeries.length > 0) {
+          html += `
+            <hr class="series-divider" />
+            <section class="series-section" id="general-sketches">
+              <div class="series-header">
+                <div class="series-eyebrow">Original Works · Atelier Coloré</div>
+                <h2 class="series-title">Drawings &amp; Studies</h2>
+              </div>
+              <div class="artwork-grid">
+                ${otherSketches.map(renderCard).join('')}
+              </div>
+            </section>
+          `;
+        } else {
+          html += `
+            <div class="artwork-grid">
+              ${otherSketches.map(renderCard).join('')}
+            </div>
+          `;
+        }
+      }
+
+      container.innerHTML = html;
     }
 
     window.applySort = renderGrid;
@@ -274,7 +346,7 @@ html.lang-fr .en-text{display:none !important;}
           <div><a href="mailto:salonig2cando@gmail.com">salonig2cando@gmail.com</a></div>
           <div><a href="tel:+15875680909">+1 (587) 568-0909</a> / <a href="tel:+917584924860">+91 7584 924860</a></div>
           <div style="margin-top:8px; font-size:12px; line-height:1.5; color:rgba(255,255,255,0.85);">
-            <strong style="color:#FFF; display:block; margin-bottom:2px;">Canadian Address:</strong>
+            <strong style="color:#FFF; display:block; margin-bottom:2px;">Canada Address:</strong>
             126 Maligne Drive, Hinton, Alberta, T7V 1J3 Canada
           </div>
           <div style="margin-top:6px; font-size:12px; line-height:1.5; color:rgba(255,255,255,0.55);">
